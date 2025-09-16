@@ -1,6 +1,10 @@
+import Sidebar from "./components/Sidebar";
+
 function App() {
   return (
-    <div className="bg-black py-2 text-center text-white">Hello World</div>
+    <div className="flex h-dvh">
+      <Sidebar />
+    </div>
   );
 }
 
