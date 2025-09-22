@@ -10,7 +10,12 @@ body,
   font-family: "Poppins", sans-serif;
 }
 
-.dashboard > div > img {
+.active {
+  overflow: hidden;
+  background: white;
+  border-radius: 0.75rem;
+}
+.active img {
   filter: invert();
-  
+  background: transparent;
 }
