@@ -40,7 +40,7 @@ function Categories() {
     <div className="flex flex-1 gap-10 border px-4">
       {CATEGORIES.map((c, i) => (
         <h2
-          className={`flex-1 ${i !== CATEGORIES.length - 1 ? "border-r" : "border-r border-transparent"} px-2 text-center text-xl whitespace-nowrap uppercase`}
+          className={`flex-1 ${i === CATEGORIES.length - 1 && "border-transparent"} border-r px-2 text-center text-xl whitespace-nowrap uppercase`}
         >
           {c}
         </h2>
@@ -65,8 +65,12 @@ function ClientsList() {
 function Client({ client }) {
   return (
     <div className="flex flex-1 gap-10 border px-2">
-      {client.map((c) => (
-        <h3 className="flex-1 border-r px-2 text-xl whitespace-nowrap">{c}</h3>
+      {client.map((c, i) => (
+        <h3
+          className={`flex-1 border-r ${i === client.length - 1 && "border-transparent"} px-2 text-xl whitespace-nowrap`}
+        >
+          {c}
+        </h3>
       ))}
     </div>
   );
