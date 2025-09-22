@@ -6,105 +6,90 @@ const CLIENTS = [
     age: 35,
     policyType: "Life Insurance",
     status: "Active",
-    actions: "Edit/Delete",
   },
   {
     name: "Jane Smith",
     age: 28,
     policyType: "Health Insurance",
     status: "Pending",
-    actions: "Edit/Delete",
   },
   {
     name: "Robert Brown",
     age: 42,
     policyType: "Car Insurance",
     status: "Inactive",
-    actions: "Edit/Delete",
   },
   {
     name: "John Doe",
     age: 35,
     policyType: "Life Insurance",
     status: "Active",
-    actions: "Edit/Delete",
   },
   {
     name: "Jane Smith",
     age: 28,
     policyType: "Health Insurance",
     status: "Pending",
-    actions: "Edit/Delete",
   },
   {
     name: "Robert Brown",
     age: 42,
     policyType: "Car Insurance",
     status: "Inactive",
-    actions: "Edit/Delete",
   },
   {
     name: "John Doe",
     age: 35,
     policyType: "Life Insurance",
     status: "Active",
-    actions: "Edit/Delete",
   },
   {
     name: "Jane Smith",
     age: 28,
     policyType: "Health Insurance",
     status: "Pending",
-    actions: "Edit/Delete",
   },
   {
     name: "Robert Brown",
     age: 42,
     policyType: "Car Insurance",
     status: "Inactive",
-    actions: "Edit/Delete",
   },
   {
     name: "John Doe",
     age: 35,
     policyType: "Life Insurance",
     status: "Active",
-    actions: "Edit/Delete",
   },
   {
     name: "Jane Smith",
     age: 28,
     policyType: "Health Insurance",
     status: "Pending",
-    actions: "Edit/Delete",
   },
   {
     name: "Robert Brown",
     age: 42,
     policyType: "Car Insurance",
     status: "Inactive",
-    actions: "Edit/Delete",
   },
   {
     name: "John Doe",
     age: 35,
     policyType: "Life Insurance",
     status: "Active",
-    actions: "Edit/Delete",
   },
   {
     name: "Jane Smith",
     age: 28,
     policyType: "Health Insurance",
     status: "Pending",
-    actions: "Edit/Delete",
   },
   {
     name: "Robert Brown",
     age: 42,
     policyType: "Car Insurance",
     status: "Inactive",
-    actions: "Edit/Delete",
   },
 ];
 
@@ -141,11 +126,8 @@ function Categories() {
 function ClientsList() {
   return (
     <div className="flex flex-col gap-y-2 p-4 px-2">
-      {CLIENTS.map((c) => {
-        const { name, age, policyType, status, actions } = c;
-        const clientDetails = [name, age, policyType, status, actions];
-
-        return <Client client={clientDetails} />;
+      {CLIENTS.map((client) => {
+        return <Client client={client} />;
       })}
     </div>
   );
@@ -154,13 +136,23 @@ function ClientsList() {
 function Client({ client }) {
   return (
     <div className="flex flex-1 border px-2">
-      {client.map((c, i) => (
-        <h3
-          className={`flex-1 border-r py-2 ${i === client.length - 1 && "border-transparent"} px-2 text-xl whitespace-nowrap`}
-        >
-          {c}
-        </h3>
-      ))}
+      <h3 className={`flex-1 border-r p-2 text-xl whitespace-nowrap`}>
+        {client.name}
+      </h3>
+      <h3 className={`flex-1 border-r p-2 text-xl whitespace-nowrap`}>
+        {client.age}
+      </h3>
+      <h3 className={`flex-1 border-r p-2 text-xl whitespace-nowrap`}>
+        {client.policyType}
+      </h3>
+      <h3 className={`flex-1 border-r p-2 text-xl whitespace-nowrap`}>
+        {client.status}
+      </h3>
+      <div className="flex flex-1 items-center justify-center px-2">
+        <button className="block rounded-lg bg-green-700 px-2 py-1 font-semibold text-white">
+          VIEW
+        </button>
+      </div>
     </div>
   );
 }
