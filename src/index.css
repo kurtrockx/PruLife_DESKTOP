@@ -9,3 +9,8 @@ body,
   overflow: hidden;
   font-family: "Poppins", sans-serif;
 }
+
+.dashboard > div > img {
+  filter: invert();
+  
+}
