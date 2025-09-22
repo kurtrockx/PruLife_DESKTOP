@@ -29,7 +29,7 @@ export default function ClientPage() {
     <div className="flex flex-1 items-center justify-center">
       <div className="flex max-w-[70dvw] flex-1 flex-col">
         <Categories />
-        <Clients />
+        <ClientsList />
       </div>
     </div>
   );
@@ -49,27 +49,24 @@ function Categories() {
   );
 }
 
-function Clients() {
+function ClientsList() {
   return (
     <div className="flex flex-col border p-4 px-2">
-      {CLIENTS.map((c) => (
-        <div className="flex flex-1 gap-10 border px-2">
-          <h3 className="flex-1 border-r px-2 text-xl whitespace-nowrap">
-            {c.name}
-          </h3>
-          <h3 className="flex-1 border-r px-2 text-xl whitespace-nowrap">
-            {c.age}
-          </h3>
-          <h3 className="flex-1 border-r px-2 text-xl whitespace-nowrap">
-            {c.policyType}
-          </h3>
-          <h3 className="flex-1 border-r px-2 text-xl whitespace-nowrap">
-            {c.status}
-          </h3>
-          <h3 className="flex-1 border-r border-transparent px-2 text-xl whitespace-nowrap">
-            {c.actions}
-          </h3>
-        </div>
+      {CLIENTS.map((c) => {
+        const { name, age, policyType, status, actions } = c;
+        const clientDetails = [name, age, policyType, status, actions];
+
+        return <Client client={clientDetails} />;
+      })}
+    </div>
+  );
+}
+
+function Client({ client }) {
+  return (
+    <div className="flex flex-1 gap-10 border px-2">
+      {client.map((c) => (
+        <h3 className="flex-1 border-r px-2 text-xl whitespace-nowrap">{c}</h3>
       ))}
     </div>
   );
