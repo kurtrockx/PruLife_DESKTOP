@@ -11,9 +11,9 @@ body,
 }
 
 .active {
-  overflow: hidden;
-  background: white;
   border-radius: 0.75rem;
+  background: white;
+  overflow: hidden;
 }
 .active img {
   filter: invert();
