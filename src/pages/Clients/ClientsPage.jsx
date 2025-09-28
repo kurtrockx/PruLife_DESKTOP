@@ -1,99 +1,7 @@
 import { Link } from "react-router-dom";
+import { CLIENTS } from "../../sampleData/clients";
 
 const CATEGORIES = ["Name", "Age", "Policy Type", "Status", "Actions"];
-
-const CLIENTS = [
-  {
-    name: "John Doe",
-    age: 35,
-    policyType: "Life Insurance",
-    status: "Active",
-  },
-  {
-    name: "Jane Smith",
-    age: 28,
-    policyType: "Health Insurance",
-    status: "Pending",
-  },
-  {
-    name: "Robert Brown",
-    age: 42,
-    policyType: "Car Insurance",
-    status: "Inactive",
-  },
-  {
-    name: "John Doe",
-    age: 35,
-    policyType: "Life Insurance",
-    status: "Active",
-  },
-  {
-    name: "Jane Smith",
-    age: 28,
-    policyType: "Health Insurance",
-    status: "Pending",
-  },
-  {
-    name: "Robert Brown",
-    age: 42,
-    policyType: "Car Insurance",
-    status: "Inactive",
-  },
-  {
-    name: "John Doe",
-    age: 35,
-    policyType: "Life Insurance",
-    status: "Active",
-  },
-  {
-    name: "Jane Smith",
-    age: 28,
-    policyType: "Health Insurance",
-    status: "Pending",
-  },
-  {
-    name: "Robert Brown",
-    age: 42,
-    policyType: "Car Insurance",
-    status: "Inactive",
-  },
-  {
-    name: "John Doe",
-    age: 35,
-    policyType: "Life Insurance",
-    status: "Active",
-  },
-  {
-    name: "Jane Smith",
-    age: 28,
-    policyType: "Health Insurance",
-    status: "Pending",
-  },
-  {
-    name: "Robert Brown",
-    age: 42,
-    policyType: "Car Insurance",
-    status: "Inactive",
-  },
-  {
-    name: "John Doe",
-    age: 35,
-    policyType: "Life Insurance",
-    status: "Active",
-  },
-  {
-    name: "Jane Smith",
-    age: 28,
-    policyType: "Health Insurance",
-    status: "Pending",
-  },
-  {
-    name: "Robert Brown",
-    age: 42,
-    policyType: "Car Insurance",
-    status: "Inactive",
-  },
-];
 
 export default function ClientPage() {
   return (
@@ -156,7 +64,7 @@ function Client({ client }) {
 function ClientsButton({ clientName }) {
   return (
     <Link to={clientName}>
-      <button className="block rounded-lg bg-green-700 px-2 py-1 font-semibold text-white">
+      <button className="block cursor-pointer rounded-lg bg-green-700 px-2 py-1 font-semibold text-white duration-150 hover:-translate-y-0.5">
         VIEW
       </button>
     </Link>

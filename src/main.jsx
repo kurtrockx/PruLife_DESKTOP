@@ -5,10 +5,13 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./index.css";
 import DashboardPage from "./pages/Dashboard/DashboardPage.jsx";
 import ClientsPage from "./pages/Clients/ClientsPage.jsx";
+import ClientMainPage from "./pages/Clients/ClientMainPage.jsx";
 import PoliciesPage from "./pages/Policies/PoliciesPage.jsx";
 import ProposalsPage from "./pages/Proposals/ProposalsPage.jsx";
 import ReportsPage from "./pages/Reports/ReportsPage.jsx";
 import SettingsPage from "./pages/Settings/SettingsPage.jsx";
+import ClientDetails from "./pages/Clients/ClientOutlet/ClientDetails.jsx";
+import ClientChat from "./pages/Clients/ClientOutlet/ClientChat.jsx";
 
 const router = createBrowserRouter([
   {
@@ -26,10 +29,18 @@ const router = createBrowserRouter([
       {
         path: "clients",
         element: <ClientsPage />,
+      },
+      {
+        path: "clients/:clientId",
+        element: <ClientMainPage />,
         children: [
           {
-            path: ":clientId",
-            element: <h1>Individual client page</h1>,
+            index: true,
+            element: <ClientDetails />,
+          },
+          {
+            path: "chat",
+            element: <ClientChat />,
           },
         ],
       },

@@ -1,0 +1,92 @@
+export const CLIENTS = [
+  {
+    name: "John Doe",
+    age: 35,
+    policyType: "Life Insurance",
+    status: "Active",
+  },
+  {
+    name: "Jane Smith",
+    age: 28,
+    policyType: "Health Insurance",
+    status: "Pending",
+  },
+  {
+    name: "Robert Brown",
+    age: 42,
+    policyType: "Car Insurance",
+    status: "Inactive",
+  },
+  {
+    name: "John Doe",
+    age: 35,
+    policyType: "Life Insurance",
+    status: "Active",
+  },
+  {
+    name: "Jane Smith",
+    age: 28,
+    policyType: "Health Insurance",
+    status: "Pending",
+  },
+  {
+    name: "Robert Brown",
+    age: 42,
+    policyType: "Car Insurance",
+    status: "Inactive",
+  },
+  {
+    name: "John Doe",
+    age: 35,
+    policyType: "Life Insurance",
+    status: "Active",
+  },
+  {
+    name: "Jane Smith",
+    age: 28,
+    policyType: "Health Insurance",
+    status: "Pending",
+  },
+  {
+    name: "Robert Brown",
+    age: 42,
+    policyType: "Car Insurance",
+    status: "Inactive",
+  },
+  {
+    name: "John Doe",
+    age: 35,
+    policyType: "Life Insurance",
+    status: "Active",
+  },
+  {
+    name: "Jane Smith",
+    age: 28,
+    policyType: "Health Insurance",
+    status: "Pending",
+  },
+  {
+    name: "Robert Brown",
+    age: 42,
+    policyType: "Car Insurance",
+    status: "Inactive",
+  },
+  {
+    name: "John Doe",
+    age: 35,
+    policyType: "Life Insurance",
+    status: "Active",
+  },
+  {
+    name: "Jane Smith",
+    age: 28,
+    policyType: "Health Insurance",
+    status: "Pending",
+  },
+  {
+    name: "Robert Brown",
+    age: 42,
+    policyType: "Car Insurance",
+    status: "Inactive",
+  },
+];
