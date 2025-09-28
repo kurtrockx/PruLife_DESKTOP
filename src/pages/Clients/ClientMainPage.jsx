@@ -2,7 +2,7 @@ import { Link, Outlet } from "react-router-dom";
 
 export default function ClientMainPage() {
   return (
-    <div className="flex flex-1 flex-col items-center justify-center">
+    <div className="flex flex-1 flex-col items-center justify-center gap-2">
       <div className="flex gap-4">
         <Link className="border" to={""}>
           Client Details
@@ -11,7 +11,9 @@ export default function ClientMainPage() {
           Open Chat
         </Link>
       </div>
-      <Outlet />
+      <div className="flex aspect-video max-h-[80%] flex-1 flex-col bg-black/20">
+        <Outlet />
+      </div>
     </div>
   );
 }
