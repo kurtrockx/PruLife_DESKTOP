@@ -114,6 +114,7 @@ function Categories() {
     <div className="sticky top-0 flex flex-1 border border-[#450509] bg-[#450509] px-4 font-semibold text-white shadow-sm">
       {CATEGORIES.map((c, i) => (
         <h2
+          key={i}
           className={`flex-1 py-2 ${i === CATEGORIES.length - 1 && "border-transparent"} mx-auto border-r border-black px-2 text-center text-xl whitespace-nowrap uppercase`}
         >
           {c}
@@ -126,8 +127,8 @@ function Categories() {
 function ClientsList() {
   return (
     <div className="flex flex-col gap-y-2 p-4 px-2">
-      {CLIENTS.map((client) => {
-        return <Client client={client} />;
+      {CLIENTS.map((client, i) => {
+        return <Client client={client} key={i} />;
       })}
     </div>
   );
@@ -149,10 +150,17 @@ function Client({ client }) {
         {client.status}
       </h3>
       <div className="flex flex-1 items-center justify-center px-2">
-        <button className="block rounded-lg bg-green-700 px-2 py-1 font-semibold text-white">
-          VIEW
-        </button>
+        <ClientsButton />
       </div>
     </div>
+  );
+}
+
+//COMPONENTS
+function ClientsButton() {
+  return (
+    <button className="block rounded-lg bg-green-700 px-2 py-1 font-semibold text-white">
+      VIEW
+    </button>
   );
 }
