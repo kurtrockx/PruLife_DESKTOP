@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 const CATEGORIES = ["Name", "Age", "Policy Type", "Status", "Actions"];
 
 const CLIENTS = [
@@ -144,17 +146,19 @@ function Client({ client }) {
       <h3 className={clientDetailStyle}>{client.policyType}</h3>
       <h3 className={clientDetailStyle}>{client.status}</h3>
       <div className="flex flex-1 items-center justify-center px-2">
-        <ClientsButton />
+        <ClientsButton clientName={client.name} />
       </div>
     </div>
   );
 }
 
 //COMPONENTS
-function ClientsButton() {
+function ClientsButton({ clientName }) {
   return (
-    <button className="block rounded-lg bg-green-700 px-2 py-1 font-semibold text-white">
-      VIEW
-    </button>
+    <Link to={clientName}>
+      <button className="block rounded-lg bg-green-700 px-2 py-1 font-semibold text-white">
+        VIEW
+      </button>
+    </Link>
   );
 }
