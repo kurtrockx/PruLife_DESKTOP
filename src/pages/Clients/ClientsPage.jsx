@@ -135,20 +135,14 @@ function ClientsList() {
 }
 
 function Client({ client }) {
+  const clientDetailStyle = "flex-1 border-r p-2 text-xl whitespace-nowrap";
+
   return (
     <div className="flex flex-1 border px-2">
-      <h3 className={`flex-1 border-r p-2 text-xl whitespace-nowrap`}>
-        {client.name}
-      </h3>
-      <h3 className={`flex-1 border-r p-2 text-xl whitespace-nowrap`}>
-        {client.age}
-      </h3>
-      <h3 className={`flex-1 border-r p-2 text-xl whitespace-nowrap`}>
-        {client.policyType}
-      </h3>
-      <h3 className={`flex-1 border-r p-2 text-xl whitespace-nowrap`}>
-        {client.status}
-      </h3>
+      <h3 className={clientDetailStyle}>{client.name}</h3>
+      <h3 className={clientDetailStyle}>{client.age}</h3>
+      <h3 className={clientDetailStyle}>{client.policyType}</h3>
+      <h3 className={clientDetailStyle}>{client.status}</h3>
       <div className="flex flex-1 items-center justify-center px-2">
         <ClientsButton />
       </div>
