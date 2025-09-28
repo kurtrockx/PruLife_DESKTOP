@@ -11,7 +11,7 @@ export default function ClientMainPage() {
           Open Chat
         </Link>
       </div>
-      <div className="flex aspect-video max-h-[80%] flex-1 flex-col bg-black/20">
+      <div className="flex aspect-video max-h-[80%] flex-1 flex-col bg-blue-800/20 max-xl:max-w-[80%]">
         <Outlet />
       </div>
     </div>

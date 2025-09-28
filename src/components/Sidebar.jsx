@@ -17,9 +17,10 @@ const pages = [
 
 export default function Sidebar() {
   return (
-    <div className="flex max-w-[5em] flex-1 flex-col items-center gap-6 bg-red-950 px-2 py-6">
+    <div className="z-100 flex max-w-[5em] flex-1 flex-col items-center gap-6 bg-red-950 px-2 py-6">
       {pages.map((p) => (
-        <NavLink key={p.name}
+        <NavLink
+          key={p.name}
           className="group relative flex aspect-square w-full items-center justify-center rounded-xl p-4 hover:bg-white/20"
           to={p.name.toLowerCase()}
         >
