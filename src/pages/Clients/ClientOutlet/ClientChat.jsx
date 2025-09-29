@@ -44,16 +44,25 @@ export default function ClientChat() {
 }
 
 function TypeBox() {
+  const InputStylish =
+    "shadow-[0_0_0_2.5px] shadow-red-950/0 duration-200 focus-within:shadow-red-950 hover:shadow-red-950";
+
   return (
-    <div className="flex max-h-[10%] flex-1 items-center p-[0.75rem] shadow-[0_-2px_10px] shadow-black/10 max-xl:py-2">
-      <div className="flex flex-1 rounded-full bg-black/10 px-2 py-2.5 text-black placeholder:text-black/80">
+    <div className="flex max-h-[10%] flex-1 items-center gap-2 p-[0.75rem] shadow-[0_-2px_10px] shadow-black/10 max-xl:py-2">
+      <div
+        className={`flex flex-1 rounded-full bg-black/10 px-2 text-black placeholder:text-black/80 ${InputStylish}`}
+      >
         <input
           type="text"
           placeholder="Aa"
-          className="flex-1 px-2 text-xl outline-0"
+          className="flex-1 px-2 py-2.5 text-xl outline-0"
         />
       </div>
-      <img src={sendIcon} alt="sendIcon" className="max-h-full" />
+      <img
+        src={sendIcon}
+        alt="sendIcon"
+        className="max-h-full cursor-pointer rounded-full p-1.75 hover:bg-black/10"
+      />
     </div>
   );
 }
