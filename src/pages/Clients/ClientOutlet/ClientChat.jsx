@@ -1,4 +1,3 @@
-import { useParams } from "react-router-dom";
 import sendIcon from "../../../assets/sendIcon.svg";
 
 const sampleMessages = [
@@ -29,8 +28,6 @@ const sampleMessages = [
 ];
 
 export default function ClientChat() {
-  const { clientId } = useParams();
-
   return (
     <>
       <ChatMessagesContainer>
