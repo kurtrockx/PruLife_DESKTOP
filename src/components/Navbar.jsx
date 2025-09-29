@@ -4,7 +4,7 @@ import prulifeLogo from "../assets/prulifeLogo.png";
 export default function Navbar() {
   return (
     <nav className="flex justify-center bg-white shadow-md">
-      <Link className="flex max-h-20 items-center justify-center gap-2 p-2">
+      <Link to={'dashboard'} className="flex max-h-20 items-center justify-center gap-2 p-2">
         <img
           src={prulifeLogo}
           alt="prulife"

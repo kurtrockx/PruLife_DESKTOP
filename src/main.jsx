@@ -1,7 +1,11 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import App from "./App.jsx";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import {
+  createBrowserRouter,
+  Navigate,
+  RouterProvider,
+} from "react-router-dom";
 import "./index.css";
 import DashboardPage from "./pages/Dashboard/DashboardPage.jsx";
 import ClientListPage from "./pages/Clients/ClientListPage.jsx";
@@ -20,7 +24,7 @@ const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <DashboardPage />,
+        element: <Navigate to="dashboard" replace />,
       },
       {
         path: "dashboard",
@@ -36,6 +40,10 @@ const router = createBrowserRouter([
         children: [
           {
             index: true,
+            element: <Navigate to="details" replace />,
+          },
+          {
+            path: "details",
             element: <ClientDetails />,
           },
           {

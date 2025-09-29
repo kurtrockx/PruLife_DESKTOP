@@ -10,12 +10,19 @@ body,
   font-family: "Poppins", sans-serif;
 }
 
-.active {
+.sidebar .active {
   border-radius: 0.75rem;
   background: white;
   overflow: hidden;
 }
-.active img {
+.sidebar .active img {
   filter: invert();
   background: transparent;
+}
+
+.clientMainPage .active {
+  border-radius: 0.75rem;
+  background: #430209;
+  color: white;
+  overflow: hidden;
 }
