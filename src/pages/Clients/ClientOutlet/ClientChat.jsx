@@ -1,46 +1,44 @@
+import { useEffect, useState } from "react";
 import sendIcon from "../../../assets/sendIcon.svg";
-
-const sampleMessages = [
-  { sender: "admin", message: "Welcome to the chat!" },
-  { sender: "user", message: "Hi, I need some help." },
-  { sender: "admin", message: "Sure, what can I assist you with?" },
-  { sender: "user", message: "I have a question about my account." },
-  { sender: "admin", message: "Welcome to the chat!" },
-  { sender: "user", message: "Hi, I need some help." },
-  { sender: "admin", message: "Sure, what can I assist you with?" },
-  { sender: "user", message: "I have a question about my account." },
-  { sender: "admin", message: "Please provide more details about your query." },
-  { sender: "admin", message: "Welcome to the chat!" },
-  { sender: "user", message: "Hi, I need some help." },
-  { sender: "admin", message: "Sure, what can I assist you with?" },
-  { sender: "user", message: "I have a question about my account." },
-  { sender: "admin", message: "Please provide more details about your query." },
-  { sender: "admin", message: "Welcome to the chat!" },
-  { sender: "user", message: "Hi, I need some help." },
-  { sender: "admin", message: "Sure, what can I assist you with?" },
-  { sender: "user", message: "I have a question about my account." },
-  { sender: "admin", message: "Please provide more details about your query." },
-  { sender: "admin", message: "Welcome to the chat!" },
-  { sender: "user", message: "Hi, I need some help." },
-  { sender: "admin", message: "Sure, what can I assist you with?" },
-  { sender: "user", message: "I have a question about my account." },
-  { sender: "admin", message: "Please provide more details about your query." },
-];
+import { listenToDB, pushMessage } from "../../../backend/firebase_firestore";
+import { useParams } from "react-router-dom";
+import Loading from "../../../components/Loading";
 
 export default function ClientChat() {
+  const { clientId } = useParams();
+  const [messagesList, setMessagesList] = useState([]);
+  const [message, setMessage] = useState("");
+
+  useEffect(() => {
+    const unsubscribe = listenToDB(clientId, (data) => {
+      setMessagesList(data?.messages || []); // handle case where no messages yet
+      console.log("Realtime update:", data);
+    });
+
+    return () => unsubscribe();
+  }, [clientId]);
+
+  const handleSend = () => {
+    if (!message.trim()) return; // prevent empty messages
+    pushMessage(clientId, "admin", message.trim());
+    setMessage(""); // clear input after sending
+  };
+
   return (
     <>
       <ChatMessagesContainer>
-        {sampleMessages.map((msg, i) => (
-          <ChatMessage message={msg} key={i} />
-        ))}
+        {messagesList.length < 1 ? (
+          <Loading />
+        ) : (
+          messagesList.map((msg, i) => <ChatMessage message={msg} key={i} />)
+        )}
       </ChatMessagesContainer>
-      <TypeBox />
+      <TypeBox message={message} setMessage={setMessage} onSend={handleSend} />
     </>
   );
 }
 
-function TypeBox() {
+function TypeBox({ message, setMessage, onSend }) {
   const InputStylish =
     "shadow-[0_0_0_2.5px] shadow-red-950/0 duration-200 focus-within:shadow-red-950 hover:shadow-red-950";
 
@@ -50,15 +48,19 @@ function TypeBox() {
         className={`flex flex-1 rounded-full bg-black/10 px-2 text-black placeholder:text-black/80 ${InputStylish}`}
       >
         <input
+          value={message}
+          onChange={(e) => setMessage(e.target.value)}
           type="text"
           placeholder="Aa"
           className="flex-1 px-2 py-2.5 text-xl outline-0"
+          onKeyDown={(e) => e.key === "Enter" && onSend()}
         />
       </div>
       <img
+        onClick={onSend}
         src={sendIcon}
         alt="sendIcon"
-        className="max-h-full cursor-pointer rounded-full p-1.75 hover:bg-black/10"
+        className="max-h-full cursor-pointer rounded-full p-1.5 hover:bg-black/10"
       />
     </div>
   );
@@ -66,7 +68,7 @@ function TypeBox() {
 
 function ChatMessagesContainer({ children }) {
   return (
-    <div className="flex flex-1 flex-col gap-2 overflow-y-scroll px-2 py-4">
+    <div className="flex flex-1 flex-col gap-2 overflow-y-scroll px-2 py-4 overflow-x-hidden">
       {children}
     </div>
   );
@@ -74,14 +76,15 @@ function ChatMessagesContainer({ children }) {
 
 function ChatMessage({ message }) {
   const { sender, message: text } = message;
-  const senderStyle = `${sender === "admin" ? "self-end bg-blue-500 rounded-tr-none text-white" : "self-start bg-black/20 rounded-tl-none text-black/80"}`;
+  const senderStyle =
+    sender === "admin"
+      ? "self-end bg-blue-500 rounded-tr-none text-white duration-400 starting:translate-x-[100%]"
+      : "self-start bg-black/20 rounded-tl-none text-black/80 duration-400 starting:-translate-x-[100%]";
   const messageStyle = "p-2 rounded-2xl max-w-2xl";
 
   return (
     <div className={`${senderStyle} ${messageStyle}`}>
-      <h1>
-        {sender}: {text}
-      </h1>
+      <p>{text}</p>
     </div>
   );
 }

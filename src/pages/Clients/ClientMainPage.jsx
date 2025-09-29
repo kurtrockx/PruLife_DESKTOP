@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { NavLink, Outlet } from "react-router-dom";
 
 export default function ClientMainPage() {
@@ -12,7 +13,7 @@ export default function ClientMainPage() {
         </NavLink>
         <NavLink className={ClientTabStyle} to={"chat"}>
           Open Chat
-        </NavLink>
+        </NavLink>{" "}
       </div>
       <div className="flex aspect-video max-h-[90%] flex-1 flex-col overflow-hidden rounded-2xl bg-white shadow-[0_0_10px] shadow-black/20 max-2xl:max-w-[90%]">
         <Outlet />
