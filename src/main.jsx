@@ -4,7 +4,7 @@ import App from "./App.jsx";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./index.css";
 import DashboardPage from "./pages/Dashboard/DashboardPage.jsx";
-import ClientsPage from "./pages/Clients/ClientsPage.jsx";
+import ClientListPage from "./pages/Clients/ClientListPage.jsx";
 import ClientMainPage from "./pages/Clients/ClientMainPage.jsx";
 import PoliciesPage from "./pages/Policies/PoliciesPage.jsx";
 import ProposalsPage from "./pages/Proposals/ProposalsPage.jsx";
@@ -28,7 +28,7 @@ const router = createBrowserRouter([
       },
       {
         path: "clients",
-        element: <ClientsPage />,
+        element: <ClientListPage />,
       },
       {
         path: "clients/:clientId",

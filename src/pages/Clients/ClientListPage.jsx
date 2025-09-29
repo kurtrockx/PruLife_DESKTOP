@@ -3,7 +3,7 @@ import { CLIENTS } from "../../sampleData/clients";
 
 const CATEGORIES = ["Name", "Age", "Policy Type", "Status", "Actions"];
 
-export default function ClientPage() {
+export default function ClientListPage() {
   return (
     <div className="flex flex-1 flex-col justify-center">
       <h1 className="mx-auto pt-20 text-2xl font-semibold">
