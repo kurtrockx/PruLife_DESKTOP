@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
-import sendIcon from "../../../assets/sendIcon.svg";
+import { useEffect, useRef, useState } from "react";
 import { listenToDB, pushMessage } from "../../../backend/firebase_firestore";
 import { useParams } from "react-router-dom";
+import sendIcon from "../../../assets/sendIcon.svg";
 import Loading from "../../../components/Loading";
 
 export default function ClientChat() {
@@ -26,6 +26,7 @@ export default function ClientChat() {
 
   return (
     <>
+      <ChatHeader clientId={clientId} />
       <ChatMessagesContainer>
         {messagesList.length < 1 ? (
           <Loading />
@@ -35,6 +36,12 @@ export default function ClientChat() {
       </ChatMessagesContainer>
       <TypeBox message={message} setMessage={setMessage} onSend={handleSend} />
     </>
+  );
+}
+
+function ChatHeader({ clientId }) {
+  return (
+    <div className="bg-red-950 p-2 text-center text-white">{clientId}</div>
   );
 }
 
@@ -67,8 +74,20 @@ function TypeBox({ message, setMessage, onSend }) {
 }
 
 function ChatMessagesContainer({ children }) {
+  const scrollableContainerRef = useRef(null);
+
+  useEffect(() => {
+    if (scrollableContainerRef.current) {
+      scrollableContainerRef.current.scrollTop =
+        scrollableContainerRef.current.scrollHeight;
+    }
+  }, [children]);
+
   return (
-    <div className="flex flex-1 flex-col gap-2 overflow-y-scroll px-2 py-4 overflow-x-hidden">
+    <div
+      ref={scrollableContainerRef}
+      className="flex flex-1 flex-col gap-2 overflow-x-hidden overflow-y-scroll px-2 py-4"
+    >
       {children}
     </div>
   );
