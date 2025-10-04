@@ -1,6 +1,5 @@
 import { useParams } from "react-router-dom";
 import { CLIENTS } from "../../../sampleData/clients";
-import clientsIcon from "../../../assets/clientsIcon.svg";
 
 export default function ClientDetails() {
   const { clientId } = useParams();
@@ -8,8 +7,12 @@ export default function ClientDetails() {
 
   return (
     <>
-      <img src={clientsIcon} alt="client picture" className="max-h-[20%]" />
-      <ul className="mx-auto flex flex-col text-center">
+      <img
+        src="https://avatars.githubusercontent.com/u/170799880?v=4"
+        alt="client picture"
+        className="block aspect-square w-1/2 rounded object-cover"
+      />
+      <ul className="mx-auto flex w-full flex-1 flex-col items-center justify-center text-center">
         <li>{client.name}</li>
         <li>{client.age}</li>
         <li>{client.status}</li>
