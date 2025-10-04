@@ -17,7 +17,7 @@ const pages = [
 
 export default function Sidebar() {
   return (
-    <div className="z-100 flex max-w-[5em] flex-1 flex-col items-center gap-6 bg-red-950 px-2 py-6 sidebar">
+    <div className="sidebar z-100 flex max-w-[4.25em] flex-1 flex-col items-center gap-6 bg-red-950 px-2 py-6 lg:max-w-[4.5em] 2xl:max-w-[5em]">
       {pages.map((p) => (
         <NavLink
           key={p.name}
