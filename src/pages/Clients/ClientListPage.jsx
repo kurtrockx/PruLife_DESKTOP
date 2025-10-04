@@ -20,12 +20,15 @@ export default function ClientListPage() {
 }
 
 function Categories() {
+  const textResponsive = "max-2xl:text-base max-xl:text-sm max-lg:text-xs";
+  const paddingResponsive = "max-xl:p-1 max-lg:px-0.5";
+
   return (
     <div className="sticky top-0 flex flex-1 border border-[#450509] bg-[#450509] px-4 font-semibold text-white shadow-sm">
       {CATEGORIES.map((c, i) => (
         <h2
           key={i}
-          className={`flex-1 py-2 ${i === CATEGORIES.length - 1 && "border-transparent"} mx-auto border-r border-black px-2 text-center text-xl whitespace-nowrap uppercase`}
+          className={`mx-auto flex-1 border-r border-black px-2 text-center whitespace-nowrap uppercase ${textResponsive} ${paddingResponsive} ${i === CATEGORIES.length - 1 && "border-transparent"}`}
         >
           {c}
         </h2>
@@ -45,7 +48,9 @@ function ClientsList() {
 }
 
 function Client({ client }) {
-  const clientDetailStyle = "flex-1 border-r p-2 text-xl whitespace-nowrap";
+  const textResponsive = "max-2xl:text-base max-xl:text-sm max-lg:text-xs";
+  const paddingResponsive = "max-xl:p-1 max-lg:px-0.25 max-lg:py-0.25";
+  const clientDetailStyle = `flex-1 border-r p-2 text-xl whitespace-nowrap max-w-[20%] flex items-center truncate justify-center ${textResponsive} ${paddingResponsive}`;
 
   return (
     <div className="flex flex-1 border px-2">
@@ -53,7 +58,9 @@ function Client({ client }) {
       <h3 className={clientDetailStyle}>{client.age}</h3>
       <h3 className={clientDetailStyle}>{client.policyType}</h3>
       <h3 className={clientDetailStyle}>{client.status}</h3>
-      <div className="flex flex-1 items-center justify-center px-2">
+      <div
+        className={`flex flex-1 items-center justify-center ${paddingResponsive} ${textResponsive}`}
+      >
         <ClientsButton clientName={client.name} />
       </div>
     </div>
