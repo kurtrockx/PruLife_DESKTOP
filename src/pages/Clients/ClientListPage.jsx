@@ -21,7 +21,7 @@ export default function ClientListPage() {
 
 function Categories() {
   const textResponsive = "max-2xl:text-base max-xl:text-sm max-lg:text-xs";
-  const paddingResponsive = "max-xl:p-1 max-lg:px-0.5";
+  const paddingResponsive = "max-xl:p-1 max-lg:px-0.5 py-4";
 
   return (
     <div className="sticky top-0 flex flex-1 border border-[#450509] bg-[#450509] px-4 font-semibold text-white shadow-sm">
