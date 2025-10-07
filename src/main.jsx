@@ -10,7 +10,6 @@ import "./index.css";
 import DashboardPage from "./pages/Dashboard/DashboardPage.jsx";
 import ClientListPage from "./pages/Clients/ClientListPage.jsx";
 import ClientMainPage from "./pages/Clients/ClientMainPage.jsx";
-import PoliciesPage from "./pages/Policies/PoliciesPage.jsx";
 import ProposalsPage from "./pages/Proposals/ProposalsPage.jsx";
 import ReportsPage from "./pages/Reports/ReportsPage.jsx";
 import SettingsPage from "./pages/Settings/SettingsPage.jsx";
@@ -51,10 +50,6 @@ const router = createBrowserRouter([
             element: <ClientChat />,
           },
         ],
-      },
-      {
-        path: "policies",
-        element: <PoliciesPage />,
       },
       {
         path: "proposals",

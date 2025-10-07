@@ -12,9 +12,13 @@ body,
 
 .sidebar .active {
   border-radius: 0.75rem;
-  background: white;
   overflow: hidden;
+  background: white;
 }
+.sidebar .active p {
+  color: black;
+}
+
 .sidebar .active img {
   filter: invert();
   background: transparent;
