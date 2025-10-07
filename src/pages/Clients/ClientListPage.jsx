@@ -24,7 +24,7 @@ function Categories() {
   const paddingResponsive = "max-xl:px-1 max-xl:py-2 max-lg:px-0.5 py-4";
 
   return (
-    <div className="sticky top-0 flex flex-1 border border-[#450509] bg-[#450509] px-4 font-semibold text-white shadow-sm">
+    <div className="sticky top-0 flex flex-1 border border-red-950 bg-red-950 px-4 font-semibold text-white shadow-sm">
       {CATEGORIES.map((c, i) => (
         <h2
           key={i}
