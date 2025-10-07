@@ -8,11 +8,14 @@ import { ChatMessage } from "./chat-components/ChatMessage";
 import { ChatMessagesContainer } from "./chat-components/ChatMessagesContainer";
 import { TypeBox } from "./chat-components/TypeBox";
 import { ChatHeader } from "./chat-components/ChatHeader";
+import PDFGenerator from "../../../components/PDFGenerator";
 
 export default function ClientChat() {
   const { clientId } = useParams();
   const [messagesList, setMessagesList] = useState([]);
   const [message, setMessage] = useState("");
+
+  const [openPdfModal, setOpenPdfModal] = useState(false);
 
   useEffect(() => {
     const unsubscribe = listenToDB(clientId, (data) => {
@@ -32,6 +35,14 @@ export default function ClientChat() {
   return (
     <>
       <ChatHeader clientId={clientId} />
+      <button onClick={() => setOpenPdfModal(prev => !prev)} className="cursor-pointer bg-green-400 py-4 font-semibold text-white shadow-2xl text-shadow-sm">
+        Open PDF
+      </button>
+      {openPdfModal && (
+        <div className="fixed top-0 left-0 flex min-h-svh min-w-svw items-center justify-center bg-black/40 backdrop-blur-sm">
+          <PDFGenerator />
+        </div>
+      )}
       <ChatMessagesContainer>
         {messagesList.length < 1 ? (
           <Loading />
