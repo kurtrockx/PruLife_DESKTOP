@@ -3,6 +3,9 @@ import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 
 export default function PDFGenerator() {
+  const tableEntryDesign =
+    "flex flex-1 flex-col items-center justify-center border p-1";
+
   const printRef = useRef();
 
   const handleDownloadPdf = async () => {
@@ -42,21 +45,81 @@ export default function PDFGenerator() {
   };
 
   return (
-    <div className="flex flex-col items-center gap-6 p-6">
+    <div className="flex flex-col items-center gap-6 bg-stone-800 p-6 text-xs">
       <div
         ref={printRef}
-        className="force-rgb h-[1056px] w-[816px] border bg-white p-8 shadow-lg [zoom:0.8]"
+        className="force-rgb flex h-[1056px] w-[816px] flex-col border bg-white p-8 shadow-lg [zoom:0.8]"
       >
-        <h1 className="text-center text-3xl font-bold text-blue-600">
-          Properly Scaled Preview
-        </h1>
-        <p className="mt-4 text-center text-gray-600">
-          Looks smaller on screen, but exports sharp and full-size.
-        </p>
-        <div className="mt-6 space-y-2 text-center">
-          <p>- On-screen zoom: 80%</p>
-          <p>- PDF output: Full 8.5 × 11 inch Letter size</p>
+        {/* Header sample proposal */}
+        <div className="text-right">
+          <p>
+            Simple Summary Proposal by
+            <BoldText> CHE VIANNEY PAREDES</BoldText> | Unit Operations Manager
+            | Prulife UK
+          </p>
         </div>
+
+        {/* Profile */}
+        <div className="flex flex-col">
+          <BoldText>I. PROFILE</BoldText>
+          <div className="flex">
+            <p className="flex-1">Proposed Policy Owner:</p>
+            <p className="flex-1">Menzie Junsay</p>
+            <p className="flex-1">Age: 29yo</p>
+          </div>
+          <div className="flex">
+            <p className="flex-1">Proposed Life Insured:</p>
+            <p className="flex-1">Menzie Junsay</p>
+            <p className="flex-1">Age: 29yo</p>
+          </div>
+        </div>
+
+        {/* Insurance Plan HEADER*/}
+        <div>
+          <BoldText>
+            INSURANCE PLAN: PRULINK ASSURANCE ACOUNT PLUS (PROTECTION HEAVY)
+          </BoldText>
+          <div className="flex">
+            <div className={`${tableEntryDesign}`}>BENEFITS</div>
+            <div
+              className={`${tableEntryDesign} border-black bg-red-800 text-white`}
+            >
+              <BoldText>BEST</BoldText>
+              <p>61,228</p>
+              <p>(Flexible)</p>
+            </div>
+            <div
+              className={`${tableEntryDesign} border-black bg-red-800 text-white`}
+            >
+              <BoldText>BETTER</BoldText>
+              <p>36,000</p>
+              <p>(Flexible)</p>
+            </div>
+            <div
+              className={`${tableEntryDesign} border-black bg-red-800 text-white`}
+            >
+              <BoldText>GOOD</BoldText>
+              <p>25,200</p>
+              <p>(Flexible)</p>
+            </div>
+          </div>
+        </div>
+        {/* Insurance Plan MONTHLY*/}
+        <div className="flex">
+          <div className={`${tableEntryDesign}`}>
+            <BoldText>Monthly Savings</BoldText>
+          </div>
+          <div className={tableEntryDesign}>
+            <BoldText>PhP 5,102.33</BoldText>
+          </div>
+          <div className={tableEntryDesign}>
+            <BoldText>PhP 3000</BoldText>
+          </div>
+          <div className={tableEntryDesign}>
+            <BoldText>PhP 2,100</BoldText>
+          </div>
+        </div>
+        {/* Insurance Plan END*/}
       </div>
 
       <button
@@ -67,4 +130,8 @@ export default function PDFGenerator() {
       </button>
     </div>
   );
+}
+
+function BoldText({ children }) {
+  return <span className="font-bold">{children}</span>;
 }

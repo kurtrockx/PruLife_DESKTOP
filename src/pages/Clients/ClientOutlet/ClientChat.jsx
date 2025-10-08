@@ -35,11 +35,14 @@ export default function ClientChat() {
   return (
     <>
       <ChatHeader clientId={clientId} />
-      <button onClick={() => setOpenPdfModal(prev => !prev)} className="cursor-pointer bg-green-400 py-4 font-semibold text-white shadow-2xl text-shadow-sm">
+      <button
+        onClick={() => setOpenPdfModal((prev) => !prev)}
+        className="cursor-pointer bg-green-400 py-4 font-semibold text-white shadow-2xl text-shadow-sm"
+      >
         Open PDF
       </button>
       {openPdfModal && (
-        <div className="fixed top-0 left-0 flex min-h-svh min-w-svw items-center justify-center bg-black/40 backdrop-blur-sm">
+        <div className="fixed top-0 left-0 z-1000 flex min-h-svh min-w-svw items-center justify-center bg-black/40 backdrop-blur-sm">
           <PDFGenerator />
         </div>
       )}

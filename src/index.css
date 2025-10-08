@@ -31,12 +31,9 @@ body,
   overflow: hidden;
 }
 
-
 @layer utilities {
   .force-rgb * {
     /* Converts Tailwind oklch colors into rgb fallback */
     color-scheme: light;
-    color: rgb(0, 0, 0) !important;
-    background-color: rgb(255, 255, 255) !important;
   }
 }
