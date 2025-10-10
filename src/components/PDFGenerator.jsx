@@ -70,7 +70,7 @@ export default function PDFGenerator() {
       const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
 
       pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
-      pdf.save("letter-size.pdf");
+      pdf.save("Proposal.pdf");
     } catch (err) {
       console.error("PDF generation failed:", err);
     }
@@ -80,7 +80,7 @@ export default function PDFGenerator() {
     <div className="flex flex-col items-center gap-6 overflow-hidden overflow-y-auto bg-[#292524] p-6 text-xs">
       <div
         ref={printRef}
-        className="force-rgb flex h-[1056px] w-[816px] flex-col border bg-[white] p-8 shadow-lg max-lg:[zoom:0.8] max-sm:[zoom:0.5]"
+        className="force-rgb flex h-[1056px] w-[816px] flex-col border bg-[white] p-12 shadow-lg max-lg:[zoom:0.8] max-sm:[zoom:0.5]"
       >
         {/* Header sample proposal */}
         <div className="text-right">
@@ -193,7 +193,7 @@ function BoldText({ children }) {
 
 function Profile() {
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col py-4">
       <BoldText>I. PROFILE</BoldText>
       <div className="flex">
         <p className="flex-1">Proposed Policy Owner:</p>
