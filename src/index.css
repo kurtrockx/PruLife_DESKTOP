@@ -39,3 +39,6 @@ body,
     color: #000 !important;
   }
 }
+img {
+  display: inline-block;
+}
