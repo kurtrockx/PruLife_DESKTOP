@@ -35,12 +35,6 @@ export default function ClientChat() {
   return (
     <>
       <ChatHeader clientId={clientId} />
-      <button
-        onClick={() => setOpenPdfModal((prev) => !prev)}
-        className="cursor-pointer bg-green-400 py-4 font-semibold text-white shadow-2xl text-shadow-sm"
-      >
-        Open PDF
-      </button>
       {openPdfModal && <PDFModal onOpenPdfModal={setOpenPdfModal} />}
       <ChatMessagesContainer>
         {messagesList.length < 1 ? (
@@ -49,7 +43,7 @@ export default function ClientChat() {
           messagesList.map((msg, i) => <ChatMessage message={msg} key={i} />)
         )}
       </ChatMessagesContainer>
-      <TypeBox message={message} setMessage={setMessage} onSend={handleSend} />
+      <TypeBox message={message} setMessage={setMessage} onSend={handleSend} onOpenPdfModal={setOpenPdfModal} />
     </>
   );
 }

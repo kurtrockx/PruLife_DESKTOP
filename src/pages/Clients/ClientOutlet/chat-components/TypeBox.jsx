@@ -1,11 +1,15 @@
 import sendIcon from "../../../../assets/sendIcon.svg";
+import Button from "../../../../components/Button";
 
-export function TypeBox({ message, setMessage, onSend }) {
+export function TypeBox({ message, setMessage, onSend, onOpenPdfModal }) {
   const InputStylish =
     "shadow-[0_0_0_2.5px] shadow-red-950/0 duration-200 focus-within:shadow-red-950 hover:shadow-red-950";
 
   return (
     <div className="flex max-h-[10%] flex-1 items-center gap-2 p-[0.75rem] shadow-[0_-2px_10px] shadow-black/10 max-xl:py-2">
+      <Button onClick={() => onOpenPdfModal((prev) => !prev)}>
+        OPEN PROPOSAL
+      </Button>
       <div
         className={`flex flex-1 rounded-full bg-black/10 px-2 text-black placeholder:text-black/80 ${InputStylish}`}
       >
