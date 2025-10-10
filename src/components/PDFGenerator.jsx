@@ -58,7 +58,7 @@ export default function PDFGenerator() {
 
       // Restore the on-screen zoom
 
-      const imgData = canvas.toDataURL("image/png");
+      const imgData = canvas.toDataURL("image/jpeg");
 
       const pdf = new jsPDF({
         orientation: "p",
@@ -69,7 +69,7 @@ export default function PDFGenerator() {
       const pdfWidth = pdf.internal.pageSize.getWidth();
       const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
 
-      pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
+      pdf.addImage(imgData, "JPEG", 0, 0, pdfWidth, pdfHeight);
       pdf.save("Proposal.pdf");
     } catch (err) {
       console.error("PDF generation failed:", err);
