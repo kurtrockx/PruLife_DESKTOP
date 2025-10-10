@@ -21,16 +21,32 @@ const PROPOSAL_CONTANTS = [
   ["Critical Illness Waiver", "Future Premiums", "N/A", "N/A"],
 ];
 
+const PROPOSAL_CONTANTS2 = [
+  ["At 5 years (Age 34)", "1,0417,481", "72,045.38", "56,693.70"],
+  ["Total and Permanent Disability", "423,573.05", "281.115.91", "218,304.73"],
+  [
+    "Accidental Death and Disablement",
+    "924,637.33",
+    "614,156.14",
+    "485,034.70",
+  ],
+  [
+    "Accidental Death and Disablement",
+    "1,652,082.59",
+    "1,104,178.11",
+    "894,563.79",
+  ],
+];
+
 export default function PDFGenerator() {
   const tableEntryDesign =
-    "flex flex-1 flex-col items-center justify-center border p-1";
+    "flex flex-1 flex-col items-center justify-center border px-1 py-2";
 
   const printRef = useRef();
 
   const handleDownloadPdf = async () => {
     try {
       const element = printRef.current;
-
 
       await new Promise((r) => setTimeout(r, 100));
 
@@ -75,20 +91,7 @@ export default function PDFGenerator() {
           </p>
         </div>
 
-        {/* Profile */}
-        <div className="flex flex-col">
-          <BoldText>I. PROFILE</BoldText>
-          <div className="flex">
-            <p className="flex-1">Proposed Policy Owner:</p>
-            <p className="flex-1">Menzie Junsay</p>
-            <p className="flex-1">Age: 29yo</p>
-          </div>
-          <div className="flex">
-            <p className="flex-1">Proposed Life Insured:</p>
-            <p className="flex-1">Menzie Junsay</p>
-            <p className="flex-1">Age: 29yo</p>
-          </div>
-        </div>
+        <Profile />
 
         {/* Insurance Plan HEADER*/}
         <div>
@@ -96,7 +99,9 @@ export default function PDFGenerator() {
             INSURANCE PLAN: PRULINK ASSURANCE ACOUNT PLUS (PROTECTION HEAVY)
           </BoldText>
           <div className="flex text-white">
-            <div className={`${tableEntryDesign} border-black bg-neutral-600`}>
+            <div
+              className={`${tableEntryDesign} flex-2/12 border-black bg-neutral-600`}
+            >
               BENEFITS
             </div>
             <div className={`${tableEntryDesign} border-black bg-[#9f0712]`}>
@@ -116,9 +121,10 @@ export default function PDFGenerator() {
             </div>
           </div>
         </div>
+        
         {/* Insurance Plan MONTHLY*/}
         <div className="flex">
-          <div className={`${tableEntryDesign}`}>
+          <div className={`${tableEntryDesign} flex-2/12`}>
             <BoldText>Monthly Savings</BoldText>
           </div>
           <div className={tableEntryDesign}>
@@ -136,7 +142,7 @@ export default function PDFGenerator() {
           <div className="flex">
             {pLine.map((p, i) => (
               <div
-                className={`${tableEntryDesign} ${i === 0 && "items-start"}`}
+                className={`${tableEntryDesign} ${i === 0 && "flex-2/12 items-start"}`}
               >
                 {p}
               </div>
@@ -144,12 +150,36 @@ export default function PDFGenerator() {
           </div>
         ))}
 
+        {/* Insurance Plan HEADER*/}
+        <div className="flex text-white">
+          <div className={`${tableEntryDesign} border-black bg-neutral-600`}>
+            INVESTMENT PROJECTION
+          </div>
+          <div
+            className={`${tableEntryDesign} flex-[1.77] border-black bg-[#9f0712]`}
+          >
+            <BoldText>PROJECTED FUND VALUE</BoldText>
+          </div>
+        </div>
+
+        {PROPOSAL_CONTANTS2.map((pLine) => (
+          <div className="flex">
+            {pLine.map((p, i) => (
+              <div
+                className={`${tableEntryDesign} ${i === 0 && "flex-2/12 items-start"}`}
+              >
+                {p}
+              </div>
+            ))}
+          </div>
+        ))}
+        <BottomNotes />
         {/* Insurance Plan END*/}
       </div>
 
       <button
         onClick={handleDownloadPdf}
-        className="rounded-lg bg-blue-600 px-4 py-2 text-white hover:bg-blue-700 fixed inset-0 max-w-fit max-h-fit"
+        className="fixed inset-0 max-h-fit max-w-fit rounded-lg bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
       >
         Download PDF
       </button>
@@ -159,4 +189,52 @@ export default function PDFGenerator() {
 
 function BoldText({ children }) {
   return <span className="font-bold">{children}</span>;
+}
+
+function Profile() {
+  return (
+    <div className="flex flex-col">
+      <BoldText>I. PROFILE</BoldText>
+      <div className="flex">
+        <p className="flex-1">Proposed Policy Owner:</p>
+        <p className="flex-1">Menzie Junsay</p>
+        <p className="flex-1">Age: 29yo</p>
+      </div>
+      <div className="flex">
+        <p className="flex-1">Proposed Life Insured:</p>
+        <p className="flex-1">Menzie Junsay</p>
+        <p className="flex-1">Age: 29yo</p>
+      </div>
+    </div>
+  );
+}
+
+function BottomNotes() {
+  return (
+    <div className="space-y-2 py-4">
+      {/* Insurance Notes */}
+      <div>
+        <BoldText>Insurance Notes:</BoldText>
+        <p>*All insurance coverage are GUARANTEED once approved.</p>
+        <p>
+          *Critical Illness Benefits take effect 90 DAYS after Olic a roval.
+        </p>
+        <p>
+          *Hospital Income Benefits take effect 30 DAYS after policy approval.
+          Daily benefit as long as client is confined for at least 12 hours.
+        </p>
+      </div>
+      {/* Investment Notes */}
+      <div>
+        <BoldText>Investment Notes:</BoldText>
+        <p>*Fund value is NOT GUARANTEED</p>
+        <p>
+          *Fund value is projected at 10% as mandated by Insurance Commission.
+        </p>
+        <p>
+          *Chosen fund: 80% Equity Index Tracker Fund and 20% Global Tech Fund
+        </p>
+      </div>
+    </div>
+  );
 }
