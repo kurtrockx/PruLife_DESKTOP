@@ -77,7 +77,7 @@ export default function PDFGenerator() {
   };
 
   return (
-    <div className="flex flex-col items-center gap-6 overflow-auto bg-stone-800 p-6 text-xs">
+    <div className="flex flex-col items-center gap-6 overflow-hidden overflow-y-auto bg-stone-800 p-6 text-xs">
       <div
         ref={printRef}
         className="force-rgb flex h-[1056px] w-[816px] flex-col border bg-white p-8 shadow-lg max-lg:[zoom:0.8] max-sm:[zoom:0.5]"

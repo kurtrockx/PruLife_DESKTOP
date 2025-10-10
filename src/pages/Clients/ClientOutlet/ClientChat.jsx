@@ -41,11 +41,7 @@ export default function ClientChat() {
       >
         Open PDF
       </button>
-      {openPdfModal && (
-        <div className="fixed top-0 left-0 z-1000 flex max-h-dvh min-h-dvh min-w-dvw overflow-hidden justify-center bg-black/40 p-5 backdrop-blur-sm">
-          <PDFGenerator />
-        </div>
-      )}
+      {openPdfModal && <PDFModal onOpenPdfModal={setOpenPdfModal} />}
       <ChatMessagesContainer>
         {messagesList.length < 1 ? (
           <Loading />
@@ -55,5 +51,21 @@ export default function ClientChat() {
       </ChatMessagesContainer>
       <TypeBox message={message} setMessage={setMessage} onSend={handleSend} />
     </>
+  );
+}
+
+function PDFModal({ onOpenPdfModal }) {
+  return (
+    <div
+      className="fixed top-0 left-0 z-100 flex max-h-dvh min-h-dvh min-w-dvw justify-center overflow-hidden bg-black/40 p-5 backdrop-blur-sm"
+      onClick={() => onOpenPdfModal(false)}
+    >
+      <div
+        className="max-h-full overflow-y-auto"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <PDFGenerator />
+      </div>
+    </div>
   );
 }
