@@ -77,10 +77,10 @@ export default function PDFGenerator() {
   };
 
   return (
-    <div className="flex flex-col items-center gap-6 bg-stone-800 p-6 text-xs">
+    <div className="flex flex-col items-center gap-6 overflow-auto bg-stone-800 p-6 text-xs">
       <div
         ref={printRef}
-        className="force-rgb flex h-[1056px] w-[816px] flex-col border bg-white p-8 shadow-lg"
+        className="force-rgb flex h-[1056px] w-[816px] flex-col border bg-white p-8 shadow-lg max-lg:[zoom:0.8] max-sm:[zoom:0.5]"
       >
         {/* Header sample proposal */}
         <div className="text-right">
@@ -121,7 +121,7 @@ export default function PDFGenerator() {
             </div>
           </div>
         </div>
-        
+
         {/* Insurance Plan MONTHLY*/}
         <div className="flex">
           <div className={`${tableEntryDesign} flex-2/12`}>
@@ -179,7 +179,7 @@ export default function PDFGenerator() {
 
       <button
         onClick={handleDownloadPdf}
-        className="fixed inset-0 max-h-fit max-w-fit rounded-lg bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
+        className="max-h-fit max-w-fit rounded-lg bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
       >
         Download PDF
       </button>

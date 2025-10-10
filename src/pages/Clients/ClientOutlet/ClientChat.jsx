@@ -42,7 +42,7 @@ export default function ClientChat() {
         Open PDF
       </button>
       {openPdfModal && (
-        <div className="fixed top-0 left-0 z-1000 flex min-h-svh min-w-svw items-center justify-center bg-black/40 backdrop-blur-sm">
+        <div className="fixed top-0 left-0 z-1000 flex max-h-dvh min-h-dvh min-w-dvw overflow-hidden justify-center bg-black/40 p-5 backdrop-blur-sm">
           <PDFGenerator />
         </div>
       )}
