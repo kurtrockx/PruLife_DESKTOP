@@ -35,5 +35,7 @@ body,
   .force-rgb * {
     /* Converts Tailwind oklch colors into rgb fallback */
     color-scheme: light;
+    background: white !important;
+    color: #000 !important;
   }
 }

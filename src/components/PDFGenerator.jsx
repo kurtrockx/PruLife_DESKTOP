@@ -2,6 +2,25 @@ import { useRef } from "react";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 
+const PROPOSAL_CONTANTS = [
+  ["Life Insurance", "3,000,000", "2,400,000", "1,500,000"],
+  ["Total and Permanent Disability", "1,500,000", "1,000,000", "1,000,000"],
+  ["Accidental Death and Disablement", "1,500,000", "1,000,000", "1,000,000"],
+  ["Early Stage Critical Illness", "N/A", "N/A", "N/A"],
+  ["Late Stage Critical Illness", "1,000,000", "1,000,000", "N/A"],
+  ["Daily Hospital Income", "2,000", "1,500", "1,500"],
+  ["Surgical Expense Reimbursement", "30,000", "N/A", "N/A"],
+  ["ICU Benefit", "N/A", "N/A", "N/A"],
+  ["Long Term Hospitalization", "N/A", "N/A", "N/A"],
+  [
+    "Disability Waiver",
+    "Future Premiums",
+    "Future Premiums",
+    "Future Premiums",
+  ],
+  ["Critical Illness Waiver", "Future Premiums", "N/A", "N/A"],
+];
+
 export default function PDFGenerator() {
   const tableEntryDesign =
     "flex flex-1 flex-col items-center justify-center border p-1";
@@ -12,8 +31,6 @@ export default function PDFGenerator() {
     try {
       const element = printRef.current;
 
-      // Temporarily remove zoom before capture
-      element.style.zoom = "1";
 
       await new Promise((r) => setTimeout(r, 100));
 
@@ -24,7 +41,6 @@ export default function PDFGenerator() {
       });
 
       // Restore the on-screen zoom
-      element.style.zoom = "0.8";
 
       const imgData = canvas.toDataURL("image/png");
 
@@ -48,7 +64,7 @@ export default function PDFGenerator() {
     <div className="flex flex-col items-center gap-6 bg-stone-800 p-6 text-xs">
       <div
         ref={printRef}
-        className="force-rgb flex h-[1056px] w-[816px] flex-col border bg-white p-8 shadow-lg [zoom:0.8]"
+        className="force-rgb flex h-[1056px] w-[816px] flex-col border bg-white p-8 shadow-lg"
       >
         {/* Header sample proposal */}
         <div className="text-right">
@@ -79,25 +95,21 @@ export default function PDFGenerator() {
           <BoldText>
             INSURANCE PLAN: PRULINK ASSURANCE ACOUNT PLUS (PROTECTION HEAVY)
           </BoldText>
-          <div className="flex">
-            <div className={`${tableEntryDesign}`}>BENEFITS</div>
-            <div
-              className={`${tableEntryDesign} border-black bg-red-800 text-white`}
-            >
+          <div className="flex text-white">
+            <div className={`${tableEntryDesign} border-black bg-neutral-600`}>
+              BENEFITS
+            </div>
+            <div className={`${tableEntryDesign} border-black bg-[#9f0712]`}>
               <BoldText>BEST</BoldText>
               <p>61,228</p>
               <p>(Flexible)</p>
             </div>
-            <div
-              className={`${tableEntryDesign} border-black bg-red-800 text-white`}
-            >
+            <div className={`${tableEntryDesign} border-black bg-[#9f0712]`}>
               <BoldText>BETTER</BoldText>
               <p>36,000</p>
               <p>(Flexible)</p>
             </div>
-            <div
-              className={`${tableEntryDesign} border-black bg-red-800 text-white`}
-            >
+            <div className={`${tableEntryDesign} border-black bg-[#9f0712]`}>
               <BoldText>GOOD</BoldText>
               <p>25,200</p>
               <p>(Flexible)</p>
@@ -119,12 +131,25 @@ export default function PDFGenerator() {
             <BoldText>PhP 2,100</BoldText>
           </div>
         </div>
+
+        {PROPOSAL_CONTANTS.map((pLine) => (
+          <div className="flex">
+            {pLine.map((p, i) => (
+              <div
+                className={`${tableEntryDesign} ${i === 0 && "items-start"}`}
+              >
+                {p}
+              </div>
+            ))}
+          </div>
+        ))}
+
         {/* Insurance Plan END*/}
       </div>
 
       <button
         onClick={handleDownloadPdf}
-        className="rounded-lg bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
+        className="rounded-lg bg-blue-600 px-4 py-2 text-white hover:bg-blue-700 fixed inset-0 max-w-fit max-h-fit"
       >
         Download PDF
       </button>
