@@ -77,10 +77,10 @@ export default function PDFGenerator() {
   };
 
   return (
-    <div className="flex flex-col items-center gap-6 overflow-hidden overflow-y-auto bg-stone-800 p-6 text-xs">
+    <div className="flex flex-col items-center gap-6 overflow-hidden overflow-y-auto bg-[#292524] p-6 text-xs">
       <div
         ref={printRef}
-        className="force-rgb flex h-[1056px] w-[816px] flex-col border bg-white p-8 shadow-lg max-lg:[zoom:0.8] max-sm:[zoom:0.5]"
+        className="force-rgb flex h-[1056px] w-[816px] flex-col border bg-[white] p-8 shadow-lg max-lg:[zoom:0.8] max-sm:[zoom:0.5]"
       >
         {/* Header sample proposal */}
         <div className="text-right">
@@ -98,23 +98,23 @@ export default function PDFGenerator() {
           <BoldText>
             INSURANCE PLAN: PRULINK ASSURANCE ACOUNT PLUS (PROTECTION HEAVY)
           </BoldText>
-          <div className="flex text-white">
+          <div className="flex text-[white]">
             <div
-              className={`${tableEntryDesign} flex-2/12 border-black bg-neutral-600`}
+              className={`${tableEntryDesign} flex-2/12 border-black bg-[#525252]`}
             >
               BENEFITS
             </div>
-            <div className={`${tableEntryDesign} border-black bg-[#9f0712]`}>
+            <div className={`${tableEntryDesign} border-[black] bg-[#9f0712]`}>
               <BoldText>BEST</BoldText>
               <p>61,228</p>
               <p>(Flexible)</p>
             </div>
-            <div className={`${tableEntryDesign} border-black bg-[#9f0712]`}>
+            <div className={`${tableEntryDesign} border-[black] bg-[#9f0712]`}>
               <BoldText>BETTER</BoldText>
               <p>36,000</p>
               <p>(Flexible)</p>
             </div>
-            <div className={`${tableEntryDesign} border-black bg-[#9f0712]`}>
+            <div className={`${tableEntryDesign} border-[black] bg-[#9f0712]`}>
               <BoldText>GOOD</BoldText>
               <p>25,200</p>
               <p>(Flexible)</p>
@@ -151,8 +151,8 @@ export default function PDFGenerator() {
         ))}
 
         {/* Insurance Plan HEADER*/}
-        <div className="flex text-white">
-          <div className={`${tableEntryDesign} border-black bg-neutral-600`}>
+        <div className="flex text-[white]">
+          <div className={`${tableEntryDesign} border-black bg-[#525252]`}>
             INVESTMENT PROJECTION
           </div>
           <div
@@ -179,7 +179,7 @@ export default function PDFGenerator() {
 
       <button
         onClick={handleDownloadPdf}
-        className="max-h-fit max-w-fit rounded-lg bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
+        className="max-h-fit max-w-fit rounded-lg bg-[#155dfc] px-4 py-2 text-white hover:bg-[#1447e6]"
       >
         Download PDF
       </button>
