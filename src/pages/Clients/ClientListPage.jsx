@@ -3,6 +3,7 @@ import { fetchAllUsers } from "../../backend/firebase_firestore";
 import { useEffect, useState } from "react";
 import Loading from "../../components/Loading";
 import chatIcon from "../../assets/chatIcon.svg";
+import searchIcon from "../../assets/searchIcon.svg";
 
 const CATEGORIES = [
   { label: "Name", maxWidth: "max-w-[30%]" },
@@ -64,11 +65,11 @@ function Categories({ onSearchInput }) {
   return (
     <div className="sticky top-0 space-y-2 bg-white py-2">
       <SearchClient onSearchInput={onSearchInput} />
-      <div className="flex flex-1 border border-red-950 bg-red-950 px-4 font-semibold text-white shadow-sm">
+      <div className="flex flex-1 border border-red-950 bg-black px-4 font-semibold text-white shadow-sm">
         {CATEGORIES.map((c, i) => (
           <h2
             key={i}
-            className={`mx-auto flex-1 border-r border-black/40 px-2 text-center whitespace-nowrap uppercase ${textResponsive} ${paddingResponsive} ${i === CATEGORIES.length - 1 && "border-transparent"} ${c.maxWidth}`}
+            className={`mx-auto flex-1 border-r border-white/50 px-2 text-center whitespace-nowrap uppercase ${textResponsive} ${paddingResponsive} ${i === CATEGORIES.length - 1 && "border-r-0"} ${c.maxWidth}`}
           >
             {c.label}
           </h2>
@@ -92,6 +93,7 @@ function SearchClient({ onSearchInput }) {
         placeholder="Search for member"
         onChange={onSearchInput}
       />
+      <img className="max-h-6 opacity-50" src={searchIcon} alt="searchIcon" />
     </div>
   );
 }
@@ -109,7 +111,7 @@ function ClientsList({ clients }) {
 function Client({ client }) {
   const textResponsive = "max-2xl:text-base max-xl:text-sm max-lg:text-xs";
   const paddingResponsive = "max-xl:p-1 max-lg:px-0.25 max-lg:py-0.25";
-  const clientDetailStyle = `flex-1 border-r border-black/10 p-2 text-xl whitespace-nowrap  flex items-center truncate justify-center ${textResponsive} ${paddingResponsive}`;
+  const clientDetailStyle = `flex-1 border-r border-black/10 p-2 text-md whitespace-nowrap  flex items-center truncate justify-center ${textResponsive} ${paddingResponsive}`;
 
   const calculateAge = (birthdateStr) => {
     const birthDate = new Date(birthdateStr);
@@ -125,7 +127,7 @@ function Client({ client }) {
   return (
     <div className="flex flex-1 px-2 shadow-sm">
       <h3
-        className={`${clientDetailStyle} max-w-[30%] justify-start capitalize`}
+        className={`${clientDetailStyle} max-w-[30%] justify-start font-medium capitalize`}
       >
         {client.fullname}
       </h3>
@@ -155,7 +157,7 @@ function ClientsLink({ uid }) {
       to={`/clients/${uid}`}
       className="text-blue-800 lowercase underline underline-offset-2 hover:text-blue-500"
     >
-      VIEW
+      VIEW DETAILS
     </Link>
   );
 }
