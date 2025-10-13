@@ -41,9 +41,6 @@ export default function ClientListPage() {
 
   return (
     <div className="flex flex-1 flex-col justify-center">
-      <h1 className="mx-auto pt-20 text-2xl font-semibold">
-        CLIENT MANAGEMENT PAGE
-      </h1>
       <div className="flex flex-1 flex-col items-center justify-center">
         <div className="flex max-h-[70dvh] w-[70dvw] flex-1 flex-col overflow-y-scroll rounded-tl-xl rounded-bl-xl shadow-[0_0_.25rem] shadow-black/20">
           <Categories onSearchInput={handleSearchInput} />
@@ -82,13 +79,15 @@ function Categories({ onSearchInput }) {
 function SearchClient({ onSearchInput }) {
   const InputStylish =
     "shadow-[0_0_0_1.5px] shadow-red-950/0 duration-200 focus-within:shadow-yellow-500 hover:shadow-yellow-500";
+    const textResponsive = "max-2xl:text-base max-xl:text-sm max-lg:text-xs";
+
 
   return (
     <div
-      className={`sticky top-0 ml-auto flex w-1/2 rounded-xl border border-black/40 px-4 py-2 ${InputStylish}`}
+      className={`sticky top-0 ml-auto flex w-1/2 rounded-xl border border-black/40 px-4 py-2 ${InputStylish} `}
     >
       <input
-        className={`flex-1 outline-0`}
+        className={`flex-1 outline-0 ${textResponsive}`}
         type="text"
         placeholder="Search for member"
         onChange={onSearchInput}
@@ -125,7 +124,7 @@ function Client({ client }) {
   };
 
   return (
-    <div className="flex flex-1 px-2 shadow-sm">
+    <div className="flex flex-1 rounded-lg border border-black/10 px-2 shadow-sm duration-100 hover:shadow-md">
       <h3
         className={`${clientDetailStyle} max-w-[30%] justify-start font-medium capitalize`}
       >
@@ -141,7 +140,7 @@ function Client({ client }) {
       <div
         className={`flex max-w-[20%] flex-1 items-center justify-center ${paddingResponsive} ${textResponsive}`}
       >
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-4 max-2xl:gap-2">
           <ClientsLink uid={client.id} />
           <ClientsButton uid={client.id} />
         </div>
@@ -152,10 +151,12 @@ function Client({ client }) {
 
 //COMPONENTS
 function ClientsLink({ uid }) {
+  const textResponsive = "max-2xl:text-sm max-xl:text-xs max-lg:text-[.5rem]";
+
   return (
     <Link
       to={`/clients/${uid}`}
-      className="text-blue-800 lowercase underline underline-offset-2 hover:text-blue-500"
+      className={`text-blue-800 lowercase underline underline-offset-2 hover:text-blue-500 ${textResponsive}`}
     >
       VIEW DETAILS
     </Link>
@@ -163,10 +164,12 @@ function ClientsLink({ uid }) {
 }
 
 function ClientsButton({ uid }) {
+  const imgResponsive = "max-2xl:max-h-8 max-xl:max-h-6";
+
   return (
     <Link to={`${uid}/chat`}>
       <img
-        className="max-h-8 drop-shadow-sm duration-100 hover:-translate-y-0.5 hover:brightness-95"
+        className={`max-h-8 drop-shadow-sm duration-100 hover:-translate-y-0.5 hover:brightness-95 ${imgResponsive}`}
         src={chatIcon}
         alt="chat"
       />

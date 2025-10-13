@@ -42,6 +42,11 @@ async function fetchAllUsers() {
   }
 }
 
+async function updateUser(id, data) {
+  const userRef = doc(db, "users", id);
+  await updateDoc(userRef, data);
+}
+
 const listenToDB = (userId, callback) => {
   const docRef = doc(db, "users", userId);
 
@@ -82,4 +87,4 @@ const pushMessage = async (userId, sender, text) => {
   }
 };
 
-export { listenToDB, pushMessage, fetchAllUsers };
+export { listenToDB, pushMessage, fetchAllUsers, updateUser };

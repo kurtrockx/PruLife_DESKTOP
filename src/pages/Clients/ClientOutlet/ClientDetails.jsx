@@ -1,38 +1,109 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { fetchAllUsers } from "../../../backend/firebase_firestore";
+import { fetchAllUsers, updateUser } from "../../../backend/firebase_firestore";
 import Loading from "../../../components/Loading";
+import { Pencil, Check } from "lucide-react";
+import Button from "../../../components/Button";
 
 export default function ClientDetails() {
   const { clientId } = useParams();
-  const [client, setClient] = useState("");
+  const [client, setClient] = useState(null);
+  const [editedClient, setEditedClient] = useState({});
+  const [editingField, setEditingField] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
 
   useEffect(() => {
-    const getClients = async () => {
+    const getClient = async () => {
       const users = await fetchAllUsers();
-      setClient(users.find((c) => c.id === clientId));
+      const found = users.find((c) => c.id === clientId);
+      setClient(found);
+      setEditedClient(found);
+      setLoading(false);
     };
-    getClients();
+    getClient();
   }, [clientId]);
+
+  const handleEdit = (field) => {
+    setEditingField(field);
+  };
+
+  const handleChange = (field, value) => {
+    setEditedClient((prev) => ({ ...prev, [field]: value }));
+  };
+
+  const handleSave = async () => {
+    setSaving(true);
+    try {
+      await updateUser(clientId, editedClient); // assumes your firebase util has this function
+      setClient(editedClient);
+      setEditingField(null);
+      alert("Client info updated successfully!");
+    } catch (error) {
+      console.error("Error updating user:", error);
+      alert("Failed to update user info.");
+    }
+    setSaving(false);
+  };
+
+  if (loading) return <Loading />;
+
+  const textResponsive = "max-2xl:text-sm max-xl:text-xs max-lg:text-[0.75rem]";
+
+  const labelStyle = `font-semibold text-sm text-black/60 flex-2 ${textResponsive}`;
+  const inputStyle = `flex-5 max-lg:flex-10 max-md:flex-5 border border-black/20 rounded-lg p-2 text-sm focus:outline-none focus:ring-2 focus:ring-yellow-400 duration-100 disabled:bg-black/5 disabled:cursor-not-allowed ${textResponsive}`;
+  const buttonStyle = `text-yellow-600 hover:text-yellow-800 transition-all flex-0.5 cursor-pointer ${textResponsive}`;
+
+  const fields = [
+    { key: "fullname", label: "Full Name" },
+    { key: "contactNumber", label: "Contact" },
+    { key: "email", label: "Email" },
+    { key: "occupation", label: "Occupation" },
+    { key: "status", label: "Status" },
+  ];
 
   return (
     <>
-      <img
-        src="https://avatars.githubusercontent.com/u/170799880?v=4"
-        alt="client picture"
-        className="block aspect-square w-1/2 rounded object-cover"
-      />
-      {client === "" ? (
-        <Loading />
-      ) : (
-        <ul className="mx-auto flex w-full flex-1 flex-col items-center justify-center text-center">
-          <li>{client?.fullname}</li>
-          <li>{client?.contactNumber}</li>
-          <li>{client?.email}</li>
-          <li>{client?.occupation}</li>
-          <li>{client?.status}</li>
-        </ul>
-      )}
+      <div className="aspect-square w-1/2 rounded-md max-lg:hidden">
+        <img
+          src="https://avatars.githubusercontent.com/u/170799880?v=4"
+          alt="client"
+          className="block object-cover w-full h-full shadow-md"
+        />
+      </div>
+
+      <div className="flex flex-1 flex-col justify-center gap-y-2 p-6">
+        <h2 className="py-4 text-2xl font-bold">Client Details</h2>
+        {fields.map(({ key, label }) => (
+          <div
+            key={key}
+            className="flex items-center justify-between gap-2 rounded-lg border border-black/20 px-2 py-4 duration-100 focus-within:shadow-md hover:shadow-md lg:gap-4"
+          >
+            <span className={labelStyle}>{label}</span>
+            <input
+              className={inputStyle}
+              value={editedClient[key] || ""}
+              disabled={editingField !== key}
+              onChange={(e) => handleChange(key, e.target.value)}
+            />
+            {editingField === key ? (
+              <button
+                className={buttonStyle}
+                onClick={() => setEditingField(null)}
+              >
+                <Check size={20} />
+              </button>
+            ) : (
+              <button className={buttonStyle} onClick={() => handleEdit(key)}>
+                <Pencil size={20} />
+              </button>
+            )}
+          </div>
+        ))}
+        <Button onClick={handleSave}>
+          {saving ? "Saving..." : "Save Changes"}
+        </Button>
+      </div>
     </>
   );
 }

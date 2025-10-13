@@ -18,11 +18,11 @@ export default function Sidebar() {
   const logoResponsive = "2xl:h-10 lg:h-8 h-6";
 
   return (
-    <div className="sidebar z-20 flex max-w-[12em] flex-1 flex-col items-center gap-6 bg-red-950 px-2 py-4 shadow-[0_0_.25rem] shadow-black/40 lg:max-w-[14em] lg:gap-4 2xl:max-w-[16em]">
+    <div className="sidebar z-20 flex max-w-[12em] flex-1 flex-col items-center gap-4 bg-red-950 px-2 py-4 shadow-[0_0_.25rem] shadow-black/40 lg:max-w-[14em] lg:gap-6 2xl:max-w-[16em]">
       {pages.map((p) => (
         <NavLink
           key={p.name}
-          className="group relative flex w-full items-center justify-center rounded-xl px-2 py-1 hover:bg-white/20 lg:px-px lg:py-2.5"
+          className="group relative flex w-full items-center justify-center rounded-xl px-2 py-4 hover:bg-white/20 lg:px-px lg:py-2.5"
           to={p.name.toLowerCase()}
         >
           <img
