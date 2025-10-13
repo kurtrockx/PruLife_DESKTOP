@@ -44,7 +44,7 @@ export default function ClientListPage() {
         CLIENT MANAGEMENT PAGE
       </h1>
       <div className="flex flex-1 flex-col items-center justify-center">
-        <div className="flex max-h-[70dvh] w-[70dvw] flex-1 flex-col overflow-y-scroll rounded-tl-xl rounded-bl-xl border">
+        <div className="flex max-h-[70dvh] w-[70dvw] flex-1 flex-col overflow-y-scroll rounded-tl-xl rounded-bl-xl shadow-[0_0_.25rem] shadow-black/20">
           <Categories onSearchInput={handleSearchInput} />
           {clients.length === 0 ? (
             <Loading />
@@ -80,7 +80,7 @@ function Categories({ onSearchInput }) {
 
 function SearchClient({ onSearchInput }) {
   const InputStylish =
-    "shadow-[0_0_0_2.5px] shadow-red-950/0 duration-200 focus-within:shadow-red-950 hover:shadow-red-950";
+    "shadow-[0_0_0_1.5px] shadow-red-950/0 duration-200 focus-within:shadow-yellow-500 hover:shadow-yellow-500";
 
   return (
     <div

@@ -30,7 +30,9 @@ export default function Sidebar() {
             alt={p.name}
             className={`aspect-square flex-1 cursor-pointer duration-150 group-hover:-translate-y-0.5 ${logoResponsive}`}
           />
-          <p className={`flex-2 px-px font-semibold text-white ${textResponsive}`}>
+          <p
+            className={`flex-2 px-px font-semibold text-white ${textResponsive}`}
+          >
             {p.name}
           </p>
         </NavLink>
