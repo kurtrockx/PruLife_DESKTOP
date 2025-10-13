@@ -68,12 +68,15 @@ export default function ClientDetails() {
         <img
           src="https://avatars.githubusercontent.com/u/170799880?v=4"
           alt="client"
-          className="block object-cover w-full h-full shadow-md"
+          className="block h-full w-full object-cover shadow-md"
         />
       </div>
 
-      <div className="flex flex-1 flex-col justify-center gap-y-2 p-6">
+      <div className="flex flex-1 flex-col gap-y-2 overflow-y-auto p-6">
         <h2 className="py-4 text-2xl font-bold">Client Details</h2>
+        <h2 className="text-right text-xs text-black/50">
+          You can edit the Client's Details by pressing the pencil icon
+        </h2>
         {fields.map(({ key, label }) => (
           <div
             key={key}
@@ -100,9 +103,11 @@ export default function ClientDetails() {
             )}
           </div>
         ))}
-        <Button onClick={handleSave}>
-          {saving ? "Saving..." : "Save Changes"}
-        </Button>
+        <div className="flex justify-end">
+          <Button onClick={handleSave}>
+            {saving ? "Saving..." : "Save Changes"}
+          </Button>
+        </div>
       </div>
     </>
   );
