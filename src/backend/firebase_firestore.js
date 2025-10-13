@@ -9,6 +9,7 @@ import {
   onSnapshot,
   arrayUnion,
   serverTimestamp,
+  getDocs,
 } from "firebase/firestore";
 import { getAnalytics } from "firebase/analytics";
 
@@ -26,13 +27,20 @@ const app = initializeApp(firebaseConfig);
 
 const db = getFirestore(app);
 
-// const getUsers = async () => {
-//   //collection => document => fields
-//   const docRef = doc(db, "users", "user1");
-//   const docSnap = await getDoc(docRef);
-//   //from what user1 gives back => take the name field
-//   return docSnap.data().name;
-// };
+async function fetchAllUsers() {
+  try {
+    const usersCollection = collection(db, "users");
+    const usersSnapshot = await getDocs(usersCollection);
+    const usersList = usersSnapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
+    console.log(usersList);
+    return usersList;
+  } catch (error) {
+    console.error("Error fetching users:", error);
+  }
+}
 
 const listenToDB = (userId, callback) => {
   const docRef = doc(db, "users", userId);
@@ -74,4 +82,4 @@ const pushMessage = async (userId, sender, text) => {
   }
 };
 
-export { listenToDB, pushMessage };
+export { listenToDB, pushMessage, fetchAllUsers };
