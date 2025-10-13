@@ -1,6 +1,8 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { fetchAllUsers } from "../../backend/firebase_firestore";
 import { useEffect, useState } from "react";
+import Loading from "../../components/Loading";
+import chatIcon from "../../assets/chatIcon.svg";
 
 const CATEGORIES = [
   { label: "Name", maxWidth: "max-w-[30%]" },
@@ -44,7 +46,11 @@ export default function ClientListPage() {
       <div className="flex flex-1 flex-col items-center justify-center">
         <div className="flex max-h-[70dvh] w-[70dvw] flex-1 flex-col overflow-y-scroll rounded-tl-xl rounded-bl-xl border">
           <Categories onSearchInput={handleSearchInput} />
-          <ClientsList clients={searchedClient()} />
+          {clients.length === 0 ? (
+            <Loading />
+          ) : (
+            <ClientsList clients={searchedClient()} />
+          )}
         </div>
       </div>
     </div>
@@ -62,7 +68,7 @@ function Categories({ onSearchInput }) {
         {CATEGORIES.map((c, i) => (
           <h2
             key={i}
-            className={`mx-auto flex-1 border-r border-black px-2 text-center whitespace-nowrap uppercase ${textResponsive} ${paddingResponsive} ${i === CATEGORIES.length - 1 && "border-transparent"} ${c.maxWidth}`}
+            className={`mx-auto flex-1 border-r border-black/40 px-2 text-center whitespace-nowrap uppercase ${textResponsive} ${paddingResponsive} ${i === CATEGORIES.length - 1 && "border-transparent"} ${c.maxWidth}`}
           >
             {c.label}
           </h2>
@@ -103,7 +109,7 @@ function ClientsList({ clients }) {
 function Client({ client }) {
   const textResponsive = "max-2xl:text-base max-xl:text-sm max-lg:text-xs";
   const paddingResponsive = "max-xl:p-1 max-lg:px-0.25 max-lg:py-0.25";
-  const clientDetailStyle = `flex-1 border-r p-2 text-xl whitespace-nowrap  flex items-center truncate justify-center ${textResponsive} ${paddingResponsive}`;
+  const clientDetailStyle = `flex-1 border-r border-black/10 p-2 text-xl whitespace-nowrap  flex items-center truncate justify-center ${textResponsive} ${paddingResponsive}`;
 
   const calculateAge = (birthdateStr) => {
     const birthDate = new Date(birthdateStr);
@@ -117,27 +123,51 @@ function Client({ client }) {
   };
 
   return (
-    <div className="flex flex-1 border px-2">
-      <h3 className={`${clientDetailStyle} max-w-[30%] capitalize justify-start`}>{client.fullname}</h3>
-      <h3 className={`${clientDetailStyle} max-w-[10%]`}>{calculateAge(client.birthdate)}</h3>
-      <h3 className={`${clientDetailStyle} max-w-[20%]`}>{client.contactNumber}</h3>
+    <div className="flex flex-1 px-2 shadow-sm">
+      <h3
+        className={`${clientDetailStyle} max-w-[30%] justify-start capitalize`}
+      >
+        {client.fullname}
+      </h3>
+      <h3 className={`${clientDetailStyle} max-w-[10%]`}>
+        {calculateAge(client.birthdate)}
+      </h3>
+      <h3 className={`${clientDetailStyle} max-w-[20%]`}>
+        {client.contactNumber}
+      </h3>
       <h3 className={`${clientDetailStyle} max-w-[20%]`}>{client.status}</h3>
       <div
-        className={`flex flex-1 items-center justify-center max-w-[20%] ${paddingResponsive} ${textResponsive}`}
+        className={`flex max-w-[20%] flex-1 items-center justify-center ${paddingResponsive} ${textResponsive}`}
       >
-        <ClientsButton uid={client.id} />
+        <div className="flex items-center gap-4">
+          <ClientsLink uid={client.id} />
+          <ClientsButton uid={client.id} />
+        </div>
       </div>
     </div>
   );
 }
 
 //COMPONENTS
+function ClientsLink({ uid }) {
+  return (
+    <Link
+      to={`/clients/${uid}`}
+      className="text-blue-800 lowercase underline underline-offset-2 hover:text-blue-500"
+    >
+      VIEW
+    </Link>
+  );
+}
+
 function ClientsButton({ uid }) {
   return (
-    <Link to={`/clients/${uid}`}>
-      <button className="block cursor-pointer rounded-lg bg-green-700 px-2 py-1 font-semibold text-white duration-150 hover:-translate-y-0.5">
-        VIEW
-      </button>
+    <Link to={`${uid}/chat`}>
+      <img
+        className="max-h-8 drop-shadow-sm duration-100 hover:-translate-y-0.5 hover:brightness-95"
+        src={chatIcon}
+        alt="chat"
+      />
     </Link>
   );
 }

@@ -44,7 +44,7 @@ export default function ClientChat() {
 
   return (
     <>
-      <ChatHeader clientId={client === "" ? <Loading/> : client.fullname} />
+      <ChatHeader clientId={client === "" ? <Loading /> : client.fullname} />
       {openPdfModal && <PDFModal onOpenPdfModal={setOpenPdfModal} />}
       <ChatMessagesContainer>
         {messagesList.length < 1 ? (
