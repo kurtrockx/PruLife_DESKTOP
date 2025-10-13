@@ -42,7 +42,7 @@ export default function ClientListPage() {
   return (
     <div className="flex flex-1 flex-col justify-center">
       <div className="flex flex-1 flex-col items-center justify-center">
-        <div className="flex max-h-[70dvh] w-[70dvw] flex-1 flex-col overflow-y-scroll rounded-tl-xl rounded-bl-xl shadow-[0_0_.25rem] shadow-black/20">
+        <div className="flex max-h-[80dvh] w-[70dvw] flex-1 flex-col overflow-y-scroll rounded-tl-xl rounded-bl-xl shadow-[0_0_.25rem] shadow-black/20">
           <Categories onSearchInput={handleSearchInput} />
           {clients.length === 0 ? (
             <Loading />

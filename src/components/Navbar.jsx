@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import prulifeLogo from "../assets/prulifeLogo.png";
+import prulifeLogo from "../assets/prulifeLogo.svg";
 
 export default function Navbar() {
   return (
