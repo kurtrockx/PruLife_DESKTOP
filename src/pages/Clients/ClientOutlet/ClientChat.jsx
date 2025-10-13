@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { listenToDB, pushMessage } from "../../../backend/firebase_firestore";
 import { useParams } from "react-router-dom";
+import { fetchAllUsers } from "../../../backend/firebase_firestore";
 
 import Loading from "../../../components/Loading";
 
@@ -12,8 +13,17 @@ import PDFGenerator from "../../../components/PDFGenerator";
 
 export default function ClientChat() {
   const { clientId } = useParams();
+  const [client, setClient] = useState("");
   const [messagesList, setMessagesList] = useState([]);
   const [message, setMessage] = useState("");
+
+  useEffect(() => {
+    const getClients = async () => {
+      const users = await fetchAllUsers();
+      setClient(users.find((c) => c.id === clientId));
+    };
+    getClients();
+  }, [clientId]);
 
   const [openPdfModal, setOpenPdfModal] = useState(false);
 
@@ -34,7 +44,7 @@ export default function ClientChat() {
 
   return (
     <>
-      <ChatHeader clientId={clientId} />
+      <ChatHeader clientId={client === "" ? <Loading/> : client.fullname} />
       {openPdfModal && <PDFModal onOpenPdfModal={setOpenPdfModal} />}
       <ChatMessagesContainer>
         {messagesList.length < 1 ? (
@@ -43,7 +53,12 @@ export default function ClientChat() {
           messagesList.map((msg, i) => <ChatMessage message={msg} key={i} />)
         )}
       </ChatMessagesContainer>
-      <TypeBox message={message} setMessage={setMessage} onSend={handleSend} onOpenPdfModal={setOpenPdfModal} />
+      <TypeBox
+        message={message}
+        setMessage={setMessage}
+        onSend={handleSend}
+        onOpenPdfModal={setOpenPdfModal}
+      />
     </>
   );
 }
