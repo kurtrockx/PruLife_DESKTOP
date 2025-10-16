@@ -65,11 +65,11 @@ export default function ClientDetails() {
 
   return (
     <>
-      <div className="aspect-square bg-stone-900 p-24 inset-shadow-[0_0_4rem] inset-shadow-white/20 max-xl:hidden">
+      <div className="aspect-square max-w-1/2 bg-stone-900 p-24 inset-shadow-[0_0_4rem] inset-shadow-white/20 max-xl:hidden">
         <img
           src={prulifeLogo}
           alt="client"
-          className="block h-full w-full rounded-full border-8 border-white/80 object-contain shadow-lg"
+          className="block w-full rounded-full border-8 border-white/80 object-contain shadow-lg"
         />
       </div>
 

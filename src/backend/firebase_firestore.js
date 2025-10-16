@@ -11,7 +11,6 @@ import {
   serverTimestamp,
   getDocs,
 } from "firebase/firestore";
-import { getAnalytics } from "firebase/analytics";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDB-oNYCzUQZot26XC9YO5ohoE6pwd0eYA",
@@ -24,9 +23,47 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
-
 const db = getFirestore(app);
 
+// 🔹 upload PDF and store URL in Firestore
+async function uploadPdfAndSaveToFirestore(userId, pdfBlob) {
+  try {
+    // Step 1: Upload to Cloudinary
+    const formData = new FormData();
+    formData.append("file", pdfBlob);
+    formData.append("upload_preset", "PDFGenerator"); // your Cloudinary preset
+
+    const cloudName = "dsoetkfjz"; // change this to your actual cloud name
+    const response = await fetch(
+      `https://api.cloudinary.com/v1_1/${cloudName}/raw/upload`,
+      {
+        method: "POST",
+        body: formData,
+      },
+    );
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      console.error("Cloudinary upload failed:", data);
+      throw new Error(data.error?.message || "Upload failed");
+    }
+
+    const pdfUrl = data.secure_url;
+    console.log("✅ Uploaded to Cloudinary:", pdfUrl);
+
+    // Step 2: Save PDF URL to Firestore
+    const userRef = doc(db, "users", userId);
+    await updateDoc(userRef, { pdfUrl });
+
+    console.log("✅ PDF URL saved to Firestore!");
+    return pdfUrl;
+  } catch (error) {
+    console.error("Error uploading PDF and saving:", error);
+  }
+}
+
+// 🔹 Existing helpers
 async function fetchAllUsers() {
   try {
     const usersCollection = collection(db, "users");
@@ -49,10 +86,9 @@ async function updateUser(id, data) {
 
 const listenToDB = (userId, callback) => {
   const docRef = doc(db, "users", userId);
-
   return onSnapshot(docRef, (docSnap) => {
     if (docSnap.exists()) {
-      callback(docSnap.data()); // full data
+      callback(docSnap.data());
     } else {
       console.log("No such document!");
     }
@@ -65,12 +101,11 @@ const pushMessage = async (userId, sender, text) => {
   const messageObj = {
     sender,
     message: text,
-    createdAt: Date.now(), // use client timestamp here
+    createdAt: Date.now(),
   };
 
   try {
     const snap = await getDoc(docRef);
-
     if (snap.exists()) {
       await updateDoc(docRef, {
         messages: arrayUnion(messageObj),
@@ -87,4 +122,10 @@ const pushMessage = async (userId, sender, text) => {
   }
 };
 
-export { listenToDB, pushMessage, fetchAllUsers, updateUser };
+export {
+  listenToDB,
+  pushMessage,
+  fetchAllUsers,
+  updateUser,
+  uploadPdfAndSaveToFirestore,
+};

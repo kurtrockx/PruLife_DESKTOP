@@ -1,6 +1,8 @@
 import { useRef } from "react";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
+import { uploadPdfAndSaveToFirestore } from "../backend/firebase_firestore";
+import { useParams } from "react-router-dom";
 
 const PROPOSAL_CONTANTS = [
   ["Life Insurance", "3,000,000", "2,400,000", "1,500,000"],
@@ -39,24 +41,24 @@ const PROPOSAL_CONTANTS2 = [
 ];
 
 export default function PDFGenerator() {
+  const { clientId } = useParams();
+  const printRef = useRef();
+
   const tableEntryDesign =
     "flex flex-1 flex-col items-center justify-center border px-1 py-2";
 
-  const printRef = useRef();
-
-  const handleDownloadPdf = async () => {
+  // ✅ Step 1: Capture & upload PDF directly to Cloudinary via backend helper
+  const handleUploadPdf = async () => {
     try {
       const element = printRef.current;
 
-      await new Promise((r) => setTimeout(r, 100));
+      await new Promise((r) => setTimeout(r, 100)); // Wait for layout paint
 
       const canvas = await html2canvas(element, {
         scale: 2,
         useCORS: true,
         logging: false,
       });
-
-      // Restore the on-screen zoom
 
       const imgData = canvas.toDataURL("image/jpeg");
 
@@ -70,9 +72,21 @@ export default function PDFGenerator() {
       const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
 
       pdf.addImage(imgData, "JPEG", 0, 0, pdfWidth, pdfHeight);
-      pdf.save("Proposal.pdf");
+
+      // ✅ Convert to Blob
+      const pdfBlob = pdf.output("blob");
+
+      // ✅ Upload + save URL in Firestore
+      const link = await uploadPdfAndSaveToFirestore(clientId, pdfBlob);
+
+      if (link) {
+        alert("✅ PDF uploaded and saved to Firestore!");
+      } else {
+        alert("❌ Upload failed. Check console for details.");
+      }
     } catch (err) {
-      console.error("PDF generation failed:", err);
+      console.error("PDF upload failed:", err);
+      alert("❌ PDF upload failed. Check console for details.");
     }
   };
 
@@ -80,7 +94,7 @@ export default function PDFGenerator() {
     <div className="flex flex-col items-center gap-6 overflow-hidden overflow-y-auto bg-[#292524] p-6 text-xs">
       <div
         ref={printRef}
-        className="force-rgb flex h-[1056px] w-[816px] flex-col border bg-[white] p-12 shadow-lg max-lg:[zoom:0.8] max-sm:[zoom:0.5]"
+        className="force-rgb flex h-[1056px] w-[816px] flex-col border bg-white p-12 shadow-lg max-lg:[zoom:0.8] max-sm:[zoom:0.5]"
       >
         {/* Header sample proposal */}
         <div className="text-right">
@@ -93,36 +107,31 @@ export default function PDFGenerator() {
 
         <Profile />
 
-        {/* Insurance Plan HEADER*/}
+        {/* Insurance Plan HEADER */}
         <div>
           <BoldText>
-            INSURANCE PLAN: PRULINK ASSURANCE ACOUNT PLUS (PROTECTION HEAVY)
+            INSURANCE PLAN: PRULINK ASSURANCE ACCOUNT PLUS (PROTECTION HEAVY)
           </BoldText>
-          <div className="flex text-[white]">
+          <div className="flex text-white">
             <div
               className={`${tableEntryDesign} flex-2/12 border-black bg-[#525252]`}
             >
               BENEFITS
             </div>
-            <div className={`${tableEntryDesign} border-[black] bg-[#9f0712]`}>
-              <BoldText>BEST</BoldText>
-              <p>61,228</p>
-              <p>(Flexible)</p>
-            </div>
-            <div className={`${tableEntryDesign} border-[black] bg-[#9f0712]`}>
-              <BoldText>BETTER</BoldText>
-              <p>36,000</p>
-              <p>(Flexible)</p>
-            </div>
-            <div className={`${tableEntryDesign} border-[black] bg-[#9f0712]`}>
-              <BoldText>GOOD</BoldText>
-              <p>25,200</p>
-              <p>(Flexible)</p>
-            </div>
+            {["BEST", "BETTER", "GOOD"].map((tier, idx) => (
+              <div
+                key={idx}
+                className={`${tableEntryDesign} border-black bg-[#9f0712]`}
+              >
+                <BoldText>{tier}</BoldText>
+                <p>{idx === 0 ? "61,228" : idx === 1 ? "36,000" : "25,200"}</p>
+                <p>(Flexible)</p>
+              </div>
+            ))}
           </div>
         </div>
 
-        {/* Insurance Plan MONTHLY*/}
+        {/* Monthly Savings */}
         <div className="flex">
           <div className={`${tableEntryDesign} flex-2/12`}>
             <BoldText>Monthly Savings</BoldText>
@@ -138,11 +147,13 @@ export default function PDFGenerator() {
           </div>
         </div>
 
-        {PROPOSAL_CONTANTS.map((pLine) => (
-          <div className="flex">
+        {/* Proposal table */}
+        {PROPOSAL_CONTANTS.map((pLine, idx) => (
+          <div className="flex" key={idx}>
             {pLine.map((p, i) => (
               <div
-                className={`${tableEntryDesign} ${i === 0 && "flex-2/12 items-start"}`}
+                key={i}
+                className={`${tableEntryDesign} ${i === 0 ? "flex-2/12 items-start" : ""}`}
               >
                 {p}
               </div>
@@ -150,8 +161,8 @@ export default function PDFGenerator() {
           </div>
         ))}
 
-        {/* Insurance Plan HEADER*/}
-        <div className="flex text-[white]">
+        {/* Investment Projection */}
+        <div className="flex text-white">
           <div className={`${tableEntryDesign} border-black bg-[#525252]`}>
             INVESTMENT PROJECTION
           </div>
@@ -162,26 +173,27 @@ export default function PDFGenerator() {
           </div>
         </div>
 
-        {PROPOSAL_CONTANTS2.map((pLine) => (
-          <div className="flex">
+        {PROPOSAL_CONTANTS2.map((pLine, idx) => (
+          <div className="flex" key={idx}>
             {pLine.map((p, i) => (
               <div
-                className={`${tableEntryDesign} ${i === 0 && "flex-2/12 items-start"}`}
+                key={i}
+                className={`${tableEntryDesign} ${i === 0 ? "flex-2/12 items-start" : ""}`}
               >
                 {p}
               </div>
             ))}
           </div>
         ))}
+
         <BottomNotes />
-        {/* Insurance Plan END*/}
       </div>
 
       <button
-        onClick={handleDownloadPdf}
+        onClick={handleUploadPdf}
         className="max-h-fit max-w-fit rounded-lg bg-[#155dfc] px-4 py-2 text-white hover:bg-[#1447e6]"
       >
-        Download PDF
+        Generate and Upload PDF
       </button>
     </div>
   );
