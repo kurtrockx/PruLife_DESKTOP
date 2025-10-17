@@ -94,7 +94,7 @@ export default function PDFGenerator() {
     <div className="flex flex-col items-center gap-6 overflow-hidden overflow-y-auto bg-[#292524] p-6 text-xs">
       <div
         ref={printRef}
-        className="force-rgb flex h-[1056px] w-[816px] flex-col border bg-white p-12 shadow-lg max-lg:[zoom:0.8] max-sm:[zoom:0.5]"
+        className="force-rgb flex h-[1056px] w-[816px] flex-col border bg-white p-12 shadow-lg"
       >
         {/* Header sample proposal */}
         <div className="text-right">
