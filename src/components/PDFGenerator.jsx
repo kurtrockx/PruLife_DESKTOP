@@ -47,54 +47,49 @@ export default function PDFGenerator() {
   const tableEntryDesign =
     "flex flex-1 flex-col items-center justify-center border px-1 py-2";
 
+  // ✅ Step 1: Capture & upload PDF directly to Cloudinary via backend helper
+  const handleUploadPdf = async () => {
+    try {
+      const element = printRef.current;
 
-const handleUploadPdf = async () => {
-  try {
-    const element = printRef.current;
-    if (!element) {
-      alert("❌ Error: Nothing to export.");
-      return;
+      await new Promise((r) => setTimeout(r, 100)); // Wait for layout paint
+
+      const canvas = await html2canvas(element, {
+        scale: 2,
+        useCORS: true,
+        logging: false,
+      });
+
+      const imgData = canvas.toDataURL("image/jpeg");
+
+      const pdf = new jsPDF({
+        orientation: "p",
+        unit: "mm",
+        format: [215.9, 279.4],
+      });
+
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+
+      pdf.addImage(imgData, "JPEG", 0, 0, pdfWidth, pdfHeight);
+
+      // ✅ Convert to Blob
+      const pdfBlob = pdf.output("blob");
+
+      // ✅ Upload + save URL in Firestore
+      const link = await uploadPdfAndSaveToFirestore(clientId, pdfBlob);
+
+      if (link) {
+        alert("✅ PDF uploaded and saved to Firestore!");
+      } else {
+        alert("❌ Upload failed. Check console for details.");
+      }
+    } catch (err) {
+      console.error("PDF upload failed:", err);
+      alert("❌ PDF upload failed. Check console for details.");
     }
+  };
 
-    // Wait for layout to finish
-    await new Promise((r) => setTimeout(r, 200));
-
-    // Capture page
-    const canvas = await html2canvas(element, {
-      scale: 2,
-      useCORS: true,
-      logging: false,
-    });
-
-    const imgData = canvas.toDataURL("image/jpeg", 1.0);
-
-    // Create PDF
-    const pdf = new jsPDF("p", "mm", "a4");
-    const pdfWidth = pdf.internal.pageSize.getWidth();
-    const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
-
-    pdf.addImage(imgData, "JPEG", 0, 0, pdfWidth, pdfHeight);
-
-    // ✅ Proper binary blob
-    const pdfBlob = pdf.output("blob");
-
-    const fileName = `${clientId}_proposal.pdf`;
-    const pdfFile = new File([pdfBlob], fileName, { type: "application/pdf" });
-
-    // ✅ Upload and save to Firestore
-    const uploadedUrl = await uploadPdfAndSaveToFirestore(clientId, pdfFile);
-
-    if (uploadedUrl) {
-      alert("✅ PDF uploaded successfully!");
-      console.log("✅ Cloudinary link:", uploadedUrl);
-    } else {
-      alert("❌ Upload failed, check console.");
-    }
-  } catch (err) {
-    console.error("PDF upload failed:", err);
-    alert("❌ PDF upload failed. See console for details.");
-  }
-};
   return (
     <div className="flex flex-col items-center gap-6 overflow-hidden overflow-y-auto bg-[#292524] p-6 text-xs">
       <div
