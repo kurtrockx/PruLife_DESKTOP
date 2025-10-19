@@ -16,6 +16,7 @@ export default function ClientChat() {
   const [client, setClient] = useState("");
   const [messagesList, setMessagesList] = useState([]);
   const [message, setMessage] = useState("");
+  const [openPdfModal, setOpenPdfModal] = useState(true);
 
   useEffect(() => {
     const getClients = async () => {
@@ -25,7 +26,6 @@ export default function ClientChat() {
     getClients();
   }, [clientId]);
 
-  const [openPdfModal, setOpenPdfModal] = useState(false);
 
   useEffect(() => {
     const unsubscribe = listenToDB(clientId, (data) => {

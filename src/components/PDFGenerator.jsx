@@ -1,59 +1,57 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
-import { uploadPdfAndSaveToFirestore } from "../backend/firebase_firestore";
 import { useParams } from "react-router-dom";
-import UploadPDFButton from "../../sample";
-
-const PROPOSAL_CONTANTS = [
-  ["Life Insurance", "3,000,000", "2,400,000", "1,500,000"],
-  ["Total and Permanent Disability", "1,500,000", "1,000,000", "1,000,000"],
-  ["Accidental Death and Disablement", "1,500,000", "1,000,000", "1,000,000"],
-  ["Early Stage Critical Illness", "N/A", "N/A", "N/A"],
-  ["Late Stage Critical Illness", "1,000,000", "1,000,000", "N/A"],
-  ["Daily Hospital Income", "2,000", "1,500", "1,500"],
-  ["Surgical Expense Reimbursement", "30,000", "N/A", "N/A"],
-  ["ICU Benefit", "N/A", "N/A", "N/A"],
-  ["Long Term Hospitalization", "N/A", "N/A", "N/A"],
-  [
-    "Disability Waiver",
-    "Future Premiums",
-    "Future Premiums",
-    "Future Premiums",
-  ],
-  ["Critical Illness Waiver", "Future Premiums", "N/A", "N/A"],
-];
-
-const PROPOSAL_CONTANTS2 = [
-  ["At 5 years (Age 34)", "1,0417,481", "72,045.38", "56,693.70"],
-  ["Total and Permanent Disability", "423,573.05", "281.115.91", "218,304.73"],
-  [
-    "Accidental Death and Disablement",
-    "924,637.33",
-    "614,156.14",
-    "485,034.70",
-  ],
-  [
-    "Accidental Death and Disablement",
-    "1,652,082.59",
-    "1,104,178.11",
-    "894,563.79",
-  ],
-];
+import prulifeIcon2 from "../assets/prulifeIcon2.png";
+import { PART1, PART2, PART3 } from "../proposalComputations";
 
 export default function PDFGenerator() {
   const { clientId } = useParams();
   const printRef = useRef();
+  const [loading, setLoading] = useState(false);
+  const [uploadedUrl, setUploadedUrl] = useState("");
+  const [clientAge, setClientAge] = useState(50);
 
-  const tableEntryDesign =
-    "flex flex-1 flex-col items-center justify-center border px-1 py-2";
+  // ✅ Upload PDF to Cloudinary
+  const uploadPDFToCloudinary = async (pdfBlob) => {
+    const cloudName = "dsoetkfjz"; // Your Cloudinary cloud name
+    const uploadPreset = "PDFGenerator"; // Your unsigned preset
+    const timestamp = Date.now();
 
-  // ✅ Step 1: Capture & upload PDF directly to Cloudinary via backend helper
+    const formData = new FormData();
+    formData.append("file", pdfBlob);
+    formData.append("upload_preset", uploadPreset);
+    formData.append("public_id", `proposal_${timestamp}`); // unique name
+
+    const response = await fetch(
+      `https://api.cloudinary.com/v1_1/${cloudName}/raw/upload`,
+      { method: "POST", body: formData },
+    );
+
+    const data = await response.json();
+    if (!response.ok) throw new Error(data.error?.message || "Upload failed");
+    return data.secure_url; // public Cloudinary URL
+  };
+  // ✅ Force PDF download with correct extension
+  const downloadPDF = async (url, filename = "proposal.pdf") => {
+    const res = await fetch(url);
+    const blob = await res.blob();
+    const blobUrl = window.URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+    a.href = blobUrl;
+    a.download = filename; // force .pdf extension
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    window.URL.revokeObjectURL(blobUrl);
+  };
   const handleUploadPdf = async () => {
     try {
-      const element = printRef.current;
+      setLoading(true);
 
-      await new Promise((r) => setTimeout(r, 100)); // Wait for layout paint
+      const element = printRef.current;
+      await new Promise((r) => setTimeout(r, 100)); // wait for layout paint
 
       const canvas = await html2canvas(element, {
         scale: 2,
@@ -66,7 +64,7 @@ export default function PDFGenerator() {
       const pdf = new jsPDF({
         orientation: "p",
         unit: "mm",
-        format: [215.9, 279.4],
+        format: [215.9, 279.4], // US Letter
       });
 
       const pdfWidth = pdf.internal.pageSize.getWidth();
@@ -75,129 +73,53 @@ export default function PDFGenerator() {
       pdf.addImage(imgData, "JPEG", 0, 0, pdfWidth, pdfHeight);
 
       const pdfBlob = pdf.output("blob");
-      const pdfFile = new File([pdfBlob], "proposal.pdf", {
-        type: "application/pdf",
-      });
-      const link = await uploadPdfAndSaveToFirestore(clientId, pdfFile);
 
-      if (link) {
-        alert("✅ PDF uploaded and saved to Firestore!");
-      } else {
-        alert("❌ Upload failed. Check console for details.");
-      }
+      // Upload to Cloudinary
+      const uploadedUrl = await uploadPDFToCloudinary(pdfBlob);
+      setUploadedUrl(uploadedUrl);
+
+      // Download locally with proper .pdf
+      await downloadPDF(uploadedUrl, "proposal.pdf");
+
+      alert("✅ PDF uploaded and downloaded successfully!");
     } catch (err) {
       console.error("PDF upload failed:", err);
       alert("❌ PDF upload failed. Check console for details.");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <div className="flex flex-col items-center gap-6 overflow-hidden overflow-y-auto bg-[#292524] p-6 text-xs">
-      <UploadPDFButton/>
-      <div
-        ref={printRef}
-        className="force-rgb flex h-[1056px] w-[816px] flex-col border bg-white p-12 shadow-lg"
-      >
-        {/* Header sample proposal */}
-        <div className="text-right">
-          <p>
-            Simple Summary Proposal by
-            <BoldText> CHE VIANNEY PAREDES</BoldText> | Unit Operations Manager
-            | Prulife UK
-          </p>
-        </div>
-
-        <Profile />
-
-        {/* Insurance Plan HEADER */}
-        <div>
-          <BoldText>
-            INSURANCE PLAN: PRULINK ASSURANCE ACCOUNT PLUS (PROTECTION HEAVY)
-          </BoldText>
-          <div className="flex text-white">
-            <div
-              className={`${tableEntryDesign} flex-2/12 border-black bg-[#525252]`}
-            >
-              BENEFITS
-            </div>
-            {["BEST", "BETTER", "GOOD"].map((tier, idx) => (
-              <div
-                key={idx}
-                className={`${tableEntryDesign} border-black bg-[#9f0712]`}
-              >
-                <BoldText>{tier}</BoldText>
-                <p>{idx === 0 ? "61,228" : idx === 1 ? "36,000" : "25,200"}</p>
-                <p>(Flexible)</p>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Monthly Savings */}
-        <div className="flex">
-          <div className={`${tableEntryDesign} flex-2/12`}>
-            <BoldText>Monthly Savings</BoldText>
-          </div>
-          <div className={tableEntryDesign}>
-            <BoldText>PhP 5,102.33</BoldText>
-          </div>
-          <div className={tableEntryDesign}>
-            <BoldText>PhP 3000</BoldText>
-          </div>
-          <div className={tableEntryDesign}>
-            <BoldText>PhP 2,100</BoldText>
-          </div>
-        </div>
-
-        {/* Proposal table */}
-        {PROPOSAL_CONTANTS.map((pLine, idx) => (
-          <div className="flex" key={idx}>
-            {pLine.map((p, i) => (
-              <div
-                key={i}
-                className={`${tableEntryDesign} ${i === 0 ? "flex-2/12 items-start" : ""}`}
-              >
-                {p}
-              </div>
-            ))}
-          </div>
-        ))}
-
-        {/* Investment Projection */}
-        <div className="flex text-white">
-          <div className={`${tableEntryDesign} border-black bg-[#525252]`}>
-            INVESTMENT PROJECTION
-          </div>
-          <div
-            className={`${tableEntryDesign} flex-[1.77] border-black bg-[#9f0712]`}
-          >
-            <BoldText>PROJECTED FUND VALUE</BoldText>
-          </div>
-        </div>
-
-        {PROPOSAL_CONTANTS2.map((pLine, idx) => (
-          <div className="flex" key={idx}>
-            {pLine.map((p, i) => (
-              <div
-                key={i}
-                className={`${tableEntryDesign} ${i === 0 ? "flex-2/12 items-start" : ""}`}
-              >
-                {p}
-              </div>
-            ))}
-          </div>
-        ))}
-
-        <BottomNotes />
-      </div>
-
       <button
         onClick={handleUploadPdf}
-        className="max-h-fit max-w-fit rounded-lg bg-[#155dfc] px-4 py-2 text-white hover:bg-[#1447e6]"
+        disabled={loading}
+        className="max-h-fit max-w-fit cursor-pointer rounded-lg bg-[#f0b100] px-4 py-2 text-white hover:bg-[#d08700]"
       >
-        Generate and Upload PDF
+        {loading ? "Generating PDF..." : "Generate and Send PDF"}
       </button>
+      <div
+        ref={printRef}
+        className="force-rgb h-[1056px] w-[816px] border bg-white p-5 shadow-lg"
+      >
+        <Proposal clientAge={clientAge} />
+      </div>
     </div>
+  );
+}
+
+function Proposal({ clientAge }) {
+  return (
+    <>
+      <Quotation clientAge={clientAge} />
+      <Part1Header />
+      <Part1Table clientAge={clientAge} />
+      <Part2Header />
+      <Part2Table clientAge={clientAge} />
+      <Part3Header />
+      <Part3Table clientAge={clientAge} />
+    </>
   );
 }
 
@@ -205,50 +127,322 @@ function BoldText({ children }) {
   return <span className="font-bold">{children}</span>;
 }
 
-function Profile() {
+function Quotation({ clientAge }) {
   return (
-    <div className="flex flex-col py-4">
-      <BoldText>I. PROFILE</BoldText>
-      <div className="flex">
-        <p className="flex-1">Proposed Policy Owner:</p>
-        <p className="flex-1">Menzie Junsay</p>
-        <p className="flex-1">Age: 29yo</p>
+    <div className="bg-red-800 p-2 text-white">
+      QUOTATION FOR CLIENT AGE: {clientAge}
+    </div>
+  );
+}
+function Part1Header() {
+  return (
+    <div className="border-x">
+      <div className="bg-black text-white p-2">PART I: LIFE INSURANCE COVERAGE</div>
+      <div className="grid max-h-20 grid-cols-8 divide-x text-[0.45rem]">
+        <div className="col-span-3 flex max-h-20">
+          <img
+            src={prulifeIcon2}
+            alt="prulife"
+            className="max-w-20 object-contain"
+          />
+          <div className="flex flex-1 flex-col justify-center">
+            <h4>Proposal Prepared by:</h4>
+            <BoldText>MA. MIKAELLA PRIAS MARIANO</BoldText>
+            <BoldText>Agent License: 7013****</BoldText>
+            <h5>Premiere Level Financial Advisor</h5>
+            <h5>Premiere Level Financial Advisor</h5>
+            <h5>Asst. Unit Manager</h5>
+          </div>
+        </div>
+
+        <div className="col-span-2 flex flex-col bg-red-200">
+          <div className="flex h-full flex-1 items-center px-8 text-center">
+            <BoldText>
+              PRULink Assurance Account Plus (PAA+) Continuous Savings Plan
+            </BoldText>
+          </div>
+          <div className="flex flex-1 items-center border-t">
+            <div className="flex h-full flex-1 flex-col items-center justify-center border-r">
+              <h4>83 Pesos Per Day or</h4>
+              <h4>₱2,500/ month</h4>
+            </div>
+            <div className="flex h-full flex-1 flex-col items-center justify-center">
+              <h4>100 Pesos Per Day or</h4>
+              <h4>₱3,000/ month</h4>
+            </div>
+          </div>
+        </div>
+        <div className="col-span-3 flex flex-col bg-blue-200">
+          <div className="flex h-full flex-1 items-center px-16 text-center">
+            <BoldText>
+              Elite Savings Plan | Investment-Focused Plans 5, 10 & 15 Year
+              Saving Program
+            </BoldText>
+          </div>
+          <div className="flex flex-1 items-center border-t">
+            <div className="flex h-full flex-1 flex-col items-center justify-center border-r">
+              <h4>242 Pesos Per Day or</h4>
+              <h4>₱7,250/ month</h4>
+              <h4>PAYABLE FOR 15 YEARS</h4>
+            </div>
+            <div className="flex h-full flex-1 flex-col items-center justify-center border-r">
+              <h4>333 Pesos Per Day</h4>
+              <h4>₱10,000/ month</h4>
+              <h4>PAYABLE FOR 10 YEARS</h4>
+            </div>
+            <div className="flex h-full flex-1 flex-col items-center justify-center">
+              <h4>567 Pesos Per Day</h4>
+              <h4>₱17,000/ month</h4>
+              <h4>PAYABLE FOR 5 YEARS</h4>
+            </div>
+          </div>
+        </div>
       </div>
-      <div className="flex">
-        <p className="flex-1">Proposed Life Insured:</p>
-        <p className="flex-1">Menzie Junsay</p>
-        <p className="flex-1">Age: 29yo</p>
+    </div>
+  );
+}
+function TableLayout({ children }) {
+  return (
+    <>
+      <div className="grid grid-cols-16 text-[0.45rem]">{children}</div>
+    </>
+  );
+}
+
+function Part1Table({ clientAge }) {
+  const client = PART1.find((p) => p.age === clientAge);
+  const { content1 } = client;
+  const { content2 } = client;
+  const { content3 } = client;
+
+  return (
+    <div className="border-b">
+      <TableLayout>
+        <div className="col-span-1 flex items-center justify-center border tracking-[-0.125rem] [text-orientation:upright] [writing-mode:vertical-rl]">
+          CODE BENEFITS
+        </div>
+        <div className="col-span-15 grid grid-cols-15">
+          {content1.map((row) => {
+            return (
+              <>
+                <div className="col-span-5 flex divide-x border-r">
+                  <TextRow>{row.title}</TextRow>
+                  <TextRow>{row.description}</TextRow>
+                </div>
+                <div className="col-span-4 flex divide-x border-r">
+                  <TextRow>{row.red1}</TextRow>
+                  <TextRow>{row.red2}</TextRow>
+                </div>
+                <div className="col-span-6 flex divide-x border-r">
+                  <TextRow>{row.blue1}</TextRow>
+                  <TextRow>{row.blue2}</TextRow>
+                  <TextRow>{row.blue3}</TextRow>
+                </div>
+              </>
+            );
+          })}
+        </div>
+      </TableLayout>
+      <TableLayout>
+        <div className="col-span-1 flex flex-col items-center justify-center border tracking-[-0.125rem] [text-orientation:upright] [writing-mode:vertical-rl]">
+          <p>RIDERS</p>
+          <p>PERSONAL ACCIDENT</p>
+        </div>
+        <div className="col-span-15 grid grid-cols-15">
+          {content2.map((row) => {
+            return (
+              <>
+                <div className="col-span-5 flex divide-x border-r">
+                  <TextRow>{row.title}</TextRow>
+                  <TextRow>{row.description}</TextRow>
+                </div>
+                <div className="col-span-4 flex divide-x border-r">
+                  <TextRow>{row.red1}</TextRow>
+                  <TextRow>{row.red2}</TextRow>
+                </div>
+                <div className="col-span-6 flex divide-x border-r">
+                  <TextRow>{row.blue1}</TextRow>
+                  <TextRow>{row.blue2}</TextRow>
+                  <TextRow>{row.blue3}</TextRow>
+                </div>
+              </>
+            );
+          })}
+        </div>
+      </TableLayout>
+      <TableLayout>
+        <div className="col-span-1 flex items-center justify-center border p-1">
+          Hospital Income Riders
+        </div>
+        <div className="col-span-15 grid grid-cols-15">
+          {content3.map((row) => {
+            return (
+              <>
+                <div className="col-span-5 flex divide-x border-r">
+                  <TextRow>{row.title}</TextRow>
+                  <TextRow>{row.description}</TextRow>
+                </div>
+                <div className="col-span-4 flex divide-x border-r">
+                  <TextRow>{row.red1}</TextRow>
+                  <TextRow>{row.red2}</TextRow>
+                </div>
+                <div className="col-span-6 flex divide-x border-r">
+                  <TextRow>{row.blue1}</TextRow>
+                  <TextRow>{row.blue2}</TextRow>
+                  <TextRow>{row.blue3}</TextRow>
+                </div>
+              </>
+            );
+          })}
+        </div>
+      </TableLayout>
+    </div>
+  );
+}
+function TextRow({ children }) {
+  return (
+    <p className="flex flex-1 items-center justify-center border-t p-0.5">
+      {children}
+    </p>
+  );
+}
+
+function Part2Header() {
+  return (
+    <div className="border-x">
+      <div className="bg-black p-2 text-white">
+        PART II: PROJECTION OF INVESTMENT/ WITHDRAWABLE SAVINGS
+      </div>
+      <div className="grid max-h-20 grid-cols-8 divide-x text-[0.45rem]">
+        <div className="col-span-3 flex">
+          <div className="flex flex-1 items-center justify-center border-r">
+            POLICY YEAR
+          </div>
+          <div className="flex flex-1 items-center justify-center">AGE</div>
+        </div>
+        <div className="col-span-2 flex flex-col bg-red-200">
+          <div className="flex h-full flex-1 items-center px-8 text-center">
+            <BoldText>
+              PRULink Assurance Account Plus (PAA+) Continuous Savings Plan
+            </BoldText>
+          </div>
+          <div className="flex flex-1 items-center border-t">
+            <div className="flex h-full flex-1 flex-col items-center justify-center border-r">
+              <h4>83 Pesos Per Day or</h4>
+              <h4>₱2,500/ month</h4>
+            </div>
+            <div className="flex h-full flex-1 flex-col items-center justify-center">
+              <h4>100 Pesos Per Day or</h4>
+              <h4>₱3,000/ month</h4>
+            </div>
+          </div>
+        </div>
+        <div className="col-span-3 flex flex-col bg-blue-200">
+          <div className="flex h-full flex-1 items-center px-16 text-center">
+            <BoldText>
+              Elite Savings Plan | Investment-Focused Plans 5, 10 & 15 Year
+              Saving Program
+            </BoldText>
+          </div>
+          <div className="flex flex-1 items-center border-t">
+            <div className="flex h-full flex-1 flex-col items-center justify-center border-r">
+              <h4>242 Pesos Per Day or</h4>
+              <h4>₱7,250/ month</h4>
+              <h4>PAYABLE FOR 15 YEARS</h4>
+            </div>
+            <div className="flex h-full flex-1 flex-col items-center justify-center border-r">
+              <h4>333 Pesos Per Day</h4>
+              <h4>₱10,000/ month</h4>
+              <h4>PAYABLE FOR 10 YEARS</h4>
+            </div>
+            <div className="flex h-full flex-1 flex-col items-center justify-center">
+              <h4>567 Pesos Per Day</h4>
+              <h4>₱17,000/ month</h4>
+              <h4>PAYABLE FOR 5 YEARS</h4>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
 }
 
-function BottomNotes() {
+function Part2Table({ clientAge }) {
+  const client = PART2.find((p) => p.age === clientAge);
+  const { content } = client;
+  console.log(content);
+
   return (
-    <div className="space-y-2 py-4">
-      {/* Insurance Notes */}
-      <div>
-        <BoldText>Insurance Notes:</BoldText>
-        <p>*All insurance coverage are GUARANTEED once approved.</p>
-        <p>
-          *Critical Illness Benefits take effect 90 DAYS after Olic a roval.
-        </p>
-        <p>
-          *Hospital Income Benefits take effect 30 DAYS after policy approval.
-          Daily benefit as long as client is confined for at least 12 hours.
-        </p>
-      </div>
-      {/* Investment Notes */}
-      <div>
-        <BoldText>Investment Notes:</BoldText>
-        <p>*Fund value is NOT GUARANTEED</p>
-        <p>
-          *Fund value is projected at 10% as mandated by Insurance Commission.
-        </p>
-        <p>
-          *Chosen fund: 80% Equity Index Tracker Fund and 20% Global Tech Fund
-        </p>
-      </div>
+    <>
+      {content.map((row) => (
+        <TableLayout>
+          <div className="col-span-6 flex divide-x border-x">
+            <TextRow>{row.policyYear}</TextRow>
+            <TextRow>{row.age}</TextRow>
+          </div>
+          <div className="col-span-4 flex divide-x border-r">
+            <TextRow>{row.red1}</TextRow>
+            <TextRow>{row.red2}</TextRow>
+          </div>
+          <div className="col-span-6 flex divide-x border-r">
+            <TextRow>{row.blue1}</TextRow>
+            <TextRow>{row.blue2}</TextRow>
+            <TextRow>{row.blue3}</TextRow>
+          </div>
+        </TableLayout>
+      ))}
+    </>
+  );
+}
+
+function Part3Header() {
+  return (
+    <div className="border-x">
+      <div className="bg-black p-2 text-white">PART III: FUND ALLOCATION </div>
     </div>
+  );
+}
+function Part3Table({ clientAge }) {
+  const client = PART3.find((p) => p.age === clientAge);
+  const { content } = client;
+  console.log(content);
+
+  return (
+    <>
+      <TableLayout>
+        <div className="col-span-6 flex divide-x border-x">
+          <TextRow>PLAN</TextRow>
+          <TextRow>1ST YEAR</TextRow>
+        </div>
+        <div className="col-span-4 flex divide-x border-r">
+          <TextRow>2ND YEAR</TextRow>
+          <TextRow>3RD YEAR</TextRow>
+        </div>
+        <div className="col-span-2 flex divide-x border-r">
+          <TextRow>FOURTH YEAR</TextRow>
+        </div>
+        <div className="col-span-4 flex divide-x border-r">
+          <TextRow>FIFTH YEAR</TextRow>
+        </div>
+      </TableLayout>
+      {content.map((row) => (
+        <TableLayout>
+          <div className="col-span-6 flex divide-x border-x">
+            <TextRow>{row.plan}</TextRow>
+            <TextRow>{row.first}</TextRow>
+          </div>
+          <div className="col-span-4 flex divide-x border-r">
+            <TextRow>{row.second}</TextRow>
+            <TextRow>{row.third}</TextRow>
+          </div>
+          <div className="col-span-2 flex divide-x border-r">
+            <TextRow>{row.fourth}</TextRow>
+          </div>
+          <div className="col-span-4 flex divide-x border-r">
+            <TextRow>{row.fifth}</TextRow>
+          </div>
+        </TableLayout>
+      ))}
+    </>
   );
 }
