@@ -25,15 +25,20 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-// 🔹 upload PDF and store URL in Firestore
-async function uploadPdfAndSaveToFirestore(userId, pdfBlob) {
+async function uploadPdfAndSaveToFirestore(userId, pdfFile) {
   try {
-    // Step 1: Upload to Cloudinary
-    const formData = new FormData();
-    formData.append("file", pdfBlob);
-    formData.append("upload_preset", "PDFGenerator"); // your Cloudinary preset
+    if (!(pdfFile instanceof File)) {
+      throw new Error("Invalid file passed to uploadPdfAndSaveToFirestore");
+    }
 
-    const cloudName = "dsoetkfjz"; // change this to your actual cloud name
+    const formData = new FormData();
+    formData.append("file", pdfFile);
+    formData.append("upload_preset", "PDFGenerator");
+    formData.append("public_id", `${userId}_proposal`);
+    formData.append("resource_type", "raw"); // ✅ important!
+
+    const cloudName = "dsoetkfjz"; // change if different
+
     const response = await fetch(
       `https://api.cloudinary.com/v1_1/${cloudName}/raw/upload`,
       {
@@ -45,23 +50,25 @@ async function uploadPdfAndSaveToFirestore(userId, pdfBlob) {
     const data = await response.json();
 
     if (!response.ok) {
-      console.error("Cloudinary upload failed:", data);
+      console.error("Cloudinary upload error:", data);
       throw new Error(data.error?.message || "Upload failed");
     }
 
     const pdfUrl = data.secure_url;
     console.log("✅ Uploaded to Cloudinary:", pdfUrl);
 
-    // Step 2: Save PDF URL to Firestore
+    // Save URL to Firestore
     const userRef = doc(db, "users", userId);
     await updateDoc(userRef, { pdfUrl });
 
     console.log("✅ PDF URL saved to Firestore!");
     return pdfUrl;
   } catch (error) {
-    console.error("Error uploading PDF and saving:", error);
+    console.error("❌ Upload failed:", error);
+    return null;
   }
 }
+
 
 // 🔹 Existing helpers
 async function fetchAllUsers() {
