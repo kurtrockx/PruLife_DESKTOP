@@ -5,6 +5,7 @@ import reportsIcon from "../assets/reportsIcon.svg";
 import settingsIcon from "../assets/settingsIcon.svg";
 import clientsIcon from "../assets/clientsIcon.svg";
 
+
 const pages = [
   { name: "Dashboard", icon: dashboardIcon },
   { name: "Clients", icon: clientsIcon },
@@ -16,6 +17,8 @@ const pages = [
 export default function Sidebar() {
   const textResponsive = "xl:text-base md:text-sm text-xs";
   const logoResponsive = "2xl:h-10 lg:h-8 h-6";
+
+  
 
   return (
     <div className="sidebar z-20 flex max-w-[12em] flex-1 flex-col items-center gap-4 bg-red-950 px-2 py-4 shadow-[0_0_.25rem] shadow-black/40 lg:max-w-[14em] lg:gap-6 2xl:max-w-[16em]">

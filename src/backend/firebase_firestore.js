@@ -55,7 +55,7 @@ async function uploadPdfAndSaveToFirestore(userId, pdfBlob) {
     // Step 2: Save PDF URL to Firestore
     const userRef = doc(db, "users", userId);
     await updateDoc(userRef, { pdfUrl });
-
+    
     console.log("✅ PDF URL saved to Firestore!");
     return pdfUrl;
   } catch (error) {

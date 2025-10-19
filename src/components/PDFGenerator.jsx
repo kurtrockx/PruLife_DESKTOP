@@ -3,6 +3,7 @@ import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 import { uploadPdfAndSaveToFirestore } from "../backend/firebase_firestore";
 import { useParams } from "react-router-dom";
+import UploadPDFButton from "../../sample";
 
 const PROPOSAL_CONTANTS = [
   ["Life Insurance", "3,000,000", "2,400,000", "1,500,000"],
@@ -73,11 +74,11 @@ export default function PDFGenerator() {
 
       pdf.addImage(imgData, "JPEG", 0, 0, pdfWidth, pdfHeight);
 
-      // ✅ Convert to Blob
       const pdfBlob = pdf.output("blob");
-
-      // ✅ Upload + save URL in Firestore
-      const link = await uploadPdfAndSaveToFirestore(clientId, pdfBlob);
+      const pdfFile = new File([pdfBlob], "proposal.pdf", {
+        type: "application/pdf",
+      });
+      const link = await uploadPdfAndSaveToFirestore(clientId, pdfFile);
 
       if (link) {
         alert("✅ PDF uploaded and saved to Firestore!");
@@ -92,6 +93,7 @@ export default function PDFGenerator() {
 
   return (
     <div className="flex flex-col items-center gap-6 overflow-hidden overflow-y-auto bg-[#292524] p-6 text-xs">
+      <UploadPDFButton/>
       <div
         ref={printRef}
         className="force-rgb flex h-[1056px] w-[816px] flex-col border bg-white p-12 shadow-lg"
