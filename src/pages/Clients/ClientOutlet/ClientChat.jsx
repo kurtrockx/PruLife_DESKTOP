@@ -16,7 +16,7 @@ export default function ClientChat() {
   const [client, setClient] = useState("");
   const [messagesList, setMessagesList] = useState([]);
   const [message, setMessage] = useState("");
-  const [openPdfModal, setOpenPdfModal] = useState(true);
+  const [openPdfModal, setOpenPdfModal] = useState(false);
 
   useEffect(() => {
     const getClients = async () => {
@@ -66,7 +66,7 @@ export default function ClientChat() {
 function PDFModal({ onOpenPdfModal }) {
   return (
     <div
-      className="fixed top-0 left-0 z-100 flex max-h-dvh min-h-dvh min-w-dvw justify-center overflow-hidden bg-black/40 p-5 backdrop-blur-sm"
+      className="fixed top-0 left-0 flex max-h-dvh min-h-dvh min-w-dvw justify-center overflow-hidden bg-black/40 p-5 backdrop-blur-sm z-1000"
       onClick={() => onOpenPdfModal(false)}
     >
       <div

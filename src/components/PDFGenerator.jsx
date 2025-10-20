@@ -6,7 +6,9 @@ import { uploadPdfAndSaveToFirestore } from "../backend/firebase_firestore"; // 
 import prulifeIcon2 from "../assets/prulifeIcon2.png";
 import { PART1, PART2, PART3 } from "../proposalComputations";
 
-export default function PDFGenerator() {
+const AGE_OPTIONS = Array.from({ length: 61 }, (_, i) => i); // 0–60
+
+export default function PDFGenerator({ testingMode = false }) {
   const { clientId } = useParams(); // Firestore document id for the user
   const printRef = useRef();
   const [loading, setLoading] = useState(false);
@@ -75,14 +77,34 @@ export default function PDFGenerator() {
   };
 
   return (
-    <div className="flex flex-col items-center gap-6 overflow-hidden overflow-y-auto bg-[#292524] p-6 text-xs">
-      <button
-        onClick={handleUploadPdf}
-        disabled={loading}
-        className="max-h-fit max-w-fit cursor-pointer rounded-lg bg-[#f0b100] px-4 py-2 text-[white] hover:bg-[#d08700]"
-      >
-        {loading ? "Generating PDF..." : "Generate & Send PDF"}
-      </button>
+    <div className="flex flex-col items-center gap-6 overflow-hidden overflow-y-auto bg-[#585858] p-6 text-xs">
+      {/* Dropdown for Age */}
+      <div className="flex items-center justify-center gap-4 text-white">
+        <div className="flex flex-col">
+          <label htmlFor="age" className="mb-2 text-sm font-medium text-white">
+            Select Client Age
+          </label>
+          <select
+            id="age"
+            value={clientAge}
+            onChange={(e) => setClientAge(Number(e.target.value))}
+            className="w-40 cursor-pointer rounded-lg border border-gray-300 bg-white px-3 py-2 text-gray-800 shadow-md ring-[#f0b100] transition duration-100 ease-in-out hover:ring-2 focus:border-[#f0b100] focus:ring-2 focus:outline-none"
+          >
+            {AGE_OPTIONS.map((age) => (
+              <option key={age} value={age}>
+                {age}
+              </option>
+            ))}
+          </select>
+        </div>
+        <button
+          onClick={handleUploadPdf}
+          disabled={loading}
+          className="h-full max-w-fit cursor-pointer self-end rounded-lg bg-[#f0b100] px-4 py-2 text-[white] hover:bg-[#d08700]"
+        >
+          {loading ? "Generating PDF..." : "Generate & Send PDF"}
+        </button>
+      </div>
 
       {uploadedUrl && (
         <div className="mt-2 text-center text-white">
@@ -140,21 +162,6 @@ function Part1Header() {
         PART I: LIFE INSURANCE COVERAGE
       </div>
       <div className="grid max-h-20 grid-cols-8 divide-x text-[0.45rem]">
-        <div className="col-span-3 flex max-h-20">
-          <img
-            src={prulifeIcon2}
-            alt="prulife"
-            className="max-w-20 object-contain"
-          />
-          <div className="flex flex-1 flex-col justify-center">
-            <h4>Proposal Prepared by:</h4>
-            <BoldText>MA. MIKAELLA PRIAS MARIANO</BoldText>
-            <BoldText>Agent License: 7013****</BoldText>
-            <h5>Premiere Level Financial Advisor</h5>
-            <h5>Premiere Level Financial Advisor</h5>
-            <h5>Asst. Unit Manager</h5>
-          </div>
-        </div>
 
         <div className="col-span-2 flex flex-col bg-[#ffc9c9]">
           <div className="flex h-full flex-1 items-center px-8 text-center">
@@ -315,12 +322,13 @@ function Part2Header() {
         PART II: PROJECTION OF INVESTMENT/ WITHDRAWABLE SAVINGS
       </div>
       <div className="grid max-h-20 grid-cols-8 divide-x text-[0.45rem]">
-        <div className="col-span-3 flex">
+        <div className="col-span-3 flex h-20">
           <div className="flex flex-1 items-center justify-center border-r">
             POLICY YEAR
           </div>
           <div className="flex flex-1 items-center justify-center">AGE</div>
         </div>
+
         <div className="col-span-2 flex flex-col bg-[#ffc9c9]">
           <div className="flex h-full flex-1 items-center px-8 text-center">
             <BoldText>
