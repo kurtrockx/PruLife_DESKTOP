@@ -11,7 +11,7 @@ import DashboardPage from "./pages/Dashboard/DashboardPage.jsx";
 import ClientListPage from "./pages/Clients/ClientListPage.jsx";
 import ClientMainPage from "./pages/Clients/ClientMainPage.jsx";
 import ProposalsPage from "./pages/Proposals/ProposalsPage.jsx";
-import ReportsPage from "./pages/Reports/ReportsPage.jsx";
+import AnnouncementPage from "./pages/Announcement/AnnouncementPage.jsx";
 import SettingsPage from "./pages/Settings/SettingsPage.jsx";
 import ClientDetails from "./pages/Clients/ClientOutlet/ClientDetails.jsx";
 import ClientChat from "./pages/Clients/ClientOutlet/ClientChat.jsx";
@@ -56,8 +56,8 @@ const router = createBrowserRouter([
         element: <ProposalsPage />,
       },
       {
-        path: "reports",
-        element: <ReportsPage />,
+        path: "announcement",
+        element: <AnnouncementPage />,
       },
       {
         path: "settings",

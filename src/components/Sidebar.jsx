@@ -1,7 +1,7 @@
 import { NavLink } from "react-router-dom";
 import dashboardIcon from "../assets/dashboardIcon.svg";
 import proposalsIcon from "../assets/proposalsIcon.svg";
-import reportsIcon from "../assets/reportsIcon.svg";
+import announcementIcon from "../assets/announcementIcon.svg";
 import settingsIcon from "../assets/settingsIcon.svg";
 import clientsIcon from "../assets/clientsIcon.svg";
 
@@ -10,7 +10,7 @@ const pages = [
   { name: "Dashboard", icon: dashboardIcon },
   { name: "Clients", icon: clientsIcon },
   { name: "Proposals", icon: proposalsIcon },
-  { name: "Reports", icon: reportsIcon },
+  { name: "Announcement", icon: announcementIcon },
   { name: "Settings", icon: settingsIcon },
 ];
 

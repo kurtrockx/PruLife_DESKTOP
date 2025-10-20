@@ -2,58 +2,26 @@ import { useRef, useState } from "react";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 import { useParams } from "react-router-dom";
+import { uploadPdfAndSaveToFirestore } from "../backend/firebase_firestore"; // your firebase helper
 import prulifeIcon2 from "../assets/prulifeIcon2.png";
 import { PART1, PART2, PART3 } from "../proposalComputations";
 
 export default function PDFGenerator() {
-  const { clientId } = useParams();
+  const { clientId } = useParams(); // Firestore document id for the user
   const printRef = useRef();
   const [loading, setLoading] = useState(false);
   const [uploadedUrl, setUploadedUrl] = useState("");
-  const [clientAge, setClientAge] = useState(50);
+  const [clientAge, setClientAge] = useState(0);
 
-  // ✅ Upload PDF to Cloudinary
-  const uploadPDFToCloudinary = async (pdfBlob) => {
-    const cloudName = "dsoetkfjz"; // Your Cloudinary cloud name
-    const uploadPreset = "PDFGenerator"; // Your unsigned preset
-    const timestamp = Date.now();
-
-    const formData = new FormData();
-    formData.append("file", pdfBlob);
-    formData.append("upload_preset", uploadPreset);
-    formData.append("public_id", `proposal_${timestamp}`); // unique name
-
-    const response = await fetch(
-      `https://api.cloudinary.com/v1_1/${cloudName}/raw/upload`,
-      { method: "POST", body: formData },
-    );
-
-    const data = await response.json();
-    if (!response.ok) throw new Error(data.error?.message || "Upload failed");
-    return data.secure_url; // public Cloudinary URL
-  };
-  // ✅ Force PDF download with correct extension
-  const downloadPDF = async (url, filename = "proposal.pdf") => {
-    const res = await fetch(url);
-    const blob = await res.blob();
-    const blobUrl = window.URL.createObjectURL(blob);
-
-    const a = document.createElement("a");
-    a.href = blobUrl;
-    a.download = filename; // force .pdf extension
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    window.URL.revokeObjectURL(blobUrl);
-  };
   const handleUploadPdf = async () => {
     try {
       setLoading(true);
 
-      const element = printRef.current;
-      await new Promise((r) => setTimeout(r, 100)); // wait for layout paint
+      // Wait for layout to fully render
+      await new Promise((r) => setTimeout(r, 100));
 
-      const canvas = await html2canvas(element, {
+      // Capture the proposal div as canvas
+      const canvas = await html2canvas(printRef.current, {
         scale: 2,
         useCORS: true,
         logging: false,
@@ -61,6 +29,7 @@ export default function PDFGenerator() {
 
       const imgData = canvas.toDataURL("image/jpeg");
 
+      // Create PDF
       const pdf = new jsPDF({
         orientation: "p",
         unit: "mm",
@@ -69,19 +38,34 @@ export default function PDFGenerator() {
 
       const pdfWidth = pdf.internal.pageSize.getWidth();
       const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
-
       pdf.addImage(imgData, "JPEG", 0, 0, pdfWidth, pdfHeight);
 
+      // Convert PDF to a File with .pdf extension
       const pdfBlob = pdf.output("blob");
+      const pdfFile = new File([pdfBlob], "proposal.pdf", {
+        type: "application/pdf",
+      });
 
-      // Upload to Cloudinary
-      const uploadedUrl = await uploadPDFToCloudinary(pdfBlob);
-      setUploadedUrl(uploadedUrl);
+      // Upload to Cloudinary & save URL in Firestore
+      const cloudUrl = await uploadPdfAndSaveToFirestore(clientId, pdfFile);
 
-      // Download locally with proper .pdf
-      await downloadPDF(uploadedUrl, "proposal.pdf");
+      if (!cloudUrl) throw new Error("Upload failed");
 
-      alert("✅ PDF uploaded and downloaded successfully!");
+      setUploadedUrl(cloudUrl);
+
+      // Optional: Download PDF locally
+      const res = await fetch(cloudUrl);
+      const blob = await res.blob();
+      const blobUrl = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = blobUrl;
+      a.download = "proposal.pdf"; // force .pdf extension
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      window.URL.revokeObjectURL(blobUrl);
+
+      alert("✅ PDF uploaded to Cloudinary and saved to Firestore!");
     } catch (err) {
       console.error("PDF upload failed:", err);
       alert("❌ PDF upload failed. Check console for details.");
@@ -95,13 +79,28 @@ export default function PDFGenerator() {
       <button
         onClick={handleUploadPdf}
         disabled={loading}
-        className="max-h-fit max-w-fit cursor-pointer rounded-lg bg-[#f0b100] px-4 py-2 text-white hover:bg-[#d08700]"
+        className="max-h-fit max-w-fit cursor-pointer rounded-lg bg-[#f0b100] px-4 py-2 text-[white] hover:bg-[#d08700]"
       >
-        {loading ? "Generating PDF..." : "Generate and Send PDF"}
+        {loading ? "Generating PDF..." : "Generate & Send PDF"}
       </button>
+
+      {uploadedUrl && (
+        <div className="mt-2 text-center text-white">
+          <p>Uploaded PDF URL:</p>
+          <a
+            href={uploadedUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-blue-300 underline"
+          >
+            {uploadedUrl}
+          </a>
+        </div>
+      )}
+
       <div
         ref={printRef}
-        className="force-rgb h-[1056px] w-[816px] border bg-white p-5 shadow-lg"
+        className="force-rgb h-[1056px] w-[816px] border bg-[white] p-5 shadow-lg"
       >
         <Proposal clientAge={clientAge} />
       </div>
@@ -129,7 +128,7 @@ function BoldText({ children }) {
 
 function Quotation({ clientAge }) {
   return (
-    <div className="bg-red-800 p-2 text-white">
+    <div className="bg-[#9f0712] p-2 text-[white]">
       QUOTATION FOR CLIENT AGE: {clientAge}
     </div>
   );
@@ -137,7 +136,9 @@ function Quotation({ clientAge }) {
 function Part1Header() {
   return (
     <div className="border-x">
-      <div className="bg-black text-white p-2">PART I: LIFE INSURANCE COVERAGE</div>
+      <div className="bg-[black] p-2 text-[white]">
+        PART I: LIFE INSURANCE COVERAGE
+      </div>
       <div className="grid max-h-20 grid-cols-8 divide-x text-[0.45rem]">
         <div className="col-span-3 flex max-h-20">
           <img
@@ -155,7 +156,7 @@ function Part1Header() {
           </div>
         </div>
 
-        <div className="col-span-2 flex flex-col bg-red-200">
+        <div className="col-span-2 flex flex-col bg-[#ffc9c9]">
           <div className="flex h-full flex-1 items-center px-8 text-center">
             <BoldText>
               PRULink Assurance Account Plus (PAA+) Continuous Savings Plan
@@ -172,7 +173,7 @@ function Part1Header() {
             </div>
           </div>
         </div>
-        <div className="col-span-3 flex flex-col bg-blue-200">
+        <div className="col-span-3 flex flex-col bg-[#bedbff]">
           <div className="flex h-full flex-1 items-center px-16 text-center">
             <BoldText>
               Elite Savings Plan | Investment-Focused Plans 5, 10 & 15 Year
@@ -310,7 +311,7 @@ function TextRow({ children }) {
 function Part2Header() {
   return (
     <div className="border-x">
-      <div className="bg-black p-2 text-white">
+      <div className="bg-[black] p-2 text-[white]">
         PART II: PROJECTION OF INVESTMENT/ WITHDRAWABLE SAVINGS
       </div>
       <div className="grid max-h-20 grid-cols-8 divide-x text-[0.45rem]">
@@ -320,7 +321,7 @@ function Part2Header() {
           </div>
           <div className="flex flex-1 items-center justify-center">AGE</div>
         </div>
-        <div className="col-span-2 flex flex-col bg-red-200">
+        <div className="col-span-2 flex flex-col bg-[#ffc9c9]">
           <div className="flex h-full flex-1 items-center px-8 text-center">
             <BoldText>
               PRULink Assurance Account Plus (PAA+) Continuous Savings Plan
@@ -337,7 +338,7 @@ function Part2Header() {
             </div>
           </div>
         </div>
-        <div className="col-span-3 flex flex-col bg-blue-200">
+        <div className="col-span-3 flex flex-col bg-[#bedbff]">
           <div className="flex h-full flex-1 items-center px-16 text-center">
             <BoldText>
               Elite Savings Plan | Investment-Focused Plans 5, 10 & 15 Year
@@ -370,7 +371,6 @@ function Part2Header() {
 function Part2Table({ clientAge }) {
   const client = PART2.find((p) => p.age === clientAge);
   const { content } = client;
-  console.log(content);
 
   return (
     <>
@@ -398,14 +398,15 @@ function Part2Table({ clientAge }) {
 function Part3Header() {
   return (
     <div className="border-x">
-      <div className="bg-black p-2 text-white">PART III: FUND ALLOCATION </div>
+      <div className="bg-[black] p-2 text-[white]">
+        PART III: FUND ALLOCATION{" "}
+      </div>
     </div>
   );
 }
 function Part3Table({ clientAge }) {
   const client = PART3.find((p) => p.age === clientAge);
   const { content } = client;
-  console.log(content);
 
   return (
     <>

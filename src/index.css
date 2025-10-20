@@ -45,5 +45,17 @@ img {
 }
 
 ::-webkit-scrollbar {
-  width: 16px; /* or adjust to your liking */
+  width: 8px; /* Adjust width */
+  background-color: rgba(0, 0, 0, 0.2); /* Black/20% */
+}
+
+/* Scrollbar thumb (movable part) */
+::-webkit-scrollbar-thumb {
+  background-color: #7f1d1d; /* Tailwind red-950 hex */
+  border-radius: 8px; /* Optional: rounded corners */
+}
+
+/* Optional: on hover */
+::-webkit-scrollbar-thumb:hover {
+  background-color: #991b1b; /* slightly lighter red on hover */
 }
