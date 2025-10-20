@@ -2,7 +2,8 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import App from "./App.jsx";
 import {
-  createBrowserRouter,
+  createHashRouter, // ✅ use this instead
+  Link,
   Navigate,
   RouterProvider,
 } from "react-router-dom";
@@ -16,54 +17,36 @@ import SettingsPage from "./pages/Settings/SettingsPage.jsx";
 import ClientDetails from "./pages/Clients/ClientOutlet/ClientDetails.jsx";
 import ClientChat from "./pages/Clients/ClientOutlet/ClientChat.jsx";
 
-const router = createBrowserRouter([
+const router = createHashRouter([
   {
     path: "/",
     element: <App />,
     children: [
-      {
-        index: true,
-        element: <Navigate to="dashboard" replace />,
-      },
-      {
-        path: "dashboard",
-        element: <DashboardPage />,
-      },
-      {
-        path: "clients",
-        element: <ClientListPage />,
-      },
+      { index: true, element: <Navigate to="dashboard" replace /> },
+      { path: "dashboard", element: <DashboardPage /> },
+      { path: "clients", element: <ClientListPage /> },
       {
         path: "clients/:clientId",
         element: <ClientMainPage />,
         children: [
-          {
-            index: true,
-            element: <Navigate to="details" replace />,
-          },
-          {
-            path: "details",
-            element: <ClientDetails />,
-          },
-          {
-            path: "chat",
-            element: <ClientChat />,
-          },
+          { index: true, element: <Navigate to="details" replace /> },
+          { path: "details", element: <ClientDetails /> },
+          { path: "chat", element: <ClientChat /> },
         ],
       },
-      {
-        path: "proposals",
-        element: <ProposalsPage />,
-      },
-      {
-        path: "announcement",
-        element: <AnnouncementPage />,
-      },
-      {
-        path: "settings",
-        element: <SettingsPage />,
-      },
+      { path: "proposals", element: <ProposalsPage /> },
+      { path: "announcement", element: <AnnouncementPage /> },
+      { path: "settings", element: <SettingsPage /> },
     ],
+  },
+  {
+    path: "*",
+    element: (
+      <div>
+        <h1>nothing here</h1>
+        <Link to={"/"}>go here</Link>
+      </div>
+    ),
   },
 ]);
 

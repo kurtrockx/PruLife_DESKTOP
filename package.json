@@ -1,13 +1,17 @@
 {
   "name": "desktop",
+  "version": "1.0.0",
   "private": true,
-  "version": "0.0.0",
   "type": "module",
+  "main": "public/electron.js",
   "scripts": {
-    "dev": "vite",
+    "dev": "concurrently \"vite\" \"wait-on http://localhost:5173 && electron .\"",
     "build": "vite build",
+    "electron": "electron .",
+    "dist": "npm run build && electron-builder",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "package": "electron-builder build"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.1.13",
@@ -21,16 +25,44 @@
     "tailwindcss": "^4.1.13"
   },
   "devDependencies": {
+    "electron": "^38.3.0",
     "@eslint/js": "^9.33.0",
     "@types/react": "^19.1.10",
     "@types/react-dom": "^19.1.7",
     "@vitejs/plugin-react": "^5.0.0",
+    "concurrently": "^9.2.1",
+    "electron-builder": "^25.1.8",
     "eslint": "^9.33.0",
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.20",
     "globals": "^16.3.0",
     "prettier": "^3.6.2",
     "prettier-plugin-tailwindcss": "^0.6.14",
-    "vite": "^7.1.2"
+    "vite": "^7.1.2",
+    "wait-on": "^7.2.0"
+  },
+  "build": {
+    "appId": "com.prulife.desktop",
+    "productName": "PRULife Desktop",
+    "files": [
+      "dist/**/*",
+      "public/electron.js",
+      "package.json"
+    ],
+    "directories": {
+      "buildResources": "assets"
+    },
+    "win": {
+      "target": "nsis",
+      "icon": "assets/icon.ico"
+    },
+    "mac": {
+      "target": "dmg",
+      "icon": "assets/icon.icns"
+    },
+    "linux": {
+      "target": "AppImage",
+      "icon": "assets/"
+    }
   }
 }
