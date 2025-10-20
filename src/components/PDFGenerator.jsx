@@ -162,6 +162,21 @@ function Part1Header() {
         PART I: LIFE INSURANCE COVERAGE
       </div>
       <div className="grid max-h-20 grid-cols-8 divide-x text-[0.45rem]">
+        <div className="col-span-3 flex max-h-20">
+          <img
+            src={prulifeIcon2}
+            alt="prulife"
+            className="max-w-20 object-contain"
+          />
+          <div className="flex flex-1 flex-col justify-center">
+            <h4>Proposal Prepared by:</h4>
+            <BoldText>MA. MIKAELLA PRIAS MARIANO</BoldText>
+            <BoldText>Agent License: 7013****</BoldText>
+            <h5>Premiere Level Financial Advisor</h5>
+            <h5>Premiere Level Financial Advisor</h5>
+            <h5>Asst. Unit Manager</h5>
+          </div>
+        </div>
 
         <div className="col-span-2 flex flex-col bg-[#ffc9c9]">
           <div className="flex h-full flex-1 items-center px-8 text-center">
