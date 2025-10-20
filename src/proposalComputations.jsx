@@ -108,7 +108,6 @@ export const PART1 = [
     ],
   },
 ];
-
 export const PART2 = [
   {
     age: 0,

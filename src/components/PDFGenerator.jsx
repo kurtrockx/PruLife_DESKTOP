@@ -1,10 +1,11 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { uploadPdfAndSaveToFirestore } from "../backend/firebase_firestore"; // your firebase helper
+import { useParams } from "react-router-dom";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
-import { useParams } from "react-router-dom";
-import { uploadPdfAndSaveToFirestore } from "../backend/firebase_firestore"; // your firebase helper
 import prulifeIcon2 from "../assets/prulifeIcon2.png";
 import { PART1, PART2, PART3 } from "../proposalComputations";
+import { fetchAllUsers } from "../backend/firebase_firestore";
 
 const AGE_OPTIONS = Array.from({ length: 61 }, (_, i) => i); // 0–60
 
@@ -14,6 +15,15 @@ export default function PDFGenerator({ testingMode = false }) {
   const [loading, setLoading] = useState(false);
   const [uploadedUrl, setUploadedUrl] = useState("");
   const [clientAge, setClientAge] = useState(0);
+  const [client, setClient] = useState("");
+
+  useEffect(() => {
+    const getClients = async () => {
+      const users = await fetchAllUsers();
+      setClient(users.find((c) => c.id === clientId));
+    };
+    getClients();
+  }, [clientId]);
 
   const handleUploadPdf = async () => {
     try {
@@ -97,13 +107,15 @@ export default function PDFGenerator({ testingMode = false }) {
             ))}
           </select>
         </div>
-        <button
-          onClick={handleUploadPdf}
-          disabled={loading}
-          className="h-full max-w-fit cursor-pointer self-end rounded-lg bg-[#f0b100] px-4 py-2 text-[white] hover:bg-[#d08700]"
-        >
-          {loading ? "Generating PDF..." : "Generate & Send PDF"}
-        </button>
+        {!testingMode && (
+          <button
+            onClick={handleUploadPdf}
+            disabled={loading}
+            className="h-full max-w-fit cursor-pointer self-end rounded-lg bg-[#f0b100] px-4 py-2 text-[white] hover:bg-[#d08700]"
+          >
+            {loading ? "Generating PDF..." : "Generate & Send PDF"}
+          </button>
+        )}
       </div>
 
       {uploadedUrl && (
@@ -124,13 +136,13 @@ export default function PDFGenerator({ testingMode = false }) {
         ref={printRef}
         className="force-rgb h-[1056px] w-[816px] border bg-[white] p-5 shadow-lg"
       >
-        <Proposal clientAge={clientAge} />
+        <Proposal clientAge={clientAge} client={client} />
       </div>
     </div>
   );
 }
 
-function Proposal({ clientAge }) {
+function Proposal({ clientAge, client }) {
   return (
     <>
       <Quotation clientAge={clientAge} />
@@ -140,6 +152,7 @@ function Proposal({ clientAge }) {
       <Part2Table clientAge={clientAge} />
       <Part3Header />
       <Part3Table clientAge={clientAge} />
+      <ClientDetails client={client} />
     </>
   );
 }
@@ -432,7 +445,7 @@ function Part3Table({ clientAge }) {
   const { content } = client;
 
   return (
-    <>
+    <div className="border-b">
       <TableLayout>
         <div className="col-span-6 flex divide-x border-x">
           <TextRow>PLAN</TextRow>
@@ -467,6 +480,21 @@ function Part3Table({ clientAge }) {
           </div>
         </TableLayout>
       ))}
-    </>
+    </div>
+  );
+}
+
+function ClientDetails({ client }) {
+  console.log(client);
+  return (
+    <div className="mt-10 space-y-px text-right">
+      {client && (
+        <>
+          <BoldText>Client Details</BoldText>
+          <p className="capitalize">{client.fullname}</p>
+          <p className="text-[#155dfc]">{client.email}</p>
+        </>
+      )}
+    </div>
   );
 }
