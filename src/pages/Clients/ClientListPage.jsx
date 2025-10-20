@@ -40,9 +40,9 @@ export default function ClientListPage() {
   };
 
   return (
-    <div className="flex flex-1 flex-col justify-center">
+    <div className="flex flex-1 flex-col justify-center dark:bg-neutral-700">
       <div className="flex flex-1 flex-col items-center justify-center">
-        <div className="flex max-h-[80dvh] w-[70dvw] flex-1 flex-col overflow-y-scroll rounded-tl-xl rounded-bl-xl shadow-[0_0_.25rem] shadow-black/20">
+        <div className="flex max-h-[80dvh] w-[70dvw] flex-1 flex-col overflow-y-scroll rounded-tl-xl rounded-bl-xl bg-white shadow-[0_0_.25rem] shadow-black/20 dark:border dark:border-white/50 dark:bg-neutral-900 dark:text-white">
           <Categories onSearchInput={handleSearchInput} />
           {clients.length === 0 ? (
             <Loading />
@@ -60,9 +60,9 @@ function Categories({ onSearchInput }) {
   const paddingResponsive = "max-xl:px-1 max-xl:py-2 max-lg:px-0.5 py-4";
 
   return (
-    <div className="sticky top-0 space-y-2 bg-white py-2">
+    <div className="sticky top-0 space-y-2 py-2">
       <SearchClient onSearchInput={onSearchInput} />
-      <div className="flex flex-1 border border-red-950 bg-black px-4 font-semibold text-white shadow-sm">
+      <div className="flex flex-1 border border-red-950 bg-black px-4 font-semibold text-white shadow-sm dark:border-x-0 dark:border-y-white/40">
         {CATEGORIES.map((c, i) => (
           <h2
             key={i}
@@ -78,13 +78,12 @@ function Categories({ onSearchInput }) {
 
 function SearchClient({ onSearchInput }) {
   const InputStylish =
-    "shadow-[0_0_0_1.5px] shadow-red-950/0 duration-200 focus-within:shadow-yellow-500 hover:shadow-yellow-500";
-    const textResponsive = "max-2xl:text-base max-xl:text-sm max-lg:text-xs";
-
+    "shadow-[0_0_0_1.5px] shadow-red-950/0 duration-200 focus-within:shadow-yellow-500 hover:shadow-yellow-500 dark:focus-within:shadow-white dark:hover:shadow-white";
+  const textResponsive = "max-2xl:text-base max-xl:text-sm max-lg:text-xs";
 
   return (
     <div
-      className={`sticky top-0 ml-auto flex w-1/2 rounded-xl border border-black/40 px-4 py-2 ${InputStylish} `}
+      className={`sticky top-0 ml-auto flex w-1/2 rounded-xl border border-black/40 px-4 py-2 ${InputStylish} dark:border-white`}
     >
       <input
         className={`flex-1 outline-0 ${textResponsive}`}
@@ -110,7 +109,7 @@ function ClientsList({ clients }) {
 function Client({ client }) {
   const textResponsive = "max-2xl:text-base max-xl:text-sm max-lg:text-xs";
   const paddingResponsive = "max-xl:p-1 max-lg:px-0.25 max-lg:py-0.25";
-  const clientDetailStyle = `flex-1 border-r border-black/10 p-2 text-md whitespace-nowrap  flex items-center truncate justify-center ${textResponsive} ${paddingResponsive}`;
+  const clientDetailStyle = `flex-1 border-r border-black/10 p-2 text-md whitespace-nowrap flex items-center truncate justify-center dark:border-white/40 ${textResponsive} ${paddingResponsive}`;
 
   const calculateAge = (birthdateStr) => {
     const birthDate = new Date(birthdateStr);
@@ -124,7 +123,7 @@ function Client({ client }) {
   };
 
   return (
-    <div className="flex flex-1 rounded-lg border border-black/10 px-2 shadow-sm duration-100 hover:shadow-md">
+    <div className="flex flex-1 rounded-lg border border-black/10 px-2 shadow-sm duration-100 hover:shadow-md dark:bg-neutral-800 dark:shadow-black/80">
       <h3
         className={`${clientDetailStyle} max-w-[30%] justify-start font-medium capitalize`}
       >
@@ -156,7 +155,7 @@ function ClientsLink({ uid }) {
   return (
     <Link
       to={`/clients/${uid}`}
-      className={`text-blue-800 lowercase underline underline-offset-2 hover:text-blue-500 ${textResponsive}`}
+      className={`text-blue-800 lowercase underline underline-offset-2 hover:text-blue-500 ${textResponsive} dark:text-blue-300 dark:hover:text-blue-200`}
     >
       VIEW DETAILS
     </Link>

@@ -16,7 +16,7 @@ import AnnouncementPage from "./pages/Announcement/AnnouncementPage.jsx";
 import SettingsPage from "./pages/Settings/SettingsPage.jsx";
 import ClientDetails from "./pages/Clients/ClientOutlet/ClientDetails.jsx";
 import ClientChat from "./pages/Clients/ClientOutlet/ClientChat.jsx";
-
+import ThemeProvider from "./context/ThemeProvider.jsx";
 const router = createHashRouter([
   {
     path: "/",
@@ -52,6 +52,8 @@ const router = createHashRouter([
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <RouterProvider router={router} />
+    <ThemeProvider>
+      <RouterProvider router={router} />
+    </ThemeProvider>  
   </StrictMode>,
 );

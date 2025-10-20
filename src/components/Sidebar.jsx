@@ -21,7 +21,7 @@ export default function Sidebar() {
   
 
   return (
-    <div className="sidebar z-20 flex max-w-[12em] flex-1 flex-col items-center gap-4 bg-red-950 px-2 py-4 shadow-[0_0_.25rem] shadow-black/40 lg:max-w-[14em] lg:gap-6 2xl:max-w-[16em]">
+    <div className="sidebar z-20 flex max-w-[12em] flex-1 flex-col items-center gap-4 bg-red-950 px-2 py-4 shadow-[0_0_.25rem] shadow-black/40 lg:max-w-[14em] lg:gap-6 2xl:max-w-[16em] dark:bg-neutral-950">
       {pages.map((p) => (
         <NavLink
           key={p.name}

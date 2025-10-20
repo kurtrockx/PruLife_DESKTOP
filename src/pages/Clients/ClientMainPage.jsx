@@ -1,4 +1,4 @@
-import { NavLink, Outlet, useLocation, useMatches } from "react-router-dom";
+import { NavLink, Outlet, useLocation } from "react-router-dom";
 
 export default function ClientMainPage() {
   const ClientTabStyle =
@@ -8,7 +8,7 @@ export default function ClientMainPage() {
   const currentTabOpen = location.pathname.split("/")[3];
 
   return (
-    <div className="flex flex-1 flex-col items-center justify-center gap-2">
+    <div className="flex flex-1 flex-col items-center justify-center gap-2 dark:bg-neutral-700">
       <div className="clientMainPage flex gap-4">
         <NavLink className={ClientTabStyle} to={"details"}>
           Client Details
@@ -18,7 +18,7 @@ export default function ClientMainPage() {
         </NavLink>
       </div>
       <div
-        className={`flex aspect-video max-h-[90%] flex-1 overflow-hidden rounded-2xl bg-white shadow-[0_0_10px] shadow-black/20 max-2xl:max-w-[90%] ${currentTabOpen === "chat" && "flex-col"}`}
+        className={`flex aspect-video max-h-[90%] flex-1 overflow-hidden rounded-2xl dark:border-white/40 dark:border bg-white shadow-[0_0_10px] shadow-black/20 max-2xl:max-w-[90%] dark:bg-black ${currentTabOpen === "chat" && "flex-col"}`}
       >
         <Outlet />
       </div>
