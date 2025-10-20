@@ -74,13 +74,13 @@ function AnnouncementList({ announcements, handleDelete, openModal }) {
     );
 
   return (
-    <div className="flex flex-col gap-4 p-2">
+    <div className="grid grid-cols-1 gap-4 p-2 lg:grid-cols-2 xl:grid-cols-1">
       {announcements.map((a) => (
         <div
           key={a.id}
           className="flex flex-col justify-between gap-4 rounded-xl bg-white p-4 shadow transition duration-200 hover:shadow-md xl:flex-row xl:items-center"
         >
-          <div className="flex justify-center xl:w-64 bg-gray-200 p-2 rounded-xl lg:justify-end">
+          <div className="flex lg:justify-center justify-center md:justify-end rounded-xl bg-gray-200 p-2 xl:w-64">
             {a.thumb && (
               <img
                 src={a.thumb}
@@ -138,7 +138,7 @@ function AnnouncementHeader({ openModal, setSearchInput }) {
         </button>
       </div>
 
-      <div className="mx-4 my-2 flex w-full max-w-md items-center rounded-xl border border-black/40 px-4 py-2 shadow-sm">
+      <div className="mx-4 my-2 flex w-full max-w-md items-center rounded-xl border border-black/40 px-4 py-2 shadow-sm duration-100 focus-within:border-black/80 hover:border-black/80">
         <input
           type="text"
           placeholder="Search announcements..."

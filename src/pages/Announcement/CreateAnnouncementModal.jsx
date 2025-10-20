@@ -40,7 +40,7 @@ export default function CreateAnnouncementModal({ onClose, announcement }) {
           throw new Error(data.error?.message || "Image upload failed");
 
         fullImageUrl = data.data.url;
-          thumbnailUrl = data.data.thumb.url;
+        thumbnailUrl = data.data.thumb.url;
       }
 
       if (announcement) {
@@ -72,69 +72,78 @@ export default function CreateAnnouncementModal({ onClose, announcement }) {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-      <form
-        onSubmit={handleSubmit}
-        className="flex w-96 flex-col gap-4 rounded-lg bg-white p-6"
-      >
-        <h2 className="text-xl font-semibold">
-          {announcement ? "Edit Announcement" : "Create Announcement"}
-        </h2>
+    <div className="fixed inset-0 z-1000 flex items-center justify-center bg-black/50 p-8">
+      <div className="w-3xl">
+        <form
+          onSubmit={handleSubmit}
+          className="flex max-h-[80dvh] w-full flex-col gap-4 overflow-y-scroll rounded-lg bg-white p-6"
+        >
+          <h2 className="text-xl font-semibold">
+            {announcement ? "Edit Announcement" : "Create Announcement"}
+          </h2>
 
-        <input
-          type="text"
-          placeholder="Title"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          className="rounded border p-2"
-          required
-        />
-
-        <input
-          type="text"
-          placeholder="Subtitle"
-          value={subtitle}
-          onChange={(e) => setSubtitle(e.target.value)}
-          className="rounded border p-2"
-        />
-
-        <textarea
-          placeholder="Content"
-          value={content}
-          onChange={(e) => setContent(e.target.value)}
-          rows={4}
-          className="rounded border p-2"
-          required
-        />
-
-        <input type="file" accept="image/*" onChange={handleImageChange} />
-
-        {preview && (
-          <img
-            src={preview}
-            alt="preview"
-            className="mt-2 h-32 w-full rounded-lg object-cover"
+          <input
+            type="text"
+            placeholder="Title"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            className="rounded border border-black/40 p-2 hover:shadow-md"
+            required
           />
-        )}
 
-        <div className="flex justify-end gap-2">
-          <button
-            type="button"
-            onClick={onClose}
-            className="rounded border px-4 py-2"
-            disabled={loading}
-          >
-            Cancel
-          </button>
-          <button
-            type="submit"
-            className="rounded bg-yellow-500 px-4 py-2 text-black"
-            disabled={loading}
-          >
-            {loading ? "Saving..." : "Submit"}
-          </button>
-        </div>
-      </form>
+          <input
+            type="text"
+            placeholder="Subtitle"
+            value={subtitle}
+            onChange={(e) => setSubtitle(e.target.value)}
+            className="rounded border border-black/40 p-2 hover:shadow-md"
+          />
+
+          <textarea
+            placeholder="Content"
+            value={content}
+            onChange={(e) => setContent(e.target.value)}
+            rows={4}
+            className="rounded border border-black/40 p-2 hover:shadow-md min-h-12"
+            required
+          />
+
+          <div className="w-fit rounded-md border border-black/20 px-2 hover:shadow-md">
+            <input
+              className="cursor-pointer"
+              type="file"
+              accept="image/*"
+              onChange={handleImageChange}
+            />
+          </div>
+
+          {preview && (
+            <img
+              src={preview}
+              alt="preview"
+              className="h-60 w-full rounded-lg object-cover"
+            />
+          )}
+
+          <div className="flex justify-end gap-2">
+            <button
+              type="button"
+              onClick={onClose}
+              className="rounded border px-4 py-2 cursor-pointer hover:bg-black/10"
+              disabled={loading}
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              className="rounded bg-yellow-500 px-4 py-2 text-black cursor-pointer hover:bg-yellow-600"
+              disabled={loading}
+            >
+              {loading ? "Saving..." : "Submit"}
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 }
