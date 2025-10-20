@@ -87,7 +87,7 @@ export default function PDFGenerator({ testingMode = false }) {
   };
 
   return (
-    <div className="flex flex-col items-center gap-6 overflow-hidden overflow-y-auto bg-[#585858] p-6 text-xs">
+    <div className="flex flex-col items-center gap-6 overflow-hidden overflow-y-auto bg-[#313131] p-6 text-xs dark:bg-[#161616]">
       {/* Dropdown for Age */}
       <div className="flex items-center justify-center gap-4 text-white">
         <div className="flex flex-col">
@@ -120,7 +120,7 @@ export default function PDFGenerator({ testingMode = false }) {
 
       {uploadedUrl && (
         <div className="mt-2 text-center text-white">
-          <p>Uploaded PDF URL:</p>
+          <p>Click here if PDF doesn't download within 10 seconds:</p>
           <a
             href={uploadedUrl}
             target="_blank"

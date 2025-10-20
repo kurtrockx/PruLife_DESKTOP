@@ -52,7 +52,7 @@ export default function ClientDetails() {
   const textResponsive = "max-2xl:text-sm max-xl:text-xs max-lg:text-[0.75rem]";
 
   const labelStyle = `font-semibold text-sm text-black/60 flex-2 dark:text-white ${textResponsive}`;
-  const inputStyle = `flex-5 max-xl:flex-10 dark:border-white max-md:flex-5 border border-black/20 rounded-lg p-2 text-sm focus:outline-none focus:ring-2 focus:ring-yellow-400 duration-100 dark:disabled:bg-neutral-900  disabled:bg-black/5 disabled:cursor-not-allowed ${textResponsive}`;
+  const inputStyle = `flex-5 max-xl:flex-10 dark:border-white text-gray-400 dark:text-white max-md:flex-5 border border-black/20 rounded-lg p-2 text-sm focus:outline-none focus:ring-2 focus:ring-yellow-400 duration-100 dark:disabled:bg-neutral-900 disabled:bg-black/5 disabled:cursor-not-allowed ${textResponsive}`;
   const buttonStyle = `text-yellow-600 hover:text-yellow-800 transition-all flex-0.5 cursor-pointer ${textResponsive}`;
 
   const fields = [
