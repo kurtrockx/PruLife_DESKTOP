@@ -80,7 +80,7 @@ function AnnouncementList({ announcements, handleDelete, openModal }) {
       {announcements.map((a) => (
         <div
           key={a.id}
-          className="flex flex-col justify-between gap-4 rounded-xl bg-white p-4 shadow transition duration-200 hover:shadow-md xl:flex-row xl:items-center dark:bg-black dark:border dark:border-white/40"
+          className="flex flex-col justify-between gap-4 rounded-xl bg-white p-4 shadow transition duration-200 hover:shadow-md xl:flex-row xl:items-center dark:border dark:border-white/40 dark:bg-black"
         >
           <div className="flex justify-center rounded-xl bg-gray-200 p-2 md:justify-end lg:justify-center xl:w-64">
             {a.thumb && (

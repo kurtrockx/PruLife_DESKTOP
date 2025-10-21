@@ -86,12 +86,16 @@ function SearchClient({ onSearchInput }) {
       className={`sticky top-0 ml-auto flex w-1/2 rounded-xl border border-black/40 px-4 py-2 ${InputStylish} dark:border-white`}
     >
       <input
-        className={`flex-1 outline-0 ${textResponsive}`}
+        className={`flex-1 outline-0 ${textResponsive} dark:placeholder:text-white/50`}
         type="text"
         placeholder="Search for member"
         onChange={onSearchInput}
       />
-      <img className="max-h-6 opacity-50" src={searchIcon} alt="searchIcon" />
+      <img
+        className="max-h-6 opacity-50 dark:invert"
+        src={searchIcon}
+        alt="searchIcon"
+      />
     </div>
   );
 }
