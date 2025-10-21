@@ -3,7 +3,7 @@ import prulifeLogo from "../assets/prulifeLogo.svg";
 
 export default function Navbar() {
   return (
-    <nav className="z-1000 flex justify-center bg-white shadow-md dark:bg-neutral-900 dark:text-white">
+    <nav className="drag-region z-1000 flex justify-center bg-white shadow-md dark:bg-neutral-900 dark:text-white">
       <Link
         to={"dashboard"}
         className="flex max-h-20 items-center justify-center gap-2 p-2"

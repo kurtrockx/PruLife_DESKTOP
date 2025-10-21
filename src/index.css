@@ -34,7 +34,6 @@ body,
   overflow: hidden;
 }
 
-
 @layer utilities {
   .force-rgb * {
     /* Converts Tailwind oklch colors into rgb fallback */
@@ -61,4 +60,8 @@ img {
 /* Optional: on hover */
 ::-webkit-scrollbar-thumb:hover {
   background-color: #991b1b; /* slightly lighter red on hover */
+}
+
+.drag-region {
+  -webkit-app-region: drag;
 }
