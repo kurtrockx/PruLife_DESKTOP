@@ -28,11 +28,12 @@ body,
 
 .clientMainPage .active {
   border-radius: 0.75rem;
-  background: #430209;
+  background: #9b0012;
   /* background: #f0b100; */
   color: white;
   overflow: hidden;
 }
+
 
 @layer utilities {
   .force-rgb * {
