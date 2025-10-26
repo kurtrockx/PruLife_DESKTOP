@@ -40,9 +40,9 @@ export default function ClientListPage() {
   };
 
   return (
-    <div className="flex flex-1 flex-col justify-center bg-gradient-to-br from-white-50 via-neutral-300 to-white dark:from-neutral-700 dark:via-neutral-950 dark:to-black">
+    <div className="from-white-50 flex flex-1 flex-col justify-center bg-gradient-to-br via-neutral-300 to-white dark:from-neutral-700 dark:via-neutral-950 dark:to-black">
       <div className="flex flex-1 flex-col items-center justify-center">
-        <div className="flex max-h-[80dvh] w-[70dvw] flex-1 flex-col overflow-y-scroll rounded-tl-xl rounded-bl-xl bg-white shadow-[0_0_.25rem] shadow-black/20 dark:border dark:border-white/50 dark:bg-neutral-900 dark:text-white">
+        <div className="flex max-h-[80dvh] w-[80dvw] flex-1 flex-col overflow-y-scroll rounded-tl-xl rounded-bl-xl bg-white shadow-[0_0_.25rem] shadow-black/20 dark:border dark:border-white/50 dark:bg-neutral-900 dark:text-white">
           <Categories onSearchInput={handleSearchInput} />
           {clients.length === 0 ? (
             <Loading />
@@ -60,7 +60,7 @@ function Categories({ onSearchInput }) {
   const paddingResponsive = "max-xl:px-1 max-xl:py-2 max-lg:px-0.5 py-4";
 
   return (
-    <div className="sticky top-0 space-y-2 py-2">
+    <div className="sticky top-0 space-y-2 py-2 bg-white z-100 dark:bg-neutral-900">
       <SearchClient onSearchInput={onSearchInput} />
       <div className="flex flex-1 border border-red-950 bg-black px-4 font-semibold text-white shadow-sm dark:border-x-0 dark:border-y-white/40">
         {CATEGORIES.map((c, i) => (
@@ -133,13 +133,21 @@ function Client({ client }) {
       >
         {client.fullname}
       </h3>
-      <h3 className={`${clientDetailStyle} max-w-[10%] text-black/60 dark:text-white/60`}>
+      <h3
+        className={`${clientDetailStyle} max-w-[10%] text-black/60 dark:text-white/60`}
+      >
         {calculateAge(client.birthdate)}
       </h3>
-      <h3 className={`${clientDetailStyle} max-w-[20%] text-black/60 dark:text-white/60`}>
+      <h3
+        className={`${clientDetailStyle} max-w-[20%] text-black/60 dark:text-white/60`}
+      >
         {client.contactNumber}
       </h3>
-      <h3 className={`${clientDetailStyle} max-w-[20%] text-black/60 dark:text-white/60`}>{client.status}</h3>
+      <h3
+        className={`${clientDetailStyle} max-w-[20%] text-black/60 dark:text-white/60`}
+      >
+        {client.status}
+      </h3>
       <div
         className={`flex max-w-[20%] flex-1 items-center justify-center text-black/60 dark:text-white/60 ${paddingResponsive} ${textResponsive}`}
       >

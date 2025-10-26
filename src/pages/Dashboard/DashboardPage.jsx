@@ -95,7 +95,7 @@ export default function DashboardPage() {
       <h1 className="text-2xl font-bold">Dashboard Analytics</h1>
 
       {/* SUMMARY CARDS */}
-      <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:gap-3 lg:gap-4">
+      <div className="grid grid-cols-2 gap-2 rounded-xl bg-red-900 p-4 sm:grid-cols-3 md:gap-3 lg:gap-4 dark:bg-transparent">
         <SummaryCard title="Total Clients" value={totalClients} />
         <SummaryCard
           title="Pending"
