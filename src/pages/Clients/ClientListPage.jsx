@@ -133,15 +133,15 @@ function Client({ client }) {
       >
         {client.fullname}
       </h3>
-      <h3 className={`${clientDetailStyle} max-w-[10%]`}>
+      <h3 className={`${clientDetailStyle} max-w-[10%] text-black/60 dark:text-white/60`}>
         {calculateAge(client.birthdate)}
       </h3>
-      <h3 className={`${clientDetailStyle} max-w-[20%]`}>
+      <h3 className={`${clientDetailStyle} max-w-[20%] text-black/60 dark:text-white/60`}>
         {client.contactNumber}
       </h3>
-      <h3 className={`${clientDetailStyle} max-w-[20%]`}>{client.status}</h3>
+      <h3 className={`${clientDetailStyle} max-w-[20%] text-black/60 dark:text-white/60`}>{client.status}</h3>
       <div
-        className={`flex max-w-[20%] flex-1 items-center justify-center ${paddingResponsive} ${textResponsive}`}
+        className={`flex max-w-[20%] flex-1 items-center justify-center text-black/60 dark:text-white/60 ${paddingResponsive} ${textResponsive}`}
       >
         <div className="flex items-center gap-4 max-2xl:gap-2">
           <ClientsLink uid={client.id} />
