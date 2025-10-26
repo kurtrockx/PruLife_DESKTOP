@@ -5,7 +5,6 @@ import announcementIcon from "../assets/announcementIcon.svg";
 import settingsIcon from "../assets/settingsIcon.svg";
 import clientsIcon from "../assets/clientsIcon.svg";
 
-
 const pages = [
   { name: "Dashboard", icon: dashboardIcon },
   { name: "Clients", icon: clientsIcon },
@@ -18,28 +17,37 @@ export default function Sidebar() {
   const textResponsive = "xl:text-base md:text-sm text-xs";
   const logoResponsive = "2xl:h-10 lg:h-8 h-6";
 
-  
-
   return (
-    <div className="sidebar z-20 flex max-w-[12em] flex-1 flex-col items-center gap-4 bg-red-950 px-2 py-4 shadow-[0_0_.25rem] shadow-black/40 lg:max-w-[14em] lg:gap-6 2xl:max-w-[16em] dark:bg-neutral-950">
-      {pages.map((p) => (
-        <NavLink
-          key={p.name}
-          className="group relative flex w-full items-center justify-center rounded-xl px-2 py-4 hover:bg-white/20 lg:px-px lg:py-2.5"
-          to={p.name.toLowerCase()}
-        >
-          <img
-            src={p.icon}
-            alt={p.name}
-            className={`aspect-square flex-1 cursor-pointer duration-150 group-hover:-translate-y-0.5 ${logoResponsive}`}
-          />
-          <p
-            className={`flex-2 px-px font-semibold text-white ${textResponsive}`}
+    <aside className="group z-20 flex h-full max-w-[5rem] flex-col items-center bg-red-950 px-2 py-4 shadow-[0_0_.25rem] shadow-black/40 transition-all duration-400 hover:max-w-[12em] lg:hover:max-w-[14em] 2xl:hover:max-w-[16em] dark:bg-neutral-950">
+      <nav className="flex w-full flex-col gap-2 lg:gap-4">
+        {pages.map((p) => (
+          <NavLink
+            key={p.name}
+            to={p.name.toLowerCase()}
+            className={({ isActive }) =>
+              `group/nav duratioe-500 flex w-full items-center rounded-lg px-3 py-2 transition-all hover:bg-white/20 ${
+                isActive ? "bg-white/50" : ""
+              }`
+            }
           >
-            {p.name}
-          </p>
-        </NavLink>
-      ))}
-    </div>
+            {/* Icon */}
+            <div className="flex min-w-[2.5rem] aspect-square items-center justify-center">
+              <img
+                src={p.icon}
+                alt={p.name}
+                className={`${logoResponsive} duration-300 group-hover/nav:-translate-y-0.5`}
+              />
+            </div>
+
+            {/* Label */}
+            <span
+              className={`w-0 overflow-hidden pl-2 font-semibold whitespace-nowrap text-white opacity-0 transition-all duration-500 ${textResponsive} group-hover:w-full group-hover:opacity-100`}
+            >
+              {p.name}
+            </span>
+          </NavLink>
+        ))}
+      </nav>
+    </aside>
   );
 }

@@ -54,6 +54,6 @@ createRoot(document.getElementById("root")).render(
   <StrictMode>
     <ThemeProvider>
       <RouterProvider router={router} />
-    </ThemeProvider>  
+    </ThemeProvider>
   </StrictMode>,
 );
