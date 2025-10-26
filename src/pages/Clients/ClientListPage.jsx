@@ -40,7 +40,7 @@ export default function ClientListPage() {
   };
 
   return (
-    <div className="flex flex-1 flex-col justify-center dark:bg-neutral-700">
+    <div className="flex flex-1 flex-col justify-center bg-gradient-to-br from-white-50 via-neutral-300 to-white dark:from-neutral-700 dark:via-neutral-950 dark:to-black">
       <div className="flex flex-1 flex-col items-center justify-center">
         <div className="flex max-h-[80dvh] w-[70dvw] flex-1 flex-col overflow-y-scroll rounded-tl-xl rounded-bl-xl bg-white shadow-[0_0_.25rem] shadow-black/20 dark:border dark:border-white/50 dark:bg-neutral-900 dark:text-white">
           <Categories onSearchInput={handleSearchInput} />

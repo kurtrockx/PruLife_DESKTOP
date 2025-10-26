@@ -73,8 +73,8 @@ export default function ClientDetails() {
         />
       </div>
 
-      <div className="flex flex-1 flex-col gap-y-2 overflow-y-auto p-6 text-white dark:bg-black">
-        <h2 className="py-4 text-2xl font-bold">Client Details</h2>
+      <div className="flex flex-1 flex-col gap-y-2 overflow-y-auto p-6 dark:bg-black bg-white">
+        <h2 className="py-4 text-2xl font-bold text-black dark:text-white">Client Details</h2>
         <h2 className="text-right text-xs text-black/50 dark:text-white/90">
           You can edit the Client's Details by pressing the pencil icon
         </h2>

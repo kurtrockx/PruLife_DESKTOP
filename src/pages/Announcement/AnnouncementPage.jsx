@@ -42,7 +42,7 @@ export default function AnnouncementPage() {
   };
 
   return (
-    <div className="flex flex-1 items-center justify-center dark:bg-neutral-700">
+    <div className="from-white-50 flex flex-1 items-center justify-center bg-gradient-to-br via-neutral-300 to-white dark:from-neutral-700 dark:via-neutral-950 dark:to-black">
       <div className="mx-auto flex w-[70dvw] items-center overflow-hidden rounded-md shadow-[0_0_10px] shadow-black/20">
         <div className="flex h-full max-h-[80dvh] w-full flex-col bg-black/10">
           <AnnouncementHeader
