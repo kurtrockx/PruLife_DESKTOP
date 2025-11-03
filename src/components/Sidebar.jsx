@@ -14,7 +14,7 @@ const pages = [
 ];
 
 export default function Sidebar() {
-  const textResponsive = "xl:text-base md:text-sm text-xs";
+  const textResponsive = "xl:text-sm text-xs";
   const logoResponsive = "2xl:h-6 lg:h-5 h-5";
   const { darkMode, setDarkMode } = useTheme();
 
@@ -42,7 +42,7 @@ export default function Sidebar() {
 
             {/* Label */}
             <span
-              className={`w-0 overflow-hidden font-semibold whitespace-nowrap text-white opacity-0 transition-all duration-500 ${textResponsive} group-hover:w-full group-hover:opacity-100`}
+              className={`w-0 overflow-hidden whitespace-nowrap text-white opacity-0 transition-all duration-500 ${textResponsive} group-hover:w-full group-hover:opacity-100`}
             >
               {p.name}
             </span>

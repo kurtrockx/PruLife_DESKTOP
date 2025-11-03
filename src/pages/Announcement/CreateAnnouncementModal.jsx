@@ -74,13 +74,13 @@ export default function CreateAnnouncementModal({ onClose, announcement }) {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-8">
-      <div className="w-full max-w-2xl">
+    <div className="fixed inset-0 z-5000 flex items-center justify-center bg-black/50 p-8 backdrop-blur-sm">
+      <div className="w-full max-w-2xl rounded-xl bg-white p-6 shadow-lg dark:bg-neutral-900">
         <form
           onSubmit={handleSubmit}
-          className="flex max-h-[80dvh] w-full flex-col gap-4 overflow-y-scroll rounded-lg bg-white p-6"
+          className="flex max-h-[80dvh] w-full flex-col gap-4 overflow-y-auto"
         >
-          <h2 className="text-xl font-semibold">
+          <h2 className="text-xl font-semibold dark:text-white">
             {announcement ? "Edit Announcement" : "Create Announcement"}
           </h2>
 
@@ -89,7 +89,7 @@ export default function CreateAnnouncementModal({ onClose, announcement }) {
             placeholder="Title"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            className="rounded border border-black/40 p-2 hover:shadow-md"
+            className="rounded border border-black/30 bg-white p-2 text-black hover:shadow-md dark:border-neutral-700 dark:bg-neutral-800 dark:text-gray-200"
             required
           />
 
@@ -98,7 +98,7 @@ export default function CreateAnnouncementModal({ onClose, announcement }) {
             placeholder="Subtitle"
             value={subtitle}
             onChange={(e) => setSubtitle(e.target.value)}
-            className="rounded border border-black/40 p-2 hover:shadow-md"
+            className="rounded border border-black/30 bg-white p-2 text-black hover:shadow-md dark:border-neutral-700 dark:bg-neutral-800 dark:text-gray-200"
           />
 
           <textarea
@@ -106,20 +106,21 @@ export default function CreateAnnouncementModal({ onClose, announcement }) {
             value={content}
             onChange={(e) => setContent(e.target.value)}
             rows={4}
-            className="rounded border border-black/40 p-2 hover:shadow-md min-h-12"
+            className="min-h-12 rounded border border-black/30 bg-white p-2 text-black hover:shadow-md dark:border-neutral-700 dark:bg-neutral-800 dark:text-gray-200"
             required
           />
 
-          <div className="w-fit rounded-md border border-black/20 px-2 hover:shadow-md">
+          <div className="w-fit rounded-md border border-black/20 px-2 hover:shadow-md dark:border-neutral-700 dark:bg-neutral-800">
             <input
               type="file"
               multiple
               accept="image/*"
               onChange={handleImageChange}
+              className="dark:text-gray-200"
             />
           </div>
 
-          {/* Existing images */}
+          {/* Image previews */}
           <div className="grid grid-cols-3 gap-2">
             {images.map((img, i) => (
               <div key={i} className="relative">
@@ -159,14 +160,14 @@ export default function CreateAnnouncementModal({ onClose, announcement }) {
             <button
               type="button"
               onClick={onClose}
-              className="rounded border px-4 py-2 hover:bg-black/10"
+              className="rounded border px-4 py-2 text-black hover:bg-black/10 dark:border-neutral-700 dark:text-gray-200 dark:hover:bg-neutral-800"
               disabled={loading}
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="rounded bg-yellow-500 px-4 py-2 text-black hover:bg-yellow-600"
+              className="rounded bg-yellow-400 px-4 py-2 font-semibold text-black hover:bg-yellow-500 dark:hover:bg-yellow-400/90"
               disabled={loading}
             >
               {loading ? "Saving..." : "Submit"}
