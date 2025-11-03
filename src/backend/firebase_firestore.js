@@ -125,7 +125,13 @@ const pushMessage = async (userId, sender, text) => {
 };
 
 // Upload new announcement
-async function uploadAnnouncement({ title, subtitle, content, author, imageUrl, thumbUrl }) {
+async function uploadAnnouncement({
+  title,
+  subtitle,
+  content,
+  author,
+  images,
+}) {
   try {
     const announcementsRef = collection(db, "announcements");
     const docRef = await addDoc(announcementsRef, {
@@ -133,8 +139,7 @@ async function uploadAnnouncement({ title, subtitle, content, author, imageUrl, 
       subtitle: subtitle || "",
       content,
       author,
-      image: imageUrl || null,
-      thumb: thumbUrl || null,
+      images: images || [], // <-- array of URLs
       createdAt: serverTimestamp(),
     });
     console.log("✅ Announcement uploaded:", docRef.id);
@@ -156,19 +161,18 @@ const listenToAnnouncements = (callback) => {
         .sort((a, b) => b.createdAt?.seconds - a.createdAt?.seconds);
       callback(data);
     },
-    (error) => console.error("Error listening to announcements:", error)
+    (error) => console.error("Error listening to announcements:", error),
   );
 };
 
 // Update announcement
-async function updateAnnouncement(id, { title, subtitle, content, image, thumb }) {
+async function updateAnnouncement(id, { title, subtitle, content, images }) {
   const docRef = doc(db, "announcements", id);
   await updateDoc(docRef, {
     title,
     subtitle: subtitle || "",
     content,
-    image: image || null,
-    thumb: thumb || null,
+    images: images || [],
     updatedAt: serverTimestamp(),
   });
 }

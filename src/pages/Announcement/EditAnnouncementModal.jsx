@@ -1,10 +1,7 @@
 import React, { useState } from "react";
-import {
-  uploadAnnouncement,
-  updateAnnouncement,
-} from "../../backend/firebase_firestore";
+import { updateAnnouncement } from "../../backend/firebase_firestore";
 
-export default function CreateAnnouncementModal({ onClose, announcement }) {
+export default function EditAnnouncementModal({ onClose, announcement }) {
   const [title, setTitle] = useState(announcement?.title || "");
   const [subtitle, setSubtitle] = useState(announcement?.subtitle || "");
   const [content, setContent] = useState(announcement?.content || "");
@@ -17,7 +14,7 @@ export default function CreateAnnouncementModal({ onClose, announcement }) {
     setNewFiles((prev) => [...prev, ...files]);
   };
 
-  const removeImage = (index) => {
+  const removeExistingImage = (index) => {
     setImages((prev) => prev.filter((_, i) => i !== index));
   };
 
@@ -32,6 +29,7 @@ export default function CreateAnnouncementModal({ onClose, announcement }) {
     try {
       let uploadedUrls = [];
 
+      // upload new files to imgbb
       for (const file of newFiles) {
         const formData = new FormData();
         formData.append("image", file);
@@ -47,27 +45,17 @@ export default function CreateAnnouncementModal({ onClose, announcement }) {
 
       const allImages = [...images, ...uploadedUrls];
 
-      if (announcement) {
-        await updateAnnouncement(announcement.id, {
-          title,
-          subtitle,
-          content,
-          images: allImages,
-        });
-      } else {
-        await uploadAnnouncement({
-          title,
-          subtitle,
-          content,
-          author: "Admin",
-          images: allImages,
-        });
-      }
+      await updateAnnouncement(announcement.id, {
+        title,
+        subtitle,
+        content,
+        images: allImages,
+      });
 
       onClose();
-    } catch (err) {
-      console.error("Error uploading announcement:", err);
-      alert("Failed to upload announcement.");
+    } catch (error) {
+      console.error("Error updating announcement:", error);
+      alert("Failed to update announcement.");
     } finally {
       setLoading(false);
     }
@@ -80,9 +68,7 @@ export default function CreateAnnouncementModal({ onClose, announcement }) {
           onSubmit={handleSubmit}
           className="flex max-h-[80dvh] w-full flex-col gap-4 overflow-y-scroll rounded-lg bg-white p-6"
         >
-          <h2 className="text-xl font-semibold">
-            {announcement ? "Edit Announcement" : "Create Announcement"}
-          </h2>
+          <h2 className="text-xl font-semibold">Edit Announcement</h2>
 
           <input
             type="text"
@@ -106,7 +92,7 @@ export default function CreateAnnouncementModal({ onClose, announcement }) {
             value={content}
             onChange={(e) => setContent(e.target.value)}
             rows={4}
-            className="rounded border border-black/40 p-2 hover:shadow-md min-h-12"
+            className="min-h-12 rounded border border-black/40 p-2 hover:shadow-md"
             required
           />
 
@@ -119,29 +105,32 @@ export default function CreateAnnouncementModal({ onClose, announcement }) {
             />
           </div>
 
-          {/* Existing images */}
+          {/* Images Section */}
           <div className="grid grid-cols-3 gap-2">
+            {/* Existing images */}
             {images.map((img, i) => (
               <div key={i} className="relative">
                 <img
                   src={img}
-                  alt="preview"
+                  alt="announcement"
                   className="h-24 w-full rounded-lg object-cover"
                 />
                 <button
                   type="button"
-                  onClick={() => removeImage(i)}
+                  onClick={() => removeExistingImage(i)}
                   className="absolute top-1 right-1 rounded-full bg-black/60 px-2 text-white"
                 >
                   ✕
                 </button>
               </div>
             ))}
+
+            {/* New local files */}
             {newFiles.map((file, i) => (
               <div key={i} className="relative">
                 <img
                   src={URL.createObjectURL(file)}
-                  alt="preview"
+                  alt="new file"
                   className="h-24 w-full rounded-lg object-cover"
                 />
                 <button
@@ -169,7 +158,7 @@ export default function CreateAnnouncementModal({ onClose, announcement }) {
               className="rounded bg-yellow-500 px-4 py-2 text-black hover:bg-yellow-600"
               disabled={loading}
             >
-              {loading ? "Saving..." : "Submit"}
+              {loading ? "Saving..." : "Save Changes"}
             </button>
           </div>
         </form>

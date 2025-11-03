@@ -60,9 +60,9 @@ function Categories({ onSearchInput }) {
   const paddingResponsive = "max-xl:px-1 max-xl:py-2 max-lg:px-0.5 py-4";
 
   return (
-    <div className="sticky top-0 space-y-2 py-2 bg-white z-100 dark:bg-neutral-900">
+    <div className="sticky top-0 z-100 space-y-2 bg-white py-2 dark:bg-neutral-900">
       <SearchClient onSearchInput={onSearchInput} />
-      <div className="flex flex-1 border border-red-950 bg-black px-4 font-semibold text-white shadow-sm dark:border-x-0 dark:border-y-white/40">
+      <div className="flex flex-1 border border-red-900 bg-black px-4 font-semibold text-white shadow-sm dark:border-x-0 dark:border-y-white/40">
         {CATEGORIES.map((c, i) => (
           <h2
             key={i}
@@ -78,7 +78,7 @@ function Categories({ onSearchInput }) {
 
 function SearchClient({ onSearchInput }) {
   const InputStylish =
-    "shadow-[0_0_0_1.5px] shadow-red-950/0 duration-200 focus-within:shadow-yellow-500 hover:shadow-yellow-500 dark:focus-within:shadow-white dark:hover:shadow-white";
+    "shadow-[0_0_0_1.5px] shadow-red-900/0 duration-200 focus-within:shadow-yellow-500 hover:shadow-yellow-500 dark:focus-within:shadow-white dark:hover:shadow-white";
   const textResponsive = "max-2xl:text-base max-xl:text-sm max-lg:text-xs";
 
   return (

@@ -13,7 +13,6 @@ import ClientListPage from "./pages/Clients/ClientListPage.jsx";
 import ClientMainPage from "./pages/Clients/ClientMainPage.jsx";
 import ProposalsPage from "./pages/Proposals/ProposalsPage.jsx";
 import AnnouncementPage from "./pages/Announcement/AnnouncementPage.jsx";
-import SettingsPage from "./pages/Settings/SettingsPage.jsx";
 import ClientDetails from "./pages/Clients/ClientOutlet/ClientDetails.jsx";
 import ClientChat from "./pages/Clients/ClientOutlet/ClientChat.jsx";
 import ThemeProvider from "./context/ThemeProvider.jsx";
@@ -36,7 +35,6 @@ const router = createHashRouter([
       },
       { path: "proposals", element: <ProposalsPage /> },
       { path: "announcement", element: <AnnouncementPage /> },
-      { path: "settings", element: <SettingsPage /> },
     ],
   },
   {
