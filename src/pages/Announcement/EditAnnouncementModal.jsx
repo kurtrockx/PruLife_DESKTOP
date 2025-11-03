@@ -9,6 +9,15 @@ export default function EditAnnouncementModal({ onClose, announcement }) {
   const [newFiles, setNewFiles] = useState([]);
   const [loading, setLoading] = useState(false);
 
+  // Custom alert state
+  const [alertMessage, setAlertMessage] = useState("");
+  const [alertOpen, setAlertOpen] = useState(false);
+
+  const showAlert = (message) => {
+    setAlertMessage(message);
+    setAlertOpen(true);
+  };
+
   const handleImageChange = (e) => {
     const files = Array.from(e.target.files);
     setNewFiles((prev) => [...prev, ...files]);
@@ -51,17 +60,18 @@ export default function EditAnnouncementModal({ onClose, announcement }) {
         images: allImages,
       });
 
-      onClose();
+      // Show success alert instead of native alert
+      showAlert("✅ Announcement updated successfully!");
     } catch (error) {
       console.error("Error updating announcement:", error);
-      alert("Failed to update announcement.");
+      showAlert("❌ Failed to update announcement.");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black/50 p-8 backdrop-blur-sm z-5000">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-8 backdrop-blur-sm">
       <div className="w-full max-w-2xl rounded-xl bg-white p-6 shadow-lg dark:bg-neutral-900">
         <form
           onSubmit={handleSubmit}
@@ -109,7 +119,6 @@ export default function EditAnnouncementModal({ onClose, announcement }) {
 
           {/* Images Section */}
           <div className="grid grid-cols-3 gap-2">
-            {/* Existing images */}
             {images.map((img, i) => (
               <div key={i} className="relative">
                 <img
@@ -126,8 +135,6 @@ export default function EditAnnouncementModal({ onClose, announcement }) {
                 </button>
               </div>
             ))}
-
-            {/* New local files */}
             {newFiles.map((file, i) => (
               <div key={i} className="relative">
                 <img
@@ -165,6 +172,21 @@ export default function EditAnnouncementModal({ onClose, announcement }) {
           </div>
         </form>
       </div>
+
+      {/* Custom alert modal */}
+      {alertOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+          <div className="flex w-full max-w-sm flex-col justify-center rounded bg-white p-6 shadow-lg dark:bg-neutral-900">
+            <p className="mb-4">{alertMessage}</p>
+            <button
+              className="rounded bg-red-600 px-4 py-2 text-white hover:bg-red-700"
+              onClick={() => setAlertOpen(false)}
+            >
+              OK
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

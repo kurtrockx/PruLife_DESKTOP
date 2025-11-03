@@ -15,7 +15,11 @@ export default function PieChartComponent({ data = [] }) {
   }, []);
 
   if (!Array.isArray(data) || data.length === 0)
-    return <p className="text-sm text-gray-500">No data available</p>;
+    return (
+      <p className="text-xs text-gray-500 dark:text-gray-400">
+        No data available
+      </p>
+    );
 
   const renderCustomLabel = ({
     name,
@@ -34,7 +38,7 @@ export default function PieChartComponent({ data = [] }) {
       <text
         x={x}
         y={y}
-        fill={isDark ? "#fff" : "#000"} // ✅ Use dynamic color
+        fill={isDark ? "#fff" : "#000"}
         textAnchor={x > cx ? "start" : "end"}
         dominantBaseline="central"
         fontSize={10}

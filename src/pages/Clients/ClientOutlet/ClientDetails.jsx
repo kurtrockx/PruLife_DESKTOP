@@ -14,6 +14,15 @@ export default function ClientDetails() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
 
+  // Custom alert
+  const [alertOpen, setAlertOpen] = useState(false);
+  const [alertMessage, setAlertMessage] = useState("");
+
+  const showAlert = (message) => {
+    setAlertMessage(message);
+    setAlertOpen(true);
+  };
+
   useEffect(() => {
     const getClient = async () => {
       const users = await fetchAllUsers();
@@ -36,21 +45,21 @@ export default function ClientDetails() {
   const handleSave = async () => {
     setSaving(true);
     try {
-      await updateUser(clientId, editedClient); // assumes your firebase util has this function
+      await updateUser(clientId, editedClient);
       setClient(editedClient);
       setEditingField(null);
-      alert("Client info updated successfully!");
+      showAlert("✅ Client info updated successfully!");
     } catch (error) {
       console.error("Error updating user:", error);
-      alert("Failed to update user info.");
+      showAlert("❌ Failed to update user info.");
+    } finally {
+      setSaving(false);
     }
-    setSaving(false);
   };
 
   if (loading) return <Loading />;
 
   const textResponsive = "max-2xl:text-sm max-xl:text-xs max-lg:text-[0.75rem]";
-
   const labelStyle = `font-semibold text-sm text-black/60 flex-2 dark:text-white ${textResponsive}`;
   const inputStyle = `flex-5 max-xl:flex-10 dark:border-white text-gray-400 dark:text-white max-md:flex-5 border border-black/20 rounded-lg p-2 text-sm focus:outline-none focus:ring-2 focus:ring-yellow-400 duration-100 dark:disabled:bg-neutral-900 disabled:bg-black/5 disabled:cursor-not-allowed ${textResponsive}`;
   const buttonStyle = `text-yellow-600 hover:text-yellow-800 transition-all flex-0.5 cursor-pointer ${textResponsive}`;
@@ -73,8 +82,10 @@ export default function ClientDetails() {
         />
       </div>
 
-      <div className="flex flex-1 flex-col gap-y-2 overflow-y-auto p-6 dark:bg-black bg-white">
-        <h2 className="py-4 text-2xl font-bold text-black dark:text-white">Client Details</h2>
+      <div className="flex flex-1 flex-col gap-y-2 overflow-y-auto bg-white p-6 dark:bg-black">
+        <h2 className="py-4 text-2xl font-bold text-black dark:text-white">
+          Client Details
+        </h2>
         <h2 className="text-right text-xs text-black/50 dark:text-white/90">
           You can edit the Client's Details by pressing the pencil icon
         </h2>
@@ -110,6 +121,21 @@ export default function ClientDetails() {
           </Button>
         </div>
       </div>
+
+      {/* Custom Alert Modal */}
+      {alertOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+          <div className="flex w-full max-w-sm flex-col justify-center rounded bg-white p-6 shadow-lg dark:bg-neutral-900">
+            <p className="mb-4">{alertMessage}</p>
+            <button
+              className="rounded bg-red-600 px-4 py-2 text-white hover:bg-red-700"
+              onClick={() => setAlertOpen(false)}
+            >
+              OK
+            </button>
+          </div>
+        </div>
+      )}
     </>
   );
 }

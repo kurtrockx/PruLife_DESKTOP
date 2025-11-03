@@ -56,7 +56,7 @@
     },
     "win": {
       "target": "nsis",
-      "icon": "assets/icon.ico"
+      "icon": "build-icons/favicon.ico"
     },
     "mac": {
       "target": "dmg",

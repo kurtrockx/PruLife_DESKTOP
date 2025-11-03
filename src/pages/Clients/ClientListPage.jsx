@@ -86,7 +86,7 @@ function SearchClient({ onSearchInput }) {
       className={`sticky top-0 ml-auto flex w-1/2 rounded-xl border border-black/40 px-4 py-2 ${InputStylish} dark:border-white`}
     >
       <input
-        className={`flex-1 outline-0 ${textResponsive} dark:placeholder:text-white/50 placeholder:text-black/50`}
+        className={`flex-1 outline-0 ${textResponsive} placeholder:text-black/50 dark:placeholder:text-white/50`}
         type="text"
         placeholder="Search for member"
         onChange={onSearchInput}

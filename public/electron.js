@@ -14,6 +14,8 @@ function createWindow() {
   mainWindow = new BrowserWindow({
     width: 1200,
     height: 800,
+    frame: false, // if frameless
+    icon: path.join(__dirname, "prulifeLogo.png"), // <-- your icon here
     autoHideMenuBar: true,
     titleBarStyle: "hidden",
     titleBarOverlay: {
@@ -22,13 +24,28 @@ function createWindow() {
       height: 40,
     },
     webPreferences: {
-      contextIsolation: true,
-      nodeIntegration: false,
+      nodeIntegration: true, // only if you need Node
+      contextIsolation: false, // if using nodeIntegration
+      enableRemoteModule: true, // optional
       preload: path.join(__dirname, "preload.js"),
     },
   });
 
+  mainWindow.once("ready-to-show", () => {
+    mainWindow.show();
+    mainWindow.focus();
+  });
+  mainWindow.on("focus", () => {
+    mainWindow.webContents.focus();
+  });
   mainWindow.removeMenu();
+  mainWindow.on("blur", () => {
+    console.log("Window lost focus");
+  });
+
+  mainWindow.on("focus", () => {
+    mainWindow.webContents.focus(); // ensure web contents can accept input
+  });
 
   if (isDev) {
     mainWindow.loadURL("http://localhost:5173");

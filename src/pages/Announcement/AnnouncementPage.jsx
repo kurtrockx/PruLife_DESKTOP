@@ -197,11 +197,11 @@ function AnnouncementList({
           className="group flex flex-col gap-4 rounded-xl bg-white/80 p-4 shadow-xs backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_4px_4px_rgba(0,0,0,0.15)] lg:flex-row lg:items-center lg:justify-between dark:bg-neutral-900/70 dark:shadow-[0_0_4px_rgba(255,255,255,0.05)] dark:hover:shadow-[0_0_4px_rgba(255,255,255,0.08)]"
         >
           {/* Left Section (Images + Text) */}
-          <div className="flex flex-1 flex-col gap-4 lg:flex-row lg:items-center">
+          <div className="flex flex-1 flex-col gap-8 lg:flex-row lg:items-center">
             {/* Image Preview */}
             {a.images && a.images.length > 0 && (
               <div
-                className="flex cursor-pointer gap-2"
+                className="grid cursor-pointer grid-cols-2 gap-2 max-lg:flex"
                 onClick={() => openGalleryModal(a)}
               >
                 {a.images.slice(0, 3).map((img, idx) => (

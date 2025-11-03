@@ -5,7 +5,9 @@ export default function ChartCard({ title, children, fullWidth }) {
         fullWidth ? "md:col-span-2" : ""
       }`}
     >
-      <h2 className="mb-2 text-lg font-semibold">{title}</h2>
+      <h2 className="mb-2 text-sm font-semibold sm:text-sm md:text-base">
+        {title}
+      </h2>
       {children}
     </div>
   );

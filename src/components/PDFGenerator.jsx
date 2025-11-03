@@ -7,15 +7,19 @@ import prulifeIcon2 from "../assets/prulifeIcon2.png";
 import { PART1, PART2, PART3 } from "../proposalComputations";
 import { fetchAllUsers } from "../backend/firebase_firestore";
 
-const AGE_OPTIONS = Array.from({ length: 61 }, (_, i) => i); // 0–60
+const AGE_OPTIONS = Array.from({ length: 59 }, (_, i) => i); // 0–60
 
 export default function PDFGenerator({ testingMode = false }) {
-  const { clientId } = useParams(); // Firestore document id for the user
+  const { clientId } = useParams();
   const printRef = useRef();
   const [loading, setLoading] = useState(false);
   const [uploadedUrl, setUploadedUrl] = useState("");
   const [clientAge, setClientAge] = useState(0);
-  const [client, setClient] = useState("");
+  const [client, setClient] = useState(null);
+
+  // Custom alert state
+  const [alertMessage, setAlertMessage] = useState("");
+  const [alertOpen, setAlertOpen] = useState(false);
 
   useEffect(() => {
     const getClients = async () => {
@@ -25,14 +29,17 @@ export default function PDFGenerator({ testingMode = false }) {
     getClients();
   }, [clientId]);
 
+  const showAlert = (message) => {
+    setAlertMessage(message);
+    setAlertOpen(true);
+  };
+
   const handleUploadPdf = async () => {
     try {
       setLoading(true);
 
-      // Wait for layout to fully render
       await new Promise((r) => setTimeout(r, 100));
 
-      // Capture the proposal div as canvas
       const canvas = await html2canvas(printRef.current, {
         scale: 2,
         useCORS: true,
@@ -41,26 +48,22 @@ export default function PDFGenerator({ testingMode = false }) {
 
       const imgData = canvas.toDataURL("image/jpeg");
 
-      // Create PDF
       const pdf = new jsPDF({
         orientation: "p",
         unit: "mm",
-        format: [215.9, 279.4], // US Letter
+        format: [215.9, 279.4],
       });
 
       const pdfWidth = pdf.internal.pageSize.getWidth();
       const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
       pdf.addImage(imgData, "JPEG", 0, 0, pdfWidth, pdfHeight);
 
-      // Convert PDF to a File with .pdf extension
       const pdfBlob = pdf.output("blob");
       const pdfFile = new File([pdfBlob], "proposal.pdf", {
         type: "application/pdf",
       });
 
-      // Upload to Cloudinary & save URL in Firestore
       const cloudUrl = await uploadPdfAndSaveToFirestore(clientId, pdfFile);
-
       if (!cloudUrl) throw new Error("Upload failed");
 
       setUploadedUrl(cloudUrl);
@@ -71,16 +74,16 @@ export default function PDFGenerator({ testingMode = false }) {
       const blobUrl = window.URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = blobUrl;
-      a.download = "proposal.pdf"; // force .pdf extension
+      a.download = "proposal.pdf";
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
       window.URL.revokeObjectURL(blobUrl);
 
-      alert("✅ PDF uploaded to Cloudinary and saved to Firestore!");
+      showAlert(`✅ PDF sent to ${client.fullname}!`);
     } catch (err) {
       console.error("PDF upload failed:", err);
-      alert("❌ PDF upload failed. Check console for details.");
+      showAlert("❌ Could not send the PDF to the client. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -138,6 +141,21 @@ export default function PDFGenerator({ testingMode = false }) {
       >
         <Proposal clientAge={clientAge} client={client} />
       </div>
+
+      {/* Custom alert modal */}
+      {alertOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+          <div className="w-full max-w-sm rounded bg-white p-6 shadow-lg dark:bg-neutral-900 flex justify-center flex-col">
+            <p className="mb-4">{alertMessage}</p>
+            <button
+              className="rounded bg-red-600 px-4 py-2 text-white hover:bg-red-700"
+              onClick={() => setAlertOpen(false)}
+            >
+              OK
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
