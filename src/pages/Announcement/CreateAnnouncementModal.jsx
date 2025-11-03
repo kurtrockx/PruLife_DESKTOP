@@ -133,13 +133,13 @@ export default function CreateAnnouncementModal({ onClose, announcement }) {
             </div>
 
             {/* Image previews */}
-            <div className="grid grid-cols-3 gap-2">
+            <div className="grid grid-cols-5 gap-2">
               {images.map((img, i) => (
                 <div key={i} className="relative">
                   <img
                     src={img}
                     alt="preview"
-                    className="h-24 w-full rounded-lg object-cover"
+                    className="aspect-square h-12 rounded-lg object-contain"
                   />
                   <button
                     type="button"

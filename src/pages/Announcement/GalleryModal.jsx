@@ -10,7 +10,7 @@ export default function GalleryModal({ announcement, onClose, editable }) {
   if (!images.length) {
     return (
       <div className="fixed inset-0 flex items-center justify-center bg-black/70">
-        <div className="relative rounded-lg bg-white p-6 text-center shadow-lg">
+        <div className="relative rounded-lg bg-white p-6 text-center shadow-lg dark:bg-neutral-900">
           <button
             onClick={onClose}
             className="absolute top-3 right-3 text-gray-600 hover:text-red-600"
@@ -52,7 +52,7 @@ export default function GalleryModal({ announcement, onClose, editable }) {
 
   return (
     <div className="fixed inset-0 z-5000 flex items-center justify-center bg-black/80 p-4">
-      <div className="relative w-full max-w-3xl rounded-lg bg-white p-4 shadow-lg dark:bg-neutral-900">
+      <div className="relative aspect-square h-[60dvh] overflow-hidden rounded-lg bg-white p-4 shadow-lg dark:bg-neutral-900">
         {/* Close Button */}
         <button
           onClick={onClose}
@@ -67,7 +67,7 @@ export default function GalleryModal({ announcement, onClose, editable }) {
         </h2>
 
         {/* Image Slideshow */}
-        <div className="relative flex items-center justify-center">
+        <div className="relative flex h-[calc(60dvh-100px)] items-center justify-center">
           {/* Left Arrow */}
           {images.length > 1 && (
             <button
@@ -78,11 +78,14 @@ export default function GalleryModal({ announcement, onClose, editable }) {
             </button>
           )}
 
-          <img
-            src={images[currentIndex]}
-            alt="announcement"
-            className="max-h-[70vh] w-auto rounded-lg object-contain shadow-md transition-all"
-          />
+          {/* Image Container */}
+          <div className="h-full max-h-full w-full max-w-full overflow-hidden rounded-lg">
+            <img
+              src={images[currentIndex]}
+              alt="announcement"
+              className="h-full w-full object-contain p-4 transition-all"
+            />
+          </div>
 
           {/* Right Arrow */}
           {images.length > 1 && (
@@ -97,7 +100,7 @@ export default function GalleryModal({ announcement, onClose, editable }) {
 
         {/* Delete + Status */}
         {editable && (
-          <div className="mt-4 flex items-center justify-center gap-3">
+          <div className="flex items-center justify-center gap-3">
             <button
               onClick={handleDeleteImage}
               disabled={loading}

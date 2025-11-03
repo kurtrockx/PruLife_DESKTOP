@@ -8,17 +8,17 @@ export default function RecentMessages({ messages }) {
           {messages.map((msg, index) => (
             <li
               key={index}
-              className="flex justify-between rounded-lg bg-neutral-100 p-3 text-sm dark:bg-neutral-700"
+              className="grid grid-cols-8 items-center justify-between rounded-lg bg-neutral-100 p-3 text-sm dark:bg-neutral-700"
             >
-              <div>
+              <div className="col-span-7 flex flex-col justify-center gap-4">
                 <p className="font-medium">
                   {msg.sender === "admin" && "Admin > "} {msg.client}
                 </p>
-                <p className="text-gray-600 dark:text-gray-300">
+                <p className="break-all text-gray-600 dark:text-gray-300">
                   {msg.message}
                 </p>
               </div>
-              <span className="text-xs text-gray-500">
+              <span className="text-center text-xs text-gray-500">
                 {msg.createdAt
                   ? new Date(msg.createdAt).toLocaleString()
                   : "N/A"}
