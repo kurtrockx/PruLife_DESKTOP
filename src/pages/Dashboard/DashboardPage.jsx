@@ -103,7 +103,7 @@ export default function DashboardPage() {
         ageData={ageData}
       />
 
-      <RecentMessages messages={recentMessages} />
+      <RecentMessages messages={recentMessages} clients={clients} />
     </DashboardContainer>
   );
 }

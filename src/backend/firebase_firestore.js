@@ -191,8 +191,6 @@ async function getComments(announcementId) {
   }
 }
 
-
-
 export {
   listenToDB,
   pushMessage,
