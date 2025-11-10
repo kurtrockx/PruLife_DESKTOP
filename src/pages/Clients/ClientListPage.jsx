@@ -1,5 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
-import { fetchAllUsers } from "../../backend/firebase_firestore";
+import { listenToUsers } from "../../backend/firebase_firestore";
 import { useEffect, useState } from "react";
 import Loading from "../../components/Loading";
 import chatIcon from "../../assets/chatIcon.svg";
@@ -18,11 +18,12 @@ export default function ClientListPage() {
   const [clients, setClients] = useState([]);
 
   useEffect(() => {
-    const getClients = async () => {
-      const users = await fetchAllUsers();
+    const unsubscribe = listenToUsers((users) => {
       setClients(users);
-    };
-    getClients();
+    });
+
+    // Cleanup on unmount
+    return () => unsubscribe();
   }, []);
 
   const searchedClient = () => {
@@ -151,7 +152,7 @@ function Client({ client }) {
 
   return (
     <div
-      className={`cursor-default flex flex-1 flex-col rounded-lg border border-black/10 shadow-sm duration-200 dark:bg-neutral-800 dark:shadow-black/80 ${
+      className={`flex flex-1 cursor-default flex-col rounded-lg border border-black/10 shadow-sm duration-200 dark:bg-neutral-800 dark:shadow-black/80 ${
         isHovered && "shadow-lg"
       }`}
       onClick={() => setIsHovered(!isHovered)}
@@ -210,10 +211,11 @@ function Client({ client }) {
       </div>
 
       {/* Latest message (always in DOM for smooth transition) */}
-      <Link to={`${client.id}/chat`}
+      <Link
+        to={`${client.id}/chat`}
         className={`overflow-hidden border-black/10 px-2 text-sm text-black/70 transition-all duration-200 dark:text-white/60 ${isHovered ? "max-h-10 bg-black/20 py-2 opacity-100 dark:bg-white/10" : "max-h-0 bg-transparent opacity-0"}`}
       >
-          <span className="font-semibold">Latest:</span> {latestMessage}
+        <span className="font-semibold">Latest:</span> {latestMessage}
       </Link>
     </div>
   );

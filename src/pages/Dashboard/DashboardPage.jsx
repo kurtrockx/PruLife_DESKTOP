@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { fetchAllUsers } from "../../backend/firebase_firestore";
+import { listenToUsers } from "../../backend/firebase_firestore";
 import DashboardContainer from "./layout/DashboardContainer";
 import ChartsGrid from "./layout/ChartsGrid";
 import SummaryCard from "./components/SummaryCard";
@@ -13,13 +13,13 @@ export default function DashboardPage() {
   const [recentMessages, setRecentMessages] = useState([]);
 
   useEffect(() => {
-    async function loadUsers() {
-      const users = await fetchAllUsers();
-      if (users?.length) setClients(users);
-    }
-    loadUsers();
-  }, []);
+    const unsubscribe = listenToUsers((users) => {
+      setClients(users);
+    });
 
+    // Cleanup on unmount
+    return () => unsubscribe();
+  }, []);
   useEffect(() => {
     if (!clients.length) return;
 

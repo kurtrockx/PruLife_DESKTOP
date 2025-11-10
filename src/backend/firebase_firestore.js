@@ -127,6 +127,41 @@ async function uploadAnnouncement({
   }
 }
 
+const listenToAnnouncementCounts = (announcementIds, setCounts) => {
+  const unsubscribes = [];
+
+  announcementIds.forEach((id) => {
+    const likesRef = collection(db, `announcements/${id}/likes`);
+    const commentsRef = collection(db, `announcements/${id}/comments`);
+
+    // Likes listener
+    const unsubscribeLikes = onSnapshot(likesRef, (snapshot) => {
+      setCounts((prev) => ({
+        ...prev,
+        [id]: {
+          ...prev[id],
+          likes: snapshot.size,
+        },
+      }));
+    });
+
+    // Comments listener
+    const unsubscribeComments = onSnapshot(commentsRef, (snapshot) => {
+      setCounts((prev) => ({
+        ...prev,
+        [id]: {
+          ...prev[id],
+          comments: snapshot.size,
+        },
+      }));
+    });
+
+    unsubscribes.push(unsubscribeLikes, unsubscribeComments);
+  });
+
+  return () => unsubscribes.forEach((u) => u()); // cleanup
+};
+
 // 🔹 Listen for announcements
 const listenToAnnouncements = (callback) => {
   const announcementsRef = collection(db, "announcements");
@@ -196,18 +231,30 @@ async function getComments(announcementId) {
   }
 }
 
+const listenToUsers = (callback) => {
+  const usersCollection = collection(db, "users");
+  // Subscribe to real-time updates
+  const unsubscribe = onSnapshot(usersCollection, (snapshot) => {
+    const users = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+    callback(users);
+  });
+  return unsubscribe; // you can call this to stop listening
+};
+
 export {
   listenToDB,
   pushMessage,
   fetchAllUsers,
+  listenToUsers,
   updateUser,
   uploadPdfAndSaveToFirestore,
   uploadAnnouncement,
+  listenToAnnouncementCounts,
   listenToAnnouncements,
   updateAnnouncement,
   deleteAnnouncement,
   getLikeCount,
   getCommentCount,
   getComments,
-  db
+  db,
 };

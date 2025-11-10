@@ -7,6 +7,7 @@ import GalleryModal from "./GalleryModal";
 import EditAnnouncementModal from "./EditAnnouncementModal";
 import CommentModal from "./CommentModal";
 import {
+  listenToAnnouncementCounts,
   listenToAnnouncements,
   getLikeCount,
   getCommentCount,
@@ -28,23 +29,29 @@ export default function AnnouncementPage() {
   const [comments, setComments] = useState([]);
   const [showComments, setShowComments] = useState(false);
 
-  useEffect(() => {
-    const unsubscribe = listenToAnnouncements(async (data) => {
-      setAnnouncements(data);
+useEffect(() => {
+  const unsubscribeAnnouncements = listenToAnnouncements((data) => {
+    setAnnouncements(data);
 
-      // Fetch counts
-      const newCounts = {};
-      for (const a of data) {
-        const [likeCount, commentCount] = await Promise.all([
-          getLikeCount(a.id),
-          getCommentCount(a.id),
-        ]);
-        newCounts[a.id] = { likes: likeCount, comments: commentCount };
-      }
-      setCounts(newCounts);
+    // Initialize counts object with 0
+    const initialCounts = {};
+    data.forEach((a) => {
+      initialCounts[a.id] = { likes: 0, comments: 0 };
     });
-    return () => unsubscribe();
-  }, []);
+    setCounts(initialCounts);
+
+    // Listen to real-time likes/comments
+    const unsubscribeCounts = listenToAnnouncementCounts(
+      data.map((a) => a.id),
+      setCounts,
+    );
+
+    // Cleanup for counts listener when announcements change
+    return unsubscribeCounts;
+  });
+
+  return () => unsubscribeAnnouncements();
+}, []);
 
   const handleOpenComments = async (announcement) => {
     const commentsData = await getComments(announcement.id);
