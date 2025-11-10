@@ -117,8 +117,8 @@ function SearchClient({ onSearchInput }) {
 function ClientsList({ clients }) {
   return (
     <div className="flex flex-col gap-y-2 p-4 px-2">
-      {clients.map((client) => (
-        <Client key={client.uid} client={client} />
+      {clients.map((client, i) => (
+        <Client key={i} client={client} />
       ))}
     </div>
   );
@@ -132,7 +132,7 @@ function Client({ client }) {
   );
 
   const latestMessage = client.messages?.length
-    ? client.messages[client.messages.length - 1].message
+    ? client.messages[client.messages.length - 1]
     : "No messages yet";
 
   const textResponsive = "max-2xl:text-base max-xl:text-sm max-lg:text-xs";
@@ -215,7 +215,10 @@ function Client({ client }) {
         to={`${client.id}/chat`}
         className={`overflow-hidden border-black/10 px-2 text-sm text-black/70 transition-all duration-200 dark:text-white/60 ${isHovered ? "max-h-10 bg-black/20 py-2 opacity-100 dark:bg-white/10" : "max-h-0 bg-transparent opacity-0"}`}
       >
-        <span className="font-semibold">Latest:</span> {latestMessage}
+        <span className="font-semibold">Latest:</span>{" "}
+        {latestMessage.sender === "admin"
+          ? client.messages[client.messages.length - 2].message
+          : latestMessage.message}
       </Link>
     </div>
   );
