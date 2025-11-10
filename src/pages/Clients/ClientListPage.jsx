@@ -25,15 +25,28 @@ export default function ClientListPage() {
     getClients();
   }, []);
 
-  const searchedClient = () => {
-    if (!searchInput.trim()) return clients;
+const searchedClient = () => {
+  let filtered = clients;
 
-    return clients.filter(
+  if (searchInput.trim()) {
+    filtered = clients.filter(
       (c) =>
         c.fullname.toLowerCase().includes(searchInput.toLowerCase()) ||
         c.email.toLowerCase().includes(searchInput.toLowerCase()),
     );
-  };
+  }
+
+  // Sort by latest message timestamp (descending)
+  return filtered.sort((a, b) => {
+    const aLast = a.messages?.length
+      ? a.messages[a.messages.length - 1].createdAt
+      : 0;
+    const bLast = b.messages?.length
+      ? b.messages[b.messages.length - 1].createdAt
+      : 0;
+    return bLast - aLast; // latest message first
+  });
+};
 
   const handleSearchInput = (e) => {
     setSearchInput(e.target.value);
@@ -111,6 +124,10 @@ function ClientsList({ clients }) {
 }
 
 function Client({ client }) {
+  const hasUnreadMessages = client.messages?.some(
+    (msg) => msg.sender !== "admin" && !msg.read,
+  );
+
   const textResponsive = "max-2xl:text-base max-xl:text-sm max-lg:text-xs";
   const paddingResponsive = "max-xl:p-1 max-lg:px-0.25 max-lg:py-0.25";
   const clientDetailStyle = `flex-1 border-r border-black/10 p-2 text-md whitespace-nowrap flex items-center truncate justify-center dark:border-white/40 ${textResponsive} ${paddingResponsive}`;
@@ -129,22 +146,38 @@ function Client({ client }) {
   return (
     <div className="flex flex-1 rounded-lg border border-black/10 px-2 shadow-sm duration-100 hover:shadow-md dark:bg-neutral-800 dark:shadow-black/80">
       <h3
-        className={`${clientDetailStyle} max-w-[30%] justify-start font-medium capitalize`}
+        className={`${clientDetailStyle} ${
+          hasUnreadMessages
+            ? "font-bold text-black dark:text-white"
+            : "font-normal text-black/70 dark:text-white/60"
+        } max-w-[30%] justify-start font-medium capitalize`}
       >
         {client.fullname}
       </h3>
       <h3
-        className={`${clientDetailStyle} max-w-[10%] text-black/60 dark:text-white/60`}
+        className={`${clientDetailStyle} ${
+          hasUnreadMessages
+            ? "font-bold text-black dark:text-white"
+            : "font-normal text-black/70 dark:text-white/60"
+        } max-w-[10%] text-black/60 dark:text-white/60`}
       >
         {calculateAge(client.birthdate)}
       </h3>
       <h3
-        className={`${clientDetailStyle} max-w-[20%] text-black/60 dark:text-white/60`}
+        className={`${clientDetailStyle} ${
+          hasUnreadMessages
+            ? "font-bold text-black dark:text-white"
+            : "font-normal text-black/70 dark:text-white/60"
+        } max-w-[20%] text-black/60 dark:text-white/60`}
       >
         {client.contactNumber}
       </h3>
       <h3
-        className={`${clientDetailStyle} max-w-[20%] text-black/60 dark:text-white/60`}
+        className={`${clientDetailStyle} ${
+          hasUnreadMessages
+            ? "font-bold text-black dark:text-white"
+            : "font-normal text-black/70 dark:text-white/60"
+        } max-w-[20%] text-black/60 dark:text-white/60`}
       >
         {client.status}
       </h3>

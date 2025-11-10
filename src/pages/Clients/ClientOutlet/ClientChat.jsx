@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { listenToDB, pushMessage } from "../../../backend/firebase_firestore";
 import { useParams } from "react-router-dom";
 import { fetchAllUsers } from "../../../backend/firebase_firestore";
+import { doc, updateDoc } from "firebase/firestore";
+import { db } from "../../../backend/firebase_firestore";
 
 import Loading from "../../../components/Loading";
 
@@ -27,9 +29,23 @@ export default function ClientChat() {
   }, [clientId]);
 
   useEffect(() => {
-    const unsubscribe = listenToDB(clientId, (data) => {
-      setMessagesList(data?.messages || []); // handle case where no messages yet
-      console.log("Realtime update:", data);
+    const unsubscribe = listenToDB(clientId, async (data) => {
+      if (!data?.messages) return;
+
+      setMessagesList(data.messages);
+
+      // 🔹 Mark unread client messages as read
+      const unread = data.messages.filter(
+        (msg) => msg.sender !== "admin" && !msg.read,
+      );
+
+      if (unread.length > 0) {
+        const userRef = doc(db, "users", clientId);
+        const updatedMessages = data.messages.map((m) =>
+          m.sender !== "admin" ? { ...m, read: true } : m,
+        );
+        await updateDoc(userRef, { messages: updatedMessages });
+      }
     });
 
     return () => unsubscribe();

@@ -83,7 +83,12 @@ const listenToDB = (userId, callback) => {
 // 🔹 Push a message
 const pushMessage = async (userId, sender, text) => {
   const docRef = doc(db, "users", userId);
-  const messageObj = { sender, message: text, createdAt: Date.now() };
+  const messageObj = {
+    sender,
+    message: text,
+    createdAt: Date.now(),
+    read: sender === "admin", // admin messages are instantly marked as read for admin side
+  };
 
   try {
     const snap = await getDoc(docRef);
@@ -204,4 +209,5 @@ export {
   getLikeCount,
   getCommentCount,
   getComments,
+  db
 };
