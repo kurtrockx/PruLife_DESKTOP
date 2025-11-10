@@ -9,8 +9,8 @@ export default function GalleryModal({ announcement, onClose, editable }) {
 
   if (!images.length) {
     return (
-      <div className="fixed inset-0 flex items-center justify-center bg-black/70">
-        <div className="relative rounded-lg bg-white p-6 text-center shadow-lg dark:bg-neutral-900">
+      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70">
+        <div className="relative w-96 rounded-lg bg-white p-6 text-center shadow-xl dark:bg-neutral-900">
           <button
             onClick={onClose}
             className="absolute top-3 right-3 text-gray-600 hover:text-red-600"
@@ -51,68 +51,98 @@ export default function GalleryModal({ announcement, onClose, editable }) {
   };
 
   return (
-    <div className="fixed inset-0 z-5000 flex items-center justify-center bg-black/80 p-4">
-      <div className="relative aspect-square h-[60dvh] overflow-hidden rounded-lg bg-white p-4 shadow-lg dark:bg-neutral-900">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4">
+      <div className="relative flex aspect-square w-full max-w-xl flex-col justify-between overflow-hidden rounded-xl bg-white px-16 py-8 shadow-2xl dark:bg-neutral-900">
         {/* Close Button */}
         <button
           onClick={onClose}
-          className="absolute top-2 right-2 rounded-full p-2 text-gray-700 hover:bg-gray-200 dark:text-gray-300 dark:hover:bg-neutral-800"
+          className="absolute top-4 right-4 z-20 rounded-full p-2 text-gray-700 transition hover:bg-gray-200 dark:text-gray-300 dark:hover:bg-neutral-800"
         >
-          <X size={20} />
+          <X size={24} />
         </button>
 
         {/* Title */}
-        <h2 className="mb-3 text-center text-lg font-semibold text-gray-800 dark:text-white">
-          {announcement.title} — {currentIndex + 1}/{images.length}
+        <h2 className="text-center font-semibold text-gray-800 dark:text-white">
+          {announcement.title}
         </h2>
+        <p className="text-center text-xs">
+          {currentIndex + 1}/{images.length}
+        </p>
 
-        {/* Image Slideshow */}
-        <div className="relative flex h-[calc(60dvh-100px)] items-center justify-center">
+        {/* Carousel Container */}
+        <div className="relative flex items-center justify-center overflow-hidden">
+          {/* Images Slide */}
+          <div
+            className="flex transition-transform duration-500 ease-in-out"
+            style={{ transform: `translateX(-${currentIndex * 100}%)` }}
+          >
+            {images.map((img, index) => (
+              <div
+                key={index}
+                className="flex min-w-full items-center justify-center"
+              >
+                <img
+                  src={img}
+                  alt={`Slide ${index + 1}`}
+                  className="max-h-[32vh] w-auto rounded-lg object-contain shadow-lg"
+                />
+              </div>
+            ))}
+          </div>
+
           {/* Left Arrow */}
           {images.length > 1 && (
             <button
               onClick={handlePrev}
-              className="absolute top-1/2 left-4 -translate-y-1/2 rounded-full bg-black/40 p-2 text-white hover:bg-black/60"
+              className="absolute top-1/2 left-4 -translate-y-1/2 rounded-full bg-black/40 p-2 text-white transition hover:bg-black/60"
             >
-              <ChevronLeft size={24} />
+              <ChevronLeft size={28} />
             </button>
           )}
-
-          {/* Image Container */}
-          <div className="h-full max-h-full w-full max-w-full overflow-hidden rounded-lg">
-            <img
-              src={images[currentIndex]}
-              alt="announcement"
-              className="h-full w-full object-contain p-4 transition-all"
-            />
-          </div>
 
           {/* Right Arrow */}
           {images.length > 1 && (
             <button
               onClick={handleNext}
-              className="absolute top-1/2 right-4 -translate-y-1/2 rounded-full bg-black/40 p-2 text-white hover:bg-black/60"
+              className="absolute top-1/2 right-4 -translate-y-1/2 rounded-full bg-black/40 p-2 text-white transition hover:bg-black/60"
             >
-              <ChevronRight size={24} />
+              <ChevronRight size={28} />
             </button>
           )}
         </div>
 
-        {/* Delete + Status */}
+        {/* Indicators */}
+        {images.length > 1 && (
+          <div className="mt-4 flex justify-center gap-2">
+            {images.map((_, idx) => (
+              <span
+                key={idx}
+                className={`h-2 w-2 rounded-full transition ${
+                  idx === currentIndex
+                    ? "bg-blue-600"
+                    : "bg-gray-400 dark:bg-gray-600"
+                }`}
+              />
+            ))}
+          </div>
+        )}
+
+        {/* Delete Button */}
         {editable && (
-          <div className="flex items-center justify-center gap-3">
+          <div className="mt-6 flex justify-center">
             <button
               onClick={handleDeleteImage}
               disabled={loading}
-              className="rounded-md bg-red-500 px-4 py-2 text-sm font-semibold text-white hover:bg-red-600 disabled:opacity-50"
+              className="rounded-md bg-red-500 px-4 py-2 text-sm font-semibold text-white transition hover:bg-red-600 disabled:opacity-50"
             >
               Delete This Image
             </button>
           </div>
         )}
 
+        {/* Loading Status */}
         {loading && (
-          <p className="mt-2 text-center text-sm text-gray-500">
+          <p className="mt-3 text-center text-sm text-gray-500">
             Updating announcement...
           </p>
         )}

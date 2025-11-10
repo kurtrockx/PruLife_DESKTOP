@@ -1,12 +1,11 @@
 import Navbar from "./components/Navbar";
 import Sidebar from "./components/Sidebar";
-import { Outlet, useNavigate } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 import { useEffect, useRef } from "react";
 import { fetchAllUsers, listenToDB } from "./backend/firebase_firestore";
 import { ToastContainer, toast } from "react-toastify";
 
 function App() {
-  const navigate = useNavigate();
   const prevMessagesRef = useRef({}); // store previous messages per client
 
   useEffect(() => {
@@ -31,38 +30,41 @@ function App() {
           );
 
           if (newMessages.length > 0) {
-            newMessages.forEach((msg) => {
-              toast(
-                <div>
-                  <strong>New message from {msg?.sender}</strong>
-                  <div
-                    style={{
-                      fontSize: "0.85rem",
-                      opacity: 0.8,
-                      color: "#999999",
-                      whiteSpace: "nowrap", // single line
-                      overflow: "hidden", // hide overflow
-                      textOverflow: "ellipsis", // show '...'
-                      maxWidth: "280px", // adjust width as needed
-                    }}
-                  >
-                    {msg?.message}
-                  </div>
-                </div>,
-                {
-                  style: {
-                    backgroundColor: "#ffffff", // white background
-                    color: "#7f111a", // black text
-                    borderRadius: "10px",
-                    padding: "0.95rem",
-                    boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
-                  },
+            // create a single toast per user with all new messages
+            const messagesText = newMessages
+              .map((msg) => msg.message)
+              .join(" | "); // separate messages with a separator
+
+            toast(
+              <div>
+                <strong>New message(s) from {user.fullname}</strong>
+                <div
+                  style={{
+                    fontSize: "0.85rem",
+                    opacity: 0.8,
+                    color: "#999999",
+                    whiteSpace: "nowrap",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    maxWidth: "280px",
+                  }}
+                >
+                  {messagesText}
+                </div>
+              </div>,
+              {
+                style: {
+                  backgroundColor: "#ffffff",
+                  color: "#7f111a",
+                  borderRadius: "10px",
+                  padding: "0.95rem",
+                  boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
                 },
-              );
-            });
+              },
+            );
           }
 
-          // update the ref for next comparison
+          // update previous messages
           prevMessagesRef.current[user.id] = data?.messages || [];
         });
       });

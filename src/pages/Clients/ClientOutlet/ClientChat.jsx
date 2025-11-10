@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { listenToDB, pushMessage } from "../../../backend/firebase_firestore";
-import { useParams } from "react-router-dom";
+import { useOutletContext, useParams } from "react-router-dom";
 import { fetchAllUsers } from "../../../backend/firebase_firestore";
 import { doc, updateDoc } from "firebase/firestore";
 import { db } from "../../../backend/firebase_firestore";
@@ -18,7 +18,8 @@ export default function ClientChat() {
   const [client, setClient] = useState("");
   const [messagesList, setMessagesList] = useState([]);
   const [message, setMessage] = useState("");
-  const [openPdfModal, setOpenPdfModal] = useState(false);
+  const { setOpenPdfModal, openPdfModal } = useOutletContext();
+  console.log(openPdfModal)
 
   useEffect(() => {
     const getClients = async () => {

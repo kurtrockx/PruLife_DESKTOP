@@ -114,9 +114,9 @@ export default function PDFGenerator({ testingMode = false }) {
           <button
             onClick={handleUploadPdf}
             disabled={loading}
-            className="h-full max-w-fit cursor-pointer self-end rounded-lg bg-[#f0b100] px-4 py-2 text-[white] hover:bg-[#d08700]"
+            className="h-full max-w-fit cursor-pointer self-end rounded-lg bg-[#f0b100] px-4 py-2 text-[black] hover:bg-[#d08700]"
           >
-            {loading ? "Generating PDF..." : "Generate & Send PDF"}
+            {loading ? "Generating PDF..." : "Generate & Send PROPOSAL"}
           </button>
         )}
       </div>
@@ -145,7 +145,7 @@ export default function PDFGenerator({ testingMode = false }) {
       {/* Custom alert modal */}
       {alertOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-          <div className="w-full max-w-sm rounded bg-white p-6 shadow-lg dark:bg-neutral-900 flex justify-center flex-col">
+          <div className="flex w-full max-w-sm flex-col justify-center rounded bg-white p-6 shadow-lg dark:bg-neutral-900">
             <p className="mb-4">{alertMessage}</p>
             <button
               className="rounded bg-red-600 px-4 py-2 text-white hover:bg-red-700"

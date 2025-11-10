@@ -1,6 +1,10 @@
+import { useState } from "react";
 import { NavLink, Outlet, useLocation } from "react-router-dom";
+import PDFGenerator from "../../components/PDFGenerator";
 
 export default function ClientMainPage() {
+  const [openPdfModal, setOpenPdfModal] = useState(false);
+
   const ClientTabStyle =
     "rounded-xl p-2 shadow-sm duration-150 hover:-translate-y-0.5 dark:bg-black dark:text-white";
 
@@ -18,9 +22,24 @@ export default function ClientMainPage() {
         </NavLink>
       </div>
       <div
-        className={`flex aspect-video max-h-[90%] flex-1 overflow-hidden rounded-2xl shadow-[0_0_10px] shadow-black/20 max-2xl:max-w-[90%] dark:border dark:border-white/40 bg-white dark:bg-black ${currentTabOpen === "chat" && "flex-col"}`}
+        className={`flex aspect-video max-h-[90%] flex-1 gap-4 overflow-hidden max-2xl:max-w-[90%]`}
       >
-        <Outlet />
+        <div
+          className={`flex flex-1 overflow-hidden rounded-2xl bg-white shadow-[0_0_10px] shadow-black/20 dark:border dark:border-white/40 dark:bg-black ${currentTabOpen === "chat" && "flex-col"}`}
+        >
+          <Outlet context={{ openPdfModal, setOpenPdfModal }} />
+        </div>
+        <div
+          className={`cursor-pointer max-xl:hidden ${currentTabOpen !== "chat" && "hidden"} group z-100 origin-top-right -translate-y-12 duration-200 [zoom:30%] hover:translate-y-0 hover:scale-125`}
+          onClick={() => setOpenPdfModal(!openPdfModal)}
+        >
+          <h4 className="px-4 py-2 text-right text-4xl opacity-0 duration-200 group-hover:opacity-100 dark:text-white">
+            Click to open <span className="font-bold">Proposal</span>
+          </h4>
+          <div className="pointer-events-none dark:border dark:border-white">
+            <PDFGenerator />
+          </div>
+        </div>
       </div>
     </div>
   );

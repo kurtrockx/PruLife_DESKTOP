@@ -7,9 +7,11 @@ export function TypeBox({ message, setMessage, onSend, onOpenPdfModal }) {
 
   return (
     <div className="flex max-h-[10%] flex-1 items-center gap-2 p-[0.75rem] shadow-[0_-2px_10px] shadow-black/10 max-xl:py-2 dark:bg-black dark:shadow-[0_0_4px] dark:shadow-white">
-      <Button onClick={() => onOpenPdfModal((prev) => !prev)}>
-        OPEN PROPOSAL
-      </Button>
+      <div className="xl:hidden">
+        <Button onClick={() => onOpenPdfModal((prev) => !prev)}>
+          OPEN PROPOSAL
+        </Button>
+      </div>
       <div
         className={`flex flex-1 rounded-full bg-black/10 px-2 text-black placeholder:text-black/80 ${InputStylish} dark:border dark:border-white dark:bg-neutral-900`}
       >
@@ -26,7 +28,7 @@ export function TypeBox({ message, setMessage, onSend, onOpenPdfModal }) {
         onClick={onSend}
         src={sendIcon}
         alt="sendIcon"
-        className="max-h-full cursor-pointer rounded-full p-1.5 hover:bg-black/10"
+        className="max-h-full cursor-pointer rounded-full p-1.5 hover:bg-black/10 dark:brightness-200 dark:hover:bg-white/10 dark:hover:brightness-300"
       />
     </div>
   );

@@ -25,28 +25,28 @@ export default function ClientListPage() {
     getClients();
   }, []);
 
-const searchedClient = () => {
-  let filtered = clients;
+  const searchedClient = () => {
+    let filtered = clients;
 
-  if (searchInput.trim()) {
-    filtered = clients.filter(
-      (c) =>
-        c.fullname.toLowerCase().includes(searchInput.toLowerCase()) ||
-        c.email.toLowerCase().includes(searchInput.toLowerCase()),
-    );
-  }
+    if (searchInput.trim()) {
+      filtered = clients.filter(
+        (c) =>
+          c.fullname.toLowerCase().includes(searchInput.toLowerCase()) ||
+          c.email.toLowerCase().includes(searchInput.toLowerCase()),
+      );
+    }
 
-  // Sort by latest message timestamp (descending)
-  return filtered.sort((a, b) => {
-    const aLast = a.messages?.length
-      ? a.messages[a.messages.length - 1].createdAt
-      : 0;
-    const bLast = b.messages?.length
-      ? b.messages[b.messages.length - 1].createdAt
-      : 0;
-    return bLast - aLast; // latest message first
-  });
-};
+    // Sort by latest message timestamp (descending)
+    return filtered.sort((a, b) => {
+      const aLast = a.messages?.length
+        ? a.messages[a.messages.length - 1].createdAt
+        : 0;
+      const bLast = b.messages?.length
+        ? b.messages[b.messages.length - 1].createdAt
+        : 0;
+      return bLast - aLast; // latest message first
+    });
+  };
 
   const handleSearchInput = (e) => {
     setSearchInput(e.target.value);
@@ -124,9 +124,15 @@ function ClientsList({ clients }) {
 }
 
 function Client({ client }) {
+  const [isHovered, setIsHovered] = useState(false);
+
   const hasUnreadMessages = client.messages?.some(
     (msg) => msg.sender !== "admin" && !msg.read,
   );
+
+  const latestMessage = client.messages?.length
+    ? client.messages[client.messages.length - 1].message
+    : "No messages yet";
 
   const textResponsive = "max-2xl:text-base max-xl:text-sm max-lg:text-xs";
   const paddingResponsive = "max-xl:p-1 max-lg:px-0.25 max-lg:py-0.25";
@@ -144,51 +150,71 @@ function Client({ client }) {
   };
 
   return (
-    <div className="flex flex-1 rounded-lg border border-black/10 px-2 shadow-sm duration-100 hover:shadow-md dark:bg-neutral-800 dark:shadow-black/80">
-      <h3
-        className={`${clientDetailStyle} ${
-          hasUnreadMessages
-            ? "font-bold text-black dark:text-white"
-            : "font-normal text-black/70 dark:text-white/60"
-        } max-w-[30%] justify-start font-medium capitalize`}
-      >
-        {client.fullname}
-      </h3>
-      <h3
-        className={`${clientDetailStyle} ${
-          hasUnreadMessages
-            ? "font-bold text-black dark:text-white"
-            : "font-normal text-black/70 dark:text-white/60"
-        } max-w-[10%] text-black/60 dark:text-white/60`}
-      >
-        {calculateAge(client.birthdate)}
-      </h3>
-      <h3
-        className={`${clientDetailStyle} ${
-          hasUnreadMessages
-            ? "font-bold text-black dark:text-white"
-            : "font-normal text-black/70 dark:text-white/60"
-        } max-w-[20%] text-black/60 dark:text-white/60`}
-      >
-        {client.contactNumber}
-      </h3>
-      <h3
-        className={`${clientDetailStyle} ${
-          hasUnreadMessages
-            ? "font-bold text-black dark:text-white"
-            : "font-normal text-black/70 dark:text-white/60"
-        } max-w-[20%] text-black/60 dark:text-white/60`}
-      >
-        {client.status}
-      </h3>
-      <div
-        className={`flex max-w-[20%] flex-1 items-center justify-center text-black/60 dark:text-white/60 ${paddingResponsive} ${textResponsive}`}
-      >
-        <div className="flex items-center gap-4 max-2xl:gap-2">
-          <ClientsLink uid={client.id} />
-          <ClientsButton uid={client.id} />
+    <div
+      className={`cursor-default flex flex-1 flex-col rounded-lg border border-black/10 shadow-sm duration-200 dark:bg-neutral-800 dark:shadow-black/80 ${
+        isHovered && "shadow-lg"
+      }`}
+      onClick={() => setIsHovered(!isHovered)}
+    >
+      {/* Main client info row */}
+      <div className="flex flex-1 px-2">
+        <h3
+          className={`${clientDetailStyle} ${
+            hasUnreadMessages
+              ? "font-bold text-black dark:text-white"
+              : "font-normal text-black/70 dark:text-white/60"
+          } flex max-w-[30%] items-center justify-start gap-2 font-medium capitalize`}
+        >
+          {hasUnreadMessages ? (
+            <span className="inline-block h-2 w-2 rounded-full bg-red-700"></span>
+          ) : (
+            <span className="inline-block h-2 w-2 rounded-full bg-neutral-300"></span>
+          )}
+          {client.fullname}
+        </h3>
+        <h3
+          className={`${clientDetailStyle} ${
+            hasUnreadMessages
+              ? "font-bold text-black dark:text-white"
+              : "font-normal text-black/70 dark:text-white/60"
+          } max-w-[10%] text-black/60 dark:text-white/60`}
+        >
+          {calculateAge(client.birthdate)}
+        </h3>
+        <h3
+          className={`${clientDetailStyle} ${
+            hasUnreadMessages
+              ? "font-bold text-black dark:text-white"
+              : "font-normal text-black/70 dark:text-white/60"
+          } max-w-[20%] text-black/60 dark:text-white/60`}
+        >
+          {client.contactNumber}
+        </h3>
+        <h3
+          className={`${clientDetailStyle} ${
+            hasUnreadMessages
+              ? "font-bold text-black dark:text-white"
+              : "font-normal text-black/70 dark:text-white/60"
+          } max-w-[20%] text-black/60 dark:text-white/60`}
+        >
+          {client.status}
+        </h3>
+        <div
+          className={`flex max-w-[20%] flex-1 items-center justify-center text-black/60 dark:text-white/60 ${paddingResponsive} ${textResponsive}`}
+        >
+          <div className="flex items-center gap-4 max-2xl:gap-2">
+            <ClientsLink uid={client.id} />
+            <ClientsButton uid={client.id} />
+          </div>
         </div>
       </div>
+
+      {/* Latest message (always in DOM for smooth transition) */}
+      <Link to={`${client.id}/chat`}
+        className={`overflow-hidden border-black/10 px-2 text-sm text-black/70 transition-all duration-200 dark:text-white/60 ${isHovered ? "max-h-10 bg-black/20 py-2 opacity-100 dark:bg-white/10" : "max-h-0 bg-transparent opacity-0"}`}
+      >
+          <span className="font-semibold">Latest:</span> {latestMessage}
+      </Link>
     </div>
   );
 }
