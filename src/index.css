@@ -32,6 +32,10 @@ body,
   overflow: hidden;
 }
 
+.clientBackButton {
+  background: transparent !important;
+}
+
 @layer utilities {
   .force-rgb * {
     /* Converts Tailwind oklch colors into rgb fallback */
@@ -63,4 +67,3 @@ img {
 .drag-region {
   -webkit-app-region: drag;
 }
-

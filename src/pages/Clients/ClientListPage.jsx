@@ -134,7 +134,6 @@ function Client({ client }) {
   const latestMessage = client.messages?.length
     ? client.messages[client.messages.length - 1]
     : "No messages yet";
-
   const textResponsive = "max-2xl:text-base max-xl:text-sm max-lg:text-xs";
   const paddingResponsive = "max-xl:p-1 max-lg:px-0.25 max-lg:py-0.25";
   const clientDetailStyle = `flex-1 border-r border-black/10 p-2 text-md whitespace-nowrap flex items-center truncate justify-center dark:border-white/40 ${textResponsive} ${paddingResponsive}`;
@@ -152,9 +151,7 @@ function Client({ client }) {
 
   return (
     <div
-      className={`flex flex-1 cursor-default flex-col rounded-lg border border-black/10 shadow-sm duration-200 dark:bg-neutral-800 dark:shadow-black/80 ${
-        isHovered && "shadow-lg"
-      }`}
+      className="flex flex-1 cursor-default flex-col rounded-lg border border-black/10 shadow-sm duration-200 hover:-translate-y-0.5 hover:shadow-md dark:bg-neutral-800 dark:shadow-black/80"
       onClick={() => setIsHovered(!isHovered)}
     >
       {/* Main client info row */}
@@ -213,12 +210,10 @@ function Client({ client }) {
       {/* Latest message (always in DOM for smooth transition) */}
       <Link
         to={`${client.id}/chat`}
-        className={`overflow-hidden border-black/10 px-2 text-sm text-black/70 transition-all duration-200 dark:text-white/60 ${isHovered ? "max-h-10 bg-black/20 py-2 opacity-100 dark:bg-white/10" : "max-h-0 bg-transparent opacity-0"}`}
+        className={`overflow-hidden rounded-br-md rounded-bl-md border-black/10 px-2 text-sm text-black/70 transition-all duration-200 dark:text-white/60 ${isHovered ? "max-h-10 bg-black/20 py-2 opacity-100 dark:bg-white/10" : "max-h-0 bg-transparent opacity-0"}`}
       >
-        <span className="font-semibold">Latest:</span>{" "}
-        {latestMessage.sender === "admin"
-          ? client.messages[client.messages.length - 2].message
-          : latestMessage.message}
+        <span className="font-semibold">Latest: </span>
+        {latestMessage.message}
       </Link>
     </div>
   );

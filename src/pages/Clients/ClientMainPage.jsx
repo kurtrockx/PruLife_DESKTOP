@@ -1,12 +1,13 @@
 import { useState } from "react";
 import { NavLink, Outlet, useLocation } from "react-router-dom";
 import PDFGenerator from "../../components/PDFGenerator";
+import backIcon from "../../assets/backIcon.svg";
 
 export default function ClientMainPage() {
   const [openPdfModal, setOpenPdfModal] = useState(false);
 
   const ClientTabStyle =
-    "rounded-xl p-2 shadow-sm duration-150 hover:-translate-y-0.5 dark:bg-black dark:text-white";
+    "rounded-xl p-2 shadow-sm duration-150 hover:-translate-y-0.5 dark:bg-white/10 dark:text-white bg-white/50";
 
   const location = useLocation();
   const currentTabOpen = location.pathname.split("/")[3];
@@ -14,6 +15,9 @@ export default function ClientMainPage() {
   return (
     <div className="from-white-50 flex flex-1 flex-col items-center justify-center gap-2 bg-gradient-to-br via-neutral-300 to-white dark:from-neutral-700 dark:via-neutral-950 dark:to-black">
       <div className="clientMainPage flex gap-4">
+        <NavLink className={`clientBackButton h-10 hover:-translate-y-0.5 duration-150 drop-shadow-xs drop-shadow-yellow-400 dark:drop-shadow-transparent dark:hover:drop-shadow-yellow-400`} to={"/clients"}>
+          <img src={backIcon} alt="back" className="h-full object-contain" />
+        </NavLink>
         <NavLink className={ClientTabStyle} to={"details"}>
           Client Details
         </NavLink>
