@@ -17,12 +17,13 @@ export default function DashboardPage() {
       setClients(users);
     });
 
-    // Cleanup on unmount
     return () => unsubscribe();
   }, []);
+
   useEffect(() => {
     if (!clients.length) return;
 
+    // Count clients per status
     const statusCount = clients.reduce((acc, c) => {
       const s = c.status || "Unknown";
       acc[s] = (acc[s] || 0) + 1;
@@ -32,6 +33,7 @@ export default function DashboardPage() {
       Object.entries(statusCount).map(([name, value]) => ({ name, value })),
     );
 
+    // Count clients per created date
     const dateCount = clients.reduce((acc, c) => {
       if (!c.createdAt) return acc;
       const createdAt = c.createdAt?.toDate?.() || new Date(c.createdAt);
@@ -43,6 +45,7 @@ export default function DashboardPage() {
       Object.entries(dateCount).map(([date, count]) => ({ date, count })),
     );
 
+    // Age groups
     const today = new Date();
     const ages = clients
       .map((c) =>
@@ -51,6 +54,7 @@ export default function DashboardPage() {
           : null,
       )
       .filter(Boolean);
+
     const ageGroups = { "18-25": 0, "26-35": 0, "36-45": 0, "46+": 0 };
     ages.forEach((a) => {
       if (a <= 25) ageGroups["18-25"]++;
@@ -60,6 +64,7 @@ export default function DashboardPage() {
     });
     setAgeData(Object.entries(ageGroups).map(([name, age]) => ({ name, age })));
 
+    // Recent messages
     const allMessages = clients.flatMap((c) =>
       (c.messages || []).map((m) => ({
         ...m,
@@ -74,8 +79,6 @@ export default function DashboardPage() {
   }, [clients]);
 
   const totalClients = clients.length;
-  const pendingClients = clients.filter((c) => c.status === "pending").length;
-  const activeClients = clients.filter((c) => c.status === "active").length;
 
   return (
     <DashboardContainer>
@@ -85,16 +88,18 @@ export default function DashboardPage() {
 
       <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:gap-3 lg:gap-4">
         <SummaryCard title="Total Clients" value={totalClients} />
-        <SummaryCard
-          title="Pending"
-          value={pendingClients}
-          color="text-yellow-500"
-        />
-        <SummaryCard
-          title="Active"
-          value={activeClients}
-          color="text-green-500"
-        />
+
+        {statusData.map(({ name, value }) => {
+          // Map color based on status
+          let color = "text-gray-500";
+          if (name === "Pending") color = "text-yellow-500";
+          else if (name === "Active") color = "text-green-500";
+          else if (name === "Inactive") color = "text-red-500";
+
+          return (
+            <SummaryCard key={name} title={name} value={value} color={color} />
+          );
+        })}
       </div>
 
       <ChartsGrid

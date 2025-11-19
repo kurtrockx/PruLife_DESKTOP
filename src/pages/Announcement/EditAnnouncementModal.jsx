@@ -61,10 +61,16 @@ export default function EditAnnouncementModal({ onClose, announcement }) {
       });
 
       // Show success alert instead of native alert
-      showAlert("✅ Announcement updated successfully!");
+      showAlert(
+        <h1 className="dark:text-white">
+          ✅ Announcement updated successfully!
+        </h1>,
+      );
     } catch (error) {
       console.error("Error updating announcement:", error);
-      showAlert("❌ Failed to update announcement.");
+      showAlert(
+        <h1 className="dark:text-white">❌ Failed to update announcement.</h1>,
+      );
     } finally {
       setLoading(false);
     }

@@ -80,10 +80,16 @@ export default function PDFGenerator({ testingMode = false }) {
       document.body.removeChild(a);
       window.URL.revokeObjectURL(blobUrl);
 
-      showAlert(`✅ PDF sent to ${client.fullname}!`);
+      showAlert(
+        <h1 className="dark:text-white">✅ PDF sent to ${client.fullname}!</h1>,
+      );
     } catch (err) {
       console.error("PDF upload failed:", err);
-      showAlert("❌ Could not send the PDF to the client. Please try again.");
+      showAlert(
+        <h1 className="dark:text-white">
+          ❌ Could not send the PDF to the client. Please try again.
+        </h1>,
+      );
     } finally {
       setLoading(false);
     }
@@ -505,14 +511,20 @@ function Part3Table({ clientAge }) {
 function ClientDetails({ client }) {
   console.log(client);
   return (
-    <div className="mt-10 space-y-px text-right">
-      {client && (
-        <>
-          <BoldText>Client Details</BoldText>
-          <p className="capitalize">{client.fullname}</p>
-          <p className="text-[#155dfc]">{client.email}</p>
-        </>
-      )}
+    <div className="mt-10 flex items-center justify-between gap-20">
+      <h1 className="max-w-md">
+        Sample Proposal only. Still subject for approval. Best to talk with a
+        licensed Financial Consultant for a Personalized Plan.
+      </h1>
+      <div className="space-y-px text-right">
+        {client && (
+          <>
+            <BoldText>Client Details</BoldText>
+            <p className="capitalize">{client.fullname}</p>
+            <p className="text-[#155dfc]">{client.email}</p>
+          </>
+        )}
+      </div>
     </div>
   );
 }

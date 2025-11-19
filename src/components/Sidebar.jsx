@@ -9,7 +9,6 @@ import { useTheme } from "../hooks/useTheme";
 const pages = [
   { name: "Dashboard", icon: dashboardIcon },
   { name: "Clients", icon: clientsIcon },
-  { name: "Proposals", icon: proposalsIcon },
   { name: "Announcement", icon: announcementIcon },
 ];
 

@@ -48,7 +48,11 @@ export default function ClientDetails() {
       await updateUser(clientId, editedClient);
       setClient(editedClient);
       setEditingField(null);
-      showAlert("✅ Client info updated successfully!");
+      showAlert(
+        <h1 className="dark:text-white">
+          ✅ Client info updated successfully!
+        </h1>,
+      );
     } catch (error) {
       console.error("Error updating user:", error);
       showAlert("❌ Failed to update user info.");
@@ -72,6 +76,8 @@ export default function ClientDetails() {
     { key: "status", label: "Status" },
   ];
 
+  const statusOptions = ["pending", "active", "inactive"];
+
   return (
     <>
       <div className="aspect-square max-w-1/2 bg-stone-900 p-24 inset-shadow-[0_0_4rem] inset-shadow-white/20 max-xl:hidden dark:bg-neutral-800 dark:inset-shadow-black">
@@ -89,18 +95,40 @@ export default function ClientDetails() {
         <h2 className="text-right text-xs text-black/50 dark:text-white/90">
           You can edit the Client's Details by pressing the pencil icon
         </h2>
+
         {fields.map(({ key, label }) => (
           <div
             key={key}
             className="flex items-center justify-between gap-2 rounded-lg border border-black/20 px-2 py-4 duration-100 focus-within:shadow-md hover:shadow-md lg:gap-4 dark:border-white"
           >
             <span className={labelStyle}>{label}</span>
-            <input
-              className={inputStyle}
-              value={editedClient[key] || ""}
-              disabled={editingField !== key}
-              onChange={(e) => handleChange(key, e.target.value)}
-            />
+
+            {key === "status" ? (
+              <select
+                className={inputStyle}
+                value={editedClient[key] || ""}
+                disabled={editingField !== key}
+                onChange={(e) => handleChange(key, e.target.value)}
+              >
+                {statusOptions.map((option) => (
+                  <option
+                    key={option}
+                    value={option}
+                    className="bg-black dark:text-white"
+                  >
+                    {option}
+                  </option>
+                ))}
+              </select>
+            ) : (
+              <input
+                className={inputStyle}
+                value={editedClient[key] || ""}
+                disabled={editingField !== key}
+                onChange={(e) => handleChange(key, e.target.value)}
+              />
+            )}
+
             {editingField === key ? (
               <button
                 className={buttonStyle}
@@ -115,6 +143,7 @@ export default function ClientDetails() {
             )}
           </div>
         ))}
+
         <div className="flex justify-end">
           <Button onClick={handleSave}>
             {saving ? "Saving..." : "Save Changes"}
