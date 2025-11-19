@@ -9,7 +9,7 @@ export default function EditAnnouncementModal({ onClose, announcement }) {
   const [newFiles, setNewFiles] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  // Custom alert state
+  // Alert state
   const [alertMessage, setAlertMessage] = useState("");
   const [alertOpen, setAlertOpen] = useState(false);
 
@@ -38,17 +38,19 @@ export default function EditAnnouncementModal({ onClose, announcement }) {
     try {
       let uploadedUrls = [];
 
+      // Upload new images to Cloudinary
       for (const file of newFiles) {
         const formData = new FormData();
-        formData.append("image", file);
+        formData.append("file", file);
+        formData.append("upload_preset", "announcements"); // SAME AS CREATE
 
         const res = await fetch(
-          `https://api.imgbb.com/1/upload?key=5847a1fb342e1994812f748886598a1b`,
+          `https://api.cloudinary.com/v1_1/dsoetkfjz/image/upload`,
           { method: "POST", body: formData },
         );
 
         const data = await res.json();
-        if (data.success) uploadedUrls.push(data.data.url);
+        if (data.secure_url) uploadedUrls.push(data.secure_url);
       }
 
       const allImages = [...images, ...uploadedUrls];
@@ -60,7 +62,6 @@ export default function EditAnnouncementModal({ onClose, announcement }) {
         images: allImages,
       });
 
-      // Show success alert instead of native alert
       showAlert(
         <h1 className="dark:text-white">
           ✅ Announcement updated successfully!
@@ -123,7 +124,7 @@ export default function EditAnnouncementModal({ onClose, announcement }) {
             />
           </div>
 
-          {/* Images Section */}
+          {/* Image grid */}
           <div className="grid grid-cols-3 gap-2">
             {images.map((img, i) => (
               <div key={i} className="relative">
@@ -141,11 +142,12 @@ export default function EditAnnouncementModal({ onClose, announcement }) {
                 </button>
               </div>
             ))}
+
             {newFiles.map((file, i) => (
               <div key={i} className="relative">
                 <img
                   src={URL.createObjectURL(file)}
-                  alt="new file"
+                  alt="new upload"
                   className="h-24 w-full rounded-lg object-cover"
                 />
                 <button
@@ -163,15 +165,16 @@ export default function EditAnnouncementModal({ onClose, announcement }) {
             <button
               type="button"
               onClick={onClose}
-              className="rounded border px-4 py-2 text-black hover:bg-black/10 dark:border-neutral-700 dark:text-gray-200 dark:hover:bg-neutral-800"
               disabled={loading}
+              className="rounded border px-4 py-2 text-black hover:bg-black/10 dark:border-neutral-700 dark:text-gray-200 dark:hover:bg-neutral-800"
             >
               Cancel
             </button>
+
             <button
               type="submit"
-              className="rounded bg-yellow-400 px-4 py-2 font-semibold text-black hover:bg-yellow-500 dark:hover:bg-yellow-400/90"
               disabled={loading}
+              className="rounded bg-yellow-400 px-4 py-2 font-semibold text-black hover:bg-yellow-500 dark:hover:bg-yellow-400/90"
             >
               {loading ? "Saving..." : "Save Changes"}
             </button>
@@ -179,7 +182,7 @@ export default function EditAnnouncementModal({ onClose, announcement }) {
         </form>
       </div>
 
-      {/* Custom alert modal */}
+      {/* Custom Alert */}
       {alertOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
           <div className="flex w-full max-w-sm flex-col justify-center rounded bg-white p-6 shadow-lg dark:bg-neutral-900">
