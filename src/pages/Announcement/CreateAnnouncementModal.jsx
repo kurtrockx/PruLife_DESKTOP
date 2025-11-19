@@ -43,19 +43,20 @@ export default function CreateAnnouncementModal({ onClose, announcement }) {
 
       for (const file of newFiles) {
         const formData = new FormData();
-        formData.append("image", file);
+        formData.append("file", file);
+        formData.append("upload_preset", "announcements"); // your preset
 
         const res = await fetch(
-          `https://api.imgbb.com/1/upload?key=5847a1fb342e1994812f748886598a1b`,
+          `https://api.cloudinary.com/v1_1/dsoetkfjz/image/upload`,
           { method: "POST", body: formData },
         );
 
         const data = await res.json();
-        if (data.success) uploadedUrls.push(data.data.url);
+        if (data.secure_url) uploadedUrls.push(data.secure_url);
       }
 
       const allImages = [...images, ...uploadedUrls];
-
+      
       if (announcement) {
         await updateAnnouncement(announcement.id, {
           title,

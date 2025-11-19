@@ -151,7 +151,7 @@ function Client({ client }) {
 
   return (
     <div
-      className="flex flex-1 cursor-default flex-col rounded-lg border border-black/10 shadow-sm duration-200 hover:-translate-y-0.5 hover:shadow-md dark:bg-neutral-800 dark:shadow-black/80"
+      className="group flex flex-1 cursor-default flex-col rounded-lg border border-black/10 shadow-sm duration-200 hover:-translate-y-0.5 hover:shadow-md dark:bg-neutral-800 dark:shadow-black/80"
       onClick={() => setIsHovered(!isHovered)}
     >
       {/* Main client info row */}
@@ -161,7 +161,7 @@ function Client({ client }) {
             hasUnreadMessages
               ? "font-bold text-black dark:text-white"
               : "font-normal text-black/70 dark:text-white/60"
-          } flex max-w-[30%] items-center justify-start gap-2 font-medium capitalize`}
+          } flex max-w-[30%] items-center justify-start gap-2 font-medium capitalize duration-200 dark:group-hover:text-white`}
         >
           {hasUnreadMessages ? (
             <span className="inline-block h-2 w-2 rounded-full bg-red-700"></span>
@@ -213,7 +213,7 @@ function Client({ client }) {
         className={`overflow-hidden rounded-br-md rounded-bl-md border-black/10 px-2 text-sm text-black/70 transition-all duration-200 dark:text-white/60 ${isHovered ? "max-h-10 bg-black/20 py-2 opacity-100 dark:bg-white/10" : "max-h-0 bg-transparent opacity-0"}`}
       >
         <span className="font-semibold">Latest: </span>
-        {latestMessage.message}
+        {latestMessage.message ? latestMessage.message : "No messages yet."}
       </Link>
     </div>
   );
