@@ -225,7 +225,7 @@ function ClientsLink({ uid }) {
 
   return (
     <Link
-      to={`/clients/${uid}`}
+      to={`/app/clients/${uid}`}
       className={`text-blue-800 lowercase underline underline-offset-2 hover:text-blue-500 ${textResponsive} dark:text-blue-300 dark:hover:text-blue-200`}
     >
       VIEW DETAILS

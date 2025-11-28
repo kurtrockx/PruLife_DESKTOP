@@ -13,7 +13,7 @@ export default function RecentMessages({ messages, clients }) {
             return (
               <Link
                 key={index}
-                to={`/clients/${clientFind?.id || ""}/chat`}
+                to={`/app/clients/${clientFind?.id || ""}/chat`}
                 className="block"
               >
                 <li className="grid grid-cols-8 items-center justify-between rounded-lg bg-neutral-100 p-3 text-sm dark:bg-neutral-700 hover:brightness-90">

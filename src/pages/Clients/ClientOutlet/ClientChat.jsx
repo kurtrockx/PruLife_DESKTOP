@@ -82,7 +82,7 @@ export default function ClientChat() {
 function PDFModal({ onOpenPdfModal }) {
   return (
     <div
-      className="fixed top-0 left-0 z-1000 flex max-h-dvh min-h-dvh min-w-dvw justify-center overflow-hidden bg-black/40 p-5 backdrop-blur-sm"
+      className="fixed top-0 left-0 z-1000 flex flex-col max-h-dvh min-h-dvh min-w-dvw justify-center overflow-hidden bg-black/40 p-5 backdrop-blur-sm"
       onClick={() => onOpenPdfModal(false)}
     >
       <div

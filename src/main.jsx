@@ -8,6 +8,7 @@ import {
   RouterProvider,
 } from "react-router-dom";
 import "./index.css";
+import LoginPage from "./pages/LoginPage.jsx";
 import DashboardPage from "./pages/Dashboard/DashboardPage.jsx";
 import ClientListPage from "./pages/Clients/ClientListPage.jsx";
 import ClientMainPage from "./pages/Clients/ClientMainPage.jsx";
@@ -19,6 +20,10 @@ import ThemeProvider from "./context/ThemeProvider.jsx";
 const router = createHashRouter([
   {
     path: "/",
+    element: <LoginPage />,
+  },
+  {
+    path: "/app",
     element: <App />,
     children: [
       { index: true, element: <Navigate to="dashboard" replace /> },

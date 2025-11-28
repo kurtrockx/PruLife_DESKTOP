@@ -10,14 +10,14 @@ export default function ClientMainPage() {
     "rounded-xl p-2 shadow-sm duration-150 hover:-translate-y-0.5 dark:bg-white/10 dark:text-white bg-white/50";
 
   const location = useLocation();
-  const currentTabOpen = location.pathname.split("/")[3];
+  const currentTabOpen = location.pathname.split("/")[4];
 
   return (
     <div className="from-white-50 flex flex-1 flex-col items-center justify-center gap-2 bg-gradient-to-br via-neutral-300 to-white dark:from-neutral-700 dark:via-neutral-950 dark:to-black">
       <div className="clientMainPage flex gap-4">
         <NavLink
           className={`clientBackButton h-10 drop-shadow-xs drop-shadow-yellow-400 duration-150 hover:-translate-y-0.5 dark:drop-shadow-transparent dark:hover:drop-shadow-yellow-400`}
-          to={"/clients"}
+          to={"/app/clients"}
         >
           <img src={backIcon} alt="back" className="h-full object-contain" />
         </NavLink>
