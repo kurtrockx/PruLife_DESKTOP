@@ -9,6 +9,7 @@ import { useTheme } from "../hooks/useTheme";
 const pages = [
   { name: "Dashboard", icon: dashboardIcon },
   { name: "Clients", icon: clientsIcon },
+  { name: "Proposals", icon: proposalsIcon },
   { name: "Announcement", icon: announcementIcon },
 ];
 
@@ -18,7 +19,7 @@ export default function Sidebar() {
   const { darkMode, setDarkMode } = useTheme();
 
   return (
-    <aside className="group z-20 flex h-full max-w-[6rem] justify-between flex-col items-center bg-red-900 px-2 py-4 shadow-[0_0_.25rem] shadow-black/40 transition-all duration-400 hover:max-w-[12rem] lg:hover:max-w-[14em] 2xl:hover:max-w-[16em] dark:bg-neutral-950">
+    <aside className="group z-20 flex h-full max-w-[6rem] flex-col items-center justify-between bg-red-900 px-2 py-4 shadow-[0_0_.25rem] shadow-black/40 transition-all duration-400 hover:max-w-[12rem] lg:hover:max-w-[14em] 2xl:hover:max-w-[16em] dark:bg-neutral-950">
       <nav className="flex w-full flex-col gap-2 lg:gap-4">
         {pages.map((p) => (
           <NavLink
@@ -50,7 +51,7 @@ export default function Sidebar() {
       </nav>
       <button
         onClick={() => setDarkMode(!darkMode)}
-        className="group/nav flex w-full items-center justify-center  place-self-end rounded-lg bg-black px-3 py-2 transition-all hover:bg-black/80 dark:bg-black/80 dark:hover:bg-white/40"
+        className="group/nav flex w-full items-center justify-center place-self-end rounded-lg bg-black px-3 py-2 transition-all hover:bg-black/80 dark:bg-black/80 dark:hover:bg-white/40"
       >
         {/* Icon (same layout as others) */}
         <div className="flex aspect-square min-w-[2.5rem] items-center justify-center">

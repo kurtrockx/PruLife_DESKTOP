@@ -12,8 +12,8 @@ let mainWindow;
 
 function createWindow() {
   mainWindow = new BrowserWindow({
-    width: 1200,
-    height: 800,
+    width: 1400,
+    height: 850,
     frame: false, // if frameless
     icon: path.join(__dirname, "prulifeLogo.png"), // <-- your icon here
     autoHideMenuBar: true,

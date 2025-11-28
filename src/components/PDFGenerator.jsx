@@ -205,13 +205,9 @@ function Part1Header() {
             alt="prulife"
             className="max-w-20 object-contain"
           />
-          <div className="flex flex-1 flex-col justify-center">
+          <div className="flex flex-1 flex-col justify-center text-[.6rem]">
             <h4>Proposal Prepared by:</h4>
-            <BoldText>MA. MIKAELLA PRIAS MARIANO</BoldText>
-            <BoldText>Agent License: 7013****</BoldText>
-            <h5>Premiere Level Financial Advisor</h5>
-            <h5>Premiere Level Financial Advisor</h5>
-            <h5>Asst. Unit Manager</h5>
+            <BoldText>Prulife Protectors</BoldText>
           </div>
         </div>
 
